@@ -142,7 +142,7 @@ Would love to take this forward.`
                 value={product}
                 onChange={(e) => setProduct(e.target.value)}
                 placeholder="e.g. Ashwagandha bottle OR product link"
-                className="w-full p-3 rounded bg-zinc-900 border border-zinc-700"
+                className="w-full p-3 rounded bg-surface-secondary dark:bg-dark-surface-secondary border border-border dark:border-dark-border text-text-primary dark:text-dark-text-primary"
               />
             </>
           )}
