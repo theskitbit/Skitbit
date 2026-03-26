@@ -97,7 +97,18 @@ Would love to take this forward.`
       </div>
 
       <AnimatePresence mode="wait">
-        <motion.div key={step} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <motion.div
+  key={step}
+  initial={{ opacity: 0, y: 20, scale: 0.98 }}
+  animate={{ opacity: 1, y: 0, scale: 1 }}
+  exit={{ opacity: 0, y: -20, scale: 0.98 }}
+  transition={{
+    type: "spring",
+    stiffness: 300,
+    damping: 30,
+    mass: 0.8,
+  }}
+>
           {/* STEP 1 */}
           {step === 1 && (
             <>
@@ -181,7 +192,7 @@ Would love to take this forward.`
               <h2 className="text-xl mb-4">Got it.</h2>
               <p className="text-text-secondary dark:text-dark-text-secondary mb-6">We’ll get back to you within 4hrs.</p>
 
-              <button onClick={openWhatsApp} className="w-full mb-3 p-3 bg-blue-600 rounded">
+              <button onClick={openWhatsApp} className="w-full mb-3 p-3 bg-primary text-primary-foreground hover:opacity-90 rounded">
                 Continue on WhatsApp
               </button>
 
