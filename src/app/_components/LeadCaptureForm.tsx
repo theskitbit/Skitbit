@@ -41,7 +41,7 @@ function ChipButton({ label, isSelected, onClick }: any) {
           width: isSelected ? "auto" : "100%",
           paddingRight: isSelected ? "1.5rem" : "0",
         }}
-        transition={{ duration: 0.3 }}
+        transition={{ type: "spring", stiffness: 120, damping: 20 }}
       >
         <span>{label}</span>
 
@@ -204,9 +204,14 @@ export default function LeadCaptureForm() {
 
         {!submitted && (
           <div className="mt-12 flex justify-between">
-            <button onClick={back} disabled={step===1} className="text-zinc-400">
-              ←
-            </button>
+            <motion.button
+  whileTap={{ scale: 0.85 }}
+  onClick={back}
+  disabled={step===1}
+  className="text-zinc-400"
+>
+  ←
+</motion.button>
 
             {step < total ? (
               <motion.button
