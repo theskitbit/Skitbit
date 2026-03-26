@@ -1,7 +1,3 @@
-"use client"
-
-import LeadCaptureForm from "../_components/LeadCaptureForm"
-
-export default function Page() {
-  return <LeadCaptureForm />
-}
+<div className="container mx-auto px-6 py-20">
+  <LeadCaptureForm />
+</div>
