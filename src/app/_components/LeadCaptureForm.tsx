@@ -1,8 +1,8 @@
 "use client"
+
 import dynamic from "next/dynamic"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-
 
 const brandTypes = ["D2C (Shopify brand)", "Amazon-first brand", "Both", "Just starting out"]
 const projectTypes = ["Launching a new product","Improving existing listings","Need ongoing content for ads","Just exploring"]
@@ -55,7 +55,7 @@ function ChipButton({ label, isSelected, onClick }: any) {
               className="absolute right-0"
             >
               <div className="w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center">
-                <Check className="w-3 h-3 text-white" strokeWidth={1.5} />
+                <span className="text-white text-xs">✓</span>
               </div>
             </motion.span>
           )}
@@ -65,7 +65,7 @@ function ChipButton({ label, isSelected, onClick }: any) {
   )
 }
 
-function LeadCaptureForm() {
+function LeadCaptureFormInner() {
   const [step, setStep] = useState(1)
   const [brand, setBrand] = useState("")
   const [project, setProject] = useState("")
@@ -96,8 +96,8 @@ function LeadCaptureForm() {
   }
 
   return (
-    <div className="w-full flex justify-center py-20 text-white">
-      <div className="w-full max-w-[640px] mx-auto">
+    <div className="w-full py-20 text-white">
+      <div className="max-w-[640px] mx-auto px-6">
 
         {/* Progress */}
         <div className="mb-12">
@@ -110,7 +110,7 @@ function LeadCaptureForm() {
               className="h-full bg-blue-500"
               initial={{ width: "0%" }}
               animate={{ width: `${(step / total) * 100}%` }}
-              transition={{ duration: 0.3 }}
+              transition={{ type: "spring", stiffness: 120, damping: 20 }}
             />
           </div>
         </div>
@@ -121,7 +121,7 @@ function LeadCaptureForm() {
             initial={{ opacity: 0, y: 12, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -12, scale: 0.98 }}
-            transition={{ type: "spring", stiffness: 428, damping: 30 }}
+            transition={{ type: "spring", stiffness: 280, damping: 30 }}
           >
 
             {step === 1 && (
@@ -205,25 +205,25 @@ function LeadCaptureForm() {
         {!submitted && (
           <div className="mt-12 flex justify-between">
             <motion.button
-  whileTap={{ scale: 0.85 }}
-  onClick={back}
-  disabled={step===1}
-  className="text-zinc-400"
->
-  ←
-</motion.button>
+              whileTap={{ scale: 0.85 }}
+              onClick={back}
+              disabled={step===1}
+              className="text-zinc-400"
+            >
+              ←
+            </motion.button>
 
             {step < total ? (
               <motion.button
-  whileTap={{ scale: 0.92 }}
-  whileHover={{ scale: 1.05 }}
-  transition={{ type: "spring", stiffness: 400, damping: 20 }}
-  onClick={next}
-  disabled={!canNext()}
-  className="bg-blue-500 px-4 py-2 rounded"
->
-  Next →
-</motion.button>
+                whileTap={{ scale: 0.92 }}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                onClick={next}
+                disabled={!canNext()}
+                className="bg-blue-500 px-4 py-2 rounded"
+              >
+                Next →
+              </motion.button>
             ) : (
               <button onClick={submit} className="bg-blue-500 px-4 py-2 rounded">
                 Submit ✓
@@ -235,6 +235,7 @@ function LeadCaptureForm() {
     </div>
   )
 }
+
 export default dynamic(() => Promise.resolve(LeadCaptureFormInner), {
   ssr: false,
 })
