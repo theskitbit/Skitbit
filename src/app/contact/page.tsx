@@ -1,5 +1,7 @@
-import LeadCaptureForm from "../_components/LeadCaptureForm";
-
 export default function Page() {
-  return <LeadCaptureForm />;
+  return (
+    <div className="min-h-screen bg-black flex items-center justify-center">
+      <LeadCaptureForm />
+    </div>
+  )
 }
