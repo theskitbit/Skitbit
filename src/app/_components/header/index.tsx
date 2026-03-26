@@ -86,7 +86,10 @@ export async function Header() {
             <div className="flex h-(--header-height) bg-surface-primary dark:bg-dark-surface-primary">
               <div className="container mx-auto grid w-full grid-cols-header place-items-center content-center items-center px-6 *:first:justify-self-start">
                 <ButtonLink unstyled className="flex items-center ring-offset-2" href="/">
-                  <DarkLightImageAutoscale priority {...settings.logo} />
+                  <div className="dark:mr-[-11px]">
+                    <DarkLightImageAutoscale priority {...settings.logo} />
+                  </div>
+                  <span className="text-xl font-semibold text-foreground dark:text-dark-foreground pl-[-26px]" style={{ paddingLeft: '-26px', fontSize: '21px' }}>Skitbit</span>
                 </ButtonLink>
                 <DesktopMenu {...header} />
                 <MobileMenu {...header} />
