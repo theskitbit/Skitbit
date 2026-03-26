@@ -65,7 +65,7 @@ function ChipButton({ label, isSelected, onClick }: any) {
   )
 }
 
-function LeadCaptureFormInner() {
+function LeadCaptureForm() {
   const [step, setStep] = useState(1)
   const [brand, setBrand] = useState("")
   const [project, setProject] = useState("")
@@ -235,3 +235,6 @@ function LeadCaptureFormInner() {
     </div>
   )
 }
+export default dynamic(() => Promise.resolve(LeadCaptureFormInner), {
+  ssr: false,
+})
