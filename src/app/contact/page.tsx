@@ -1,3 +1,5 @@
-<div className="container mx-auto px-6 py-20">
-  <LeadCaptureForm />
-</div>
+"use client"
+
+export default function Page() {
+  return <div style={{ color: "red" }}>TEST</div>
+}
