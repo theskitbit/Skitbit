@@ -87,7 +87,7 @@ export async function Header() {
               <div className="container mx-auto grid w-full grid-cols-header place-items-center content-center items-center px-6 *:first:justify-self-start">
                 <ButtonLink unstyled className="flex items-center gap-2 ring-offset-2" href="/">
                   <DarkLightImageAutoscale priority {...settings.logo} />
-                  <span className="text-lg font-semibold text-surface-secondary dark:text-dark-surface-secondary">Skitbit</span>
+                  <span className="text-lg font-semibold text-foreground dark:text-dark-foreground">Skitbit</span>
                 </ButtonLink>
                 <DesktopMenu {...header} />
                 <MobileMenu {...header} />
