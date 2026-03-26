@@ -96,8 +96,8 @@ export default function LeadCaptureForm() {
   }
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-6 text-white">
-      <div className="w-full max-w-[540px]">
+    <div className="w-full flex justify-center py-20 text-white">
+      <div className="w-full max-w-[640px] mx-auto">
 
         {/* Progress */}
         <div className="mb-12">
