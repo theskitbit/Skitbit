@@ -85,7 +85,7 @@ Product: ${product}`
         />
       </div>
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="popLayout">
         <motion.div
           key={step}
           initial={{ opacity: 0, y: 30, scale: 0.97 }}
