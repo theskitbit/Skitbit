@@ -79,7 +79,7 @@ export function DarkLightImageAutoscale(props: DarkLightImageProps) {
     <DarkLightImage
       priority
       alt="logo"
-      className={clsx("w-auto max-w-[200px] object-contain", {
+      className={clsx("w-auto max-w-[200px] object-contain border-[6px] border-gray-900 dark:border-gray-100", {
         "h-10": logoStyle === "square",
         "h-9": logoStyle === "4/3",
         "h-8": logoStyle === "portrait",
