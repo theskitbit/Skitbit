@@ -27,21 +27,12 @@ function ChipButton({
   return (
     <motion.button
       onClick={onClick}
-      <motion.button
-  onClick={onClick}
-  whileTap={{ scale: 0.97 }}
-  whileHover={{ scale: 1.03 }}
-  className={`px-4 py-2 rounded-full text-sm border transition ${
-    isSelected
-      ? "bg-primary text-primary-foreground border-transparent"
-      : "bg-surface-secondary dark:bg-dark-surface-secondary border-border dark:border-dark-border text-text-secondary dark:text-dark-text-secondary hover:opacity-80"
-  }`}
->
-  {label}
-</motion.button>
+      whileTap={{ scale: 0.97 }}
+      whileHover={{ scale: 1.03 }}
+      className={`px-4 py-2 rounded-full text-sm border transition ${
         isSelected
-          ? "bg-blue-600 text-text-primary dark:text-dark-text-primary border-blue-600"
-          : "bg-zinc-900 text-zinc-400 border-zinc-700"
+          ? "bg-primary text-primary-foreground border-transparent"
+          : "bg-surface-secondary dark:bg-dark-surface-secondary border-border dark:border-dark-border text-text-secondary dark:text-dark-text-secondary hover:opacity-80"
       }`}
     >
       {label}
@@ -95,32 +86,29 @@ Would love to take this forward.`
 
   return (
     <div className="w-full max-w-xl mx-auto bg-surface-primary dark:bg-dark-surface-primary border border-border dark:border-dark-border rounded-2xl p-8 shadow-sm text-text-primary dark:text-dark-text-primary">
+      
       {/* Progress */}
-      <div className="mb-6 text-sm text-zinc-400">
+      <div className="mb-6 text-sm text-text-secondary dark:text-dark-text-secondary">
         Step {step} of {total}
       </div>
 
-      <div className="h-1 bg-zinc-800 rounded mb-8">
-        <div
-          className="h-full bg-blue-500 rounded"
-          style={{ width: `${(step / total) * 100}%` }}
+      <div className="h-1 bg-border dark:bg-dark-border rounded mb-8">
+        <motion.div
+          className="h-full bg-primary rounded"
+          animate={{ width: `${(step / total) * 100}%` }}
+          transition={{ type: "spring", stiffness: 120, damping: 20 }}
         />
       </div>
 
       <AnimatePresence mode="wait">
         <motion.div
-  key={step}
-  initial={{ opacity: 0, y: 20, scale: 0.98 }}
-  animate={{ opacity: 1, y: 0, scale: 1 }}
-  exit={{ opacity: 0, y: -20, scale: 0.98 }}
-  transition={{
-    type: "spring",
-    stiffness: 300,
-    damping: 30,
-    mass: 0.8,
-  }}
->
-          {/* STEP 1 */}
+          key={step}
+          initial={{ opacity: 0, y: 20, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -20, scale: 0.98 }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        >
+
           {step === 1 && (
             <>
               <h2 className="text-xl mb-4">What kind of brand are you?</h2>
@@ -132,7 +120,6 @@ Would love to take this forward.`
             </>
           )}
 
-          {/* STEP 2 */}
           {step === 2 && (
             <>
               <h2 className="text-xl mb-4">What are you working on right now?</h2>
@@ -144,7 +131,6 @@ Would love to take this forward.`
             </>
           )}
 
-          {/* STEP 3 */}
           {step === 3 && (
             <>
               <h2 className="text-xl mb-4">When do you need this?</h2>
@@ -156,7 +142,6 @@ Would love to take this forward.`
             </>
           )}
 
-          {/* STEP 4 */}
           {step === 4 && (
             <>
               <h2 className="text-xl mb-4">What product should we create visuals for?</h2>
@@ -169,7 +154,6 @@ Would love to take this forward.`
             </>
           )}
 
-          {/* STEP 5 */}
           {step === 5 && !submitted && (
             <>
               <h2 className="text-xl mb-4">How can we reach you?</h2>
@@ -178,44 +162,51 @@ Would love to take this forward.`
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name"
-                className="w-full p-3 mb-3 rounded bg-zinc-900 border border-zinc-700"
+                className="w-full p-3 mb-3 rounded bg-surface-secondary dark:bg-dark-surface-secondary border border-border dark:border-dark-border text-text-primary dark:text-dark-text-primary"
               />
 
               <input
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
-                className="w-full p-3 mb-3 rounded bg-zinc-900 border border-zinc-700"
+                className="w-full p-3 mb-3 rounded bg-surface-secondary dark:bg-dark-surface-secondary border border-border dark:border-dark-border text-text-primary dark:text-dark-text-primary"
               />
 
               <input
                 value={whatsapp}
                 onChange={(e) => setWhatsapp(e.target.value)}
                 placeholder="WhatsApp (optional)"
-                className="w-full p-3 rounded bg-zinc-900 border border-zinc-700"
+                className="w-full p-3 rounded bg-surface-secondary dark:bg-dark-surface-secondary border border-border dark:border-dark-border text-text-primary dark:text-dark-text-primary"
               />
             </>
           )}
 
-          {/* SUCCESS */}
           {step === 5 && submitted && (
             <div className="text-center">
               <h2 className="text-xl mb-4">Got it.</h2>
-              <p className="text-text-secondary dark:text-dark-text-secondary mb-6">We’ll get back to you within 4hrs.</p>
+              <p className="text-text-secondary dark:text-dark-text-secondary mb-6">
+                We’ll get back to you shortly.
+              </p>
 
-              <button onClick={openWhatsApp} className="w-full mb-3 p-3 bg-primary text-primary-foreground hover:opacity-90 rounded">
+              <button
+                onClick={openWhatsApp}
+                className="w-full mb-3 p-3 bg-primary text-primary-foreground hover:opacity-90 rounded"
+              >
                 Continue on WhatsApp
               </button>
 
-              <button onClick={() => location.reload()} className="w-full p-3 bg-zinc-800 rounded">
+              <button
+                onClick={() => location.reload()}
+                className="w-full p-3 bg-surface-secondary border border-border dark:border-dark-border rounded"
+              >
                 Done
               </button>
             </div>
           )}
+
         </motion.div>
       </AnimatePresence>
 
-      {/* NAV */}
       {!submitted && (
         <div className="flex justify-between mt-8">
           <button onClick={() => setStep(step - 1)} disabled={step === 1}>
@@ -226,12 +217,15 @@ Would love to take this forward.`
             <button
               onClick={() => setStep(step + 1)}
               disabled={!canNext()}
-              className="bg-blue-600 px-4 py-2 rounded"
+              className="bg-primary text-primary-foreground px-4 py-2 rounded hover:opacity-90"
             >
               Next <ChevronRight />
             </button>
           ) : (
-            <button onClick={handleSubmit} className="bg-blue-600 px-4 py-2 rounded">
+            <button
+              onClick={handleSubmit}
+              className="bg-primary text-primary-foreground px-4 py-2 rounded hover:opacity-90"
+            >
               Submit <Check />
             </button>
           )}
