@@ -1,5 +1,5 @@
 "use client"
-
+import dynamic from "next/dynamic"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -65,7 +65,7 @@ function ChipButton({ label, isSelected, onClick }: any) {
   )
 }
 
-export default function LeadCaptureForm() {
+function LeadCaptureFormInner() {
   const [step, setStep] = useState(1)
   const [brand, setBrand] = useState("")
   const [project, setProject] = useState("")
