@@ -23,6 +23,33 @@
 :root {
   --header-height: 64px;
 
+  /* Luxury Minimalist Color Palette */
+  /* Accent Colors - Purple (#9333ea) */
+  --accent-rgb-50: 245 243 255;
+  --accent-rgb-100: 243 232 255;
+  --accent-rgb-200: 232 204 255;
+  --accent-rgb-300: 216 180 254;
+  --accent-rgb-400: 192 132 250;
+  --accent-rgb-500: 147 51 234;
+  --accent-rgb-600: 126 34 206;
+  --accent-rgb-700: 109 40 217;
+  --accent-rgb-800: 88 28 135;
+  --accent-rgb-900: 59 13 97;
+  --accent-rgb-950: 32 5 51;
+
+  /* Grayscale - Light to Dark */
+  --grayscale-rgb-50: 250 250 250;
+  --grayscale-rgb-100: 245 245 245;
+  --grayscale-rgb-200: 229 229 229;
+  --grayscale-rgb-300: 212 212 212;
+  --grayscale-rgb-400: 163 163 163;
+  --grayscale-rgb-500: 115 115 115;
+  --grayscale-rgb-600: 82 82 82;
+  --grayscale-rgb-700: 64 64 64;
+  --grayscale-rgb-800: 38 38 38;
+  --grayscale-rgb-900: 23 23 23;
+  --grayscale-rgb-950: 10 10 10;
+
   text-rendering: geometricprecision;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
