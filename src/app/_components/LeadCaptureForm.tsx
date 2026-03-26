@@ -27,7 +27,18 @@ function ChipButton({
   return (
     <motion.button
       onClick={onClick}
-      className={`px-4 py-2 rounded-full text-sm border transition ${
+      <motion.button
+  onClick={onClick}
+  whileTap={{ scale: 0.97 }}
+  whileHover={{ scale: 1.03 }}
+  className={`px-4 py-2 rounded-full text-sm border transition ${
+    isSelected
+      ? "bg-primary text-primary-foreground border-transparent"
+      : "bg-surface-secondary dark:bg-dark-surface-secondary border-border dark:border-dark-border text-text-secondary dark:text-dark-text-secondary hover:opacity-80"
+  }`}
+>
+  {label}
+</motion.button>
         isSelected
           ? "bg-blue-600 text-text-primary dark:text-dark-text-primary border-blue-600"
           : "bg-zinc-900 text-zinc-400 border-zinc-700"
