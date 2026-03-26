@@ -5,33 +5,22 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Check, ChevronRight, ChevronLeft } from "lucide-react"
 
 const brandTypes = ["D2C (Shopify brand)", "Amazon-first brand", "Both", "Just starting out"]
-
-const projectTypes = [
-  "Launching a new product",
-  "Improving existing listings",
-  "Need ongoing content for ads",
-  "Just exploring",
-]
-
+const projectTypes = ["Launching a new product","Improving existing listings","Need ongoing content for ads","Just exploring"]
 const timelines = ["Within 2 weeks", "This month", "No fixed timeline"]
 
-function ChipButton({
-  label,
-  isSelected,
-  onClick,
-}: {
-  label: string
-  isSelected: boolean
-  onClick: () => void
-}) {
+function ChipButton({ label, isSelected, onClick }: any) {
   return (
     <motion.button
       onClick={onClick}
-      whileTap={{ scale: 0.96 }}
-      whileHover={{ scale: 1.04 }}
+      whileTap={{ scale: 0.94 }}
+      whileHover={{ scale: 1.05 }}
+      animate={{
+        scale: isSelected ? 1.05 : 1,
+      }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className={`px-4 py-2 rounded-full text-sm border transition ${
         isSelected
-          ? "bg-blue-600 text-white border-blue-600"
+          ? "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20"
           : "bg-white/5 text-white/70 border-white/10 hover:bg-white/10"
       }`}
     >
@@ -51,7 +40,6 @@ export default function LeadCaptureForm() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [whatsapp, setWhatsapp] = useState("")
-
   const [submitted, setSubmitted] = useState(false)
 
   const total = 5
@@ -76,25 +64,22 @@ export default function LeadCaptureForm() {
 Brand: ${brand}
 Need: ${project}
 Timeline: ${timeline}
-Product: ${product}
+Product: ${product}`
 
-Would love to take this forward.`
-
-    const encoded = encodeURIComponent(msg)
-    window.open(`https://wa.me/919XXXXXXXXX?text=${encoded}`, "_blank")
+    window.open(`https://wa.me/919XXXXXXXXX?text=${encodeURIComponent(msg)}`, "_blank")
   }
 
   return (
     <div className="w-full max-w-xl mx-auto bg-black text-white rounded-2xl p-8 shadow-2xl border border-white/10">
-      
+
       {/* Progress */}
       <div className="mb-6 text-sm text-white/50">
         Step {step} of {total}
       </div>
 
-      <div className="h-1 bg-white/10 rounded mb-8">
+      <div className="h-1 bg-white/10 rounded mb-8 overflow-hidden">
         <motion.div
-          className="h-full bg-blue-500 rounded"
+          className="h-full bg-blue-500"
           animate={{ width: `${(step / total) * 100}%` }}
           transition={{ type: "spring", stiffness: 120, damping: 20 }}
         />
@@ -103,10 +88,10 @@ Would love to take this forward.`
       <AnimatePresence mode="wait">
         <motion.div
           key={step}
-          initial={{ opacity: 0, y: 20, scale: 0.98 }}
+          initial={{ opacity: 0, y: 30, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -20, scale: 0.98 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          exit={{ opacity: 0, y: -30, scale: 0.97 }}
+          transition={{ type: "spring", stiffness: 260, damping: 25 }}
         >
 
           {step === 1 && (
@@ -145,7 +130,8 @@ Would love to take this forward.`
           {step === 4 && (
             <>
               <h2 className="text-xl mb-4">What product should we create visuals for?</h2>
-              <input
+              <motion.input
+                whileFocus={{ scale: 1.01 }}
                 value={product}
                 onChange={(e) => setProduct(e.target.value)}
                 placeholder="e.g. Ashwagandha bottle OR product link"
@@ -158,50 +144,44 @@ Would love to take this forward.`
             <>
               <h2 className="text-xl mb-4">How can we reach you?</h2>
 
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Your name"
-                className="w-full p-3 mb-3 rounded bg-white/5 border border-white/10 text-white placeholder:text-white/40"
-              />
-
-              <input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-                className="w-full p-3 mb-3 rounded bg-white/5 border border-white/10 text-white placeholder:text-white/40"
-              />
-
-              <input
-                value={whatsapp}
-                onChange={(e) => setWhatsapp(e.target.value)}
-                placeholder="WhatsApp (optional)"
-                className="w-full p-3 rounded bg-white/5 border border-white/10 text-white placeholder:text-white/40"
-              />
+              {[{v:name,set:setName,p:"Your name"},
+                {v:email,set:setEmail,p:"Email"},
+                {v:whatsapp,set:setWhatsapp,p:"WhatsApp (optional)"}].map((f,i)=>(
+                <motion.input
+                  key={i}
+                  whileFocus={{ scale: 1.01 }}
+                  value={f.v}
+                  onChange={(e)=>f.set(e.target.value)}
+                  placeholder={f.p}
+                  className="w-full p-3 mb-3 rounded bg-white/5 border border-white/10 text-white placeholder:text-white/40"
+                />
+              ))}
             </>
           )}
 
           {step === 5 && submitted && (
-            <div className="text-center">
+            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} className="text-center">
               <h2 className="text-xl mb-4">Got it.</h2>
-              <p className="text-white/50 mb-6">
-                We’ll get back to you shortly.
-              </p>
+              <p className="text-white/50 mb-6">We’ll get back to you shortly.</p>
 
-              <button
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
                 onClick={openWhatsApp}
-                className="w-full mb-3 p-3 bg-blue-600 text-white rounded hover:bg-blue-700"
+                className="w-full mb-3 p-3 bg-blue-600 rounded hover:bg-blue-700"
               >
                 Continue on WhatsApp
-              </button>
+              </motion.button>
 
-              <button
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
                 onClick={() => location.reload()}
-                className="w-full p-3 bg-white/10 text-white rounded hover:bg-white/20"
+                className="w-full p-3 bg-white/10 rounded hover:bg-white/20"
               >
                 Done
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
           )}
 
         </motion.div>
@@ -209,25 +189,29 @@ Would love to take this forward.`
 
       {!submitted && (
         <div className="flex justify-between mt-8">
-          <button onClick={() => setStep(step - 1)} disabled={step === 1}>
+          <motion.button whileTap={{ scale: 0.9 }} onClick={() => setStep(step - 1)} disabled={step === 1}>
             <ChevronLeft />
-          </button>
+          </motion.button>
 
           {step < total ? (
-            <button
+            <motion.button
+              whileTap={{ scale: 0.92 }}
+              whileHover={{ scale: 1.05 }}
               onClick={() => setStep(step + 1)}
               disabled={!canNext()}
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700"
             >
               Next <ChevronRight />
-            </button>
+            </motion.button>
           ) : (
-            <button
+            <motion.button
+              whileTap={{ scale: 0.92 }}
+              whileHover={{ scale: 1.05 }}
               onClick={handleSubmit}
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700"
             >
               Submit <Check />
-            </button>
+            </motion.button>
           )}
         </div>
       )}
