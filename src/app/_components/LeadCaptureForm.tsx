@@ -29,7 +29,7 @@ function ChipButton({
       onClick={onClick}
       className={`px-4 py-2 rounded-full text-sm border transition ${
         isSelected
-          ? "bg-blue-600 text-white border-blue-600"
+          ? "bg-blue-600 text-text-primary dark:text-dark-text-primary border-blue-600"
           : "bg-zinc-900 text-zinc-400 border-zinc-700"
       }`}
     >
@@ -179,7 +179,7 @@ Would love to take this forward.`
           {step === 5 && submitted && (
             <div className="text-center">
               <h2 className="text-xl mb-4">Got it.</h2>
-              <p className="text-zinc-400 mb-6">We’ll get back to you shortly.</p>
+              <p className="text-text-secondary dark:text-dark-text-secondary mb-6">We’ll get back to you within 4hrs.</p>
 
               <button onClick={openWhatsApp} className="w-full mb-3 p-3 bg-blue-600 rounded">
                 Continue on WhatsApp
