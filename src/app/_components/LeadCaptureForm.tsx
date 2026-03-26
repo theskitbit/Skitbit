@@ -10,8 +10,8 @@ const timelines = ["Within 2 weeks", "This month", "No fixed timeline"]
 
 const transitionProps = {
   type: "spring",
-  stiffness: 500,
-  damping: 30,
+  stiffness: 350,
+  damping: 25,
   mass: 0.5,
 }
 
@@ -121,7 +121,7 @@ export default function LeadCaptureForm() {
             initial={{ opacity: 0, y: 12, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -12, scale: 0.98 }}
-            transition={{ type: "spring", stiffness: 400, damping: 35 }}
+            transition={{ type: "spring", stiffness: 428, damping: 30 }}
           >
 
             {step === 1 && (
