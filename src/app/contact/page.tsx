@@ -1,6 +1,6 @@
 "use client"
 
-import LeadCaptureForm from "../_components/LeadCaptureForm"
+iimport LeadForm from '@/app/_sections/lead-form'
 
 export default function Page() {
   return (
