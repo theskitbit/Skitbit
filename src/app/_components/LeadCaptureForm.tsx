@@ -205,16 +205,16 @@ export default function LeadCaptureForm() {
         {!submitted && (
           <div className="mt-12 flex justify-between">
             <button onClick={back} disabled={step===1} className="text-zinc-400">
-              <ChevronLeft />
+              ←
             </button>
 
             {step < total ? (
               <button onClick={next} disabled={!canNext()} className="bg-blue-500 px-4 py-2 rounded">
-                Next <ChevronRight />
+                Next →
               </button>
             ) : (
               <button onClick={submit} className="bg-blue-500 px-4 py-2 rounded">
-                Submit <Check />
+                Submit ✓
               </button>
             )}
           </div>
