@@ -83,7 +83,7 @@ Would love to take this forward.`
   }
 
   return (
-    <div className="w-full max-w-xl mx-auto text-white">
+    <div className="w-full max-w-xl mx-auto bg-surface-primary dark:bg-dark-surface-primary border border-border dark:border-dark-border rounded-2xl p-8 shadow-sm text-text-primary dark:text-dark-text-primary">
       {/* Progress */}
       <div className="mb-6 text-sm text-zinc-400">
         Step {step} of {total}
