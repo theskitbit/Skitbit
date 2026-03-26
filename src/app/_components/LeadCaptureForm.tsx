@@ -236,6 +236,6 @@ function LeadCaptureFormInner() {
   )
 }
 
-export default dynamic(() => Promise.resolve(LeadCaptureFormInner), {
+export default dynamic(() => Promise.resolve(LeadCaptureForm), {
   ssr: false,
 })
