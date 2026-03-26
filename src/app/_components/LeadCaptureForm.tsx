@@ -27,12 +27,12 @@ function ChipButton({
   return (
     <motion.button
       onClick={onClick}
-      whileTap={{ scale: 0.97 }}
-      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.96 }}
+      whileHover={{ scale: 1.04 }}
       className={`px-4 py-2 rounded-full text-sm border transition ${
         isSelected
-          ? "bg-primary text-primary-foreground border-transparent"
-          : "bg-surface-secondary dark:bg-dark-surface-secondary border-border dark:border-dark-border text-text-secondary dark:text-dark-text-secondary hover:opacity-80"
+          ? "bg-blue-600 text-white border-blue-600"
+          : "bg-white/5 text-white/70 border-white/10 hover:bg-white/10"
       }`}
     >
       {label}
@@ -85,16 +85,16 @@ Would love to take this forward.`
   }
 
   return (
-    <div className="w-full max-w-xl mx-auto bg-surface-primary dark:bg-dark-surface-primary border border-border dark:border-dark-border rounded-2xl p-8 shadow-sm text-text-primary dark:text-dark-text-primary">
+    <div className="w-full max-w-xl mx-auto bg-black text-white rounded-2xl p-8 shadow-2xl border border-white/10">
       
       {/* Progress */}
-      <div className="mb-6 text-sm text-text-secondary dark:text-dark-text-secondary">
+      <div className="mb-6 text-sm text-white/50">
         Step {step} of {total}
       </div>
 
-      <div className="h-1 bg-border dark:bg-dark-border rounded mb-8">
+      <div className="h-1 bg-white/10 rounded mb-8">
         <motion.div
-          className="h-full bg-primary rounded"
+          className="h-full bg-blue-500 rounded"
           animate={{ width: `${(step / total) * 100}%` }}
           transition={{ type: "spring", stiffness: 120, damping: 20 }}
         />
@@ -149,7 +149,7 @@ Would love to take this forward.`
                 value={product}
                 onChange={(e) => setProduct(e.target.value)}
                 placeholder="e.g. Ashwagandha bottle OR product link"
-                className="w-full p-3 rounded bg-surface-secondary dark:bg-dark-surface-secondary border border-border dark:border-dark-border text-text-primary dark:text-dark-text-primary"
+                className="w-full p-3 rounded bg-white/5 border border-white/10 text-white placeholder:text-white/40"
               />
             </>
           )}
@@ -162,21 +162,21 @@ Would love to take this forward.`
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name"
-                className="w-full p-3 mb-3 rounded bg-surface-secondary dark:bg-dark-surface-secondary border border-border dark:border-dark-border text-text-primary dark:text-dark-text-primary"
+                className="w-full p-3 mb-3 rounded bg-white/5 border border-white/10 text-white placeholder:text-white/40"
               />
 
               <input
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
-                className="w-full p-3 mb-3 rounded bg-surface-secondary dark:bg-dark-surface-secondary border border-border dark:border-dark-border text-text-primary dark:text-dark-text-primary"
+                className="w-full p-3 mb-3 rounded bg-white/5 border border-white/10 text-white placeholder:text-white/40"
               />
 
               <input
                 value={whatsapp}
                 onChange={(e) => setWhatsapp(e.target.value)}
                 placeholder="WhatsApp (optional)"
-                className="w-full p-3 rounded bg-surface-secondary dark:bg-dark-surface-secondary border border-border dark:border-dark-border text-text-primary dark:text-dark-text-primary"
+                className="w-full p-3 rounded bg-white/5 border border-white/10 text-white placeholder:text-white/40"
               />
             </>
           )}
@@ -184,20 +184,20 @@ Would love to take this forward.`
           {step === 5 && submitted && (
             <div className="text-center">
               <h2 className="text-xl mb-4">Got it.</h2>
-              <p className="text-text-secondary dark:text-dark-text-secondary mb-6">
+              <p className="text-white/50 mb-6">
                 We’ll get back to you shortly.
               </p>
 
               <button
                 onClick={openWhatsApp}
-                className="w-full mb-3 p-3 bg-primary text-primary-foreground hover:opacity-90 rounded"
+                className="w-full mb-3 p-3 bg-blue-600 text-white rounded hover:bg-blue-700"
               >
                 Continue on WhatsApp
               </button>
 
               <button
                 onClick={() => location.reload()}
-                className="w-full p-3 bg-surface-secondary border border-border dark:border-dark-border rounded"
+                className="w-full p-3 bg-white/10 text-white rounded hover:bg-white/20"
               >
                 Done
               </button>
@@ -217,14 +217,14 @@ Would love to take this forward.`
             <button
               onClick={() => setStep(step + 1)}
               disabled={!canNext()}
-              className="bg-primary text-primary-foreground px-4 py-2 rounded hover:opacity-90"
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
             >
               Next <ChevronRight />
             </button>
           ) : (
             <button
               onClick={handleSubmit}
-              className="bg-primary text-primary-foreground px-4 py-2 rounded hover:opacity-90"
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
             >
               Submit <Check />
             </button>
