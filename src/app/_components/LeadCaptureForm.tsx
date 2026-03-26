@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Check, ChevronRight, ChevronLeft } from "lucide-react"
+
 
 const brandTypes = ["D2C (Shopify brand)", "Amazon-first brand", "Both", "Just starting out"]
 const projectTypes = ["Launching a new product","Improving existing listings","Need ongoing content for ads","Just exploring"]
