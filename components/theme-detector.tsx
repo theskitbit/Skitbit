@@ -8,8 +8,8 @@ export function ThemeDetector() {
     const updateFavicon = () => {
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
       
-      // Get or create the favicon link element
-      let faviconLink = document.querySelector('link[rel="icon"]')
+      // Get or create the favicon link element and cast it properly for TypeScript
+      let faviconLink = document.querySelector('link[rel="icon"]') as HTMLLinkElement | null
       
       if (!faviconLink) {
         faviconLink = document.createElement('link')
@@ -36,8 +36,10 @@ export function ThemeDetector() {
       return () => mediaQuery.removeEventListener('change', handleChange)
     }
     // Older browsers
-    else if (mediaQuery.addListener) {
+    else if ('addListener' in mediaQuery) {
+      // @ts-expect-error - legacy fallback for older browsers
       mediaQuery.addListener(handleChange)
+      // @ts-expect-error - legacy fallback for older browsers
       return () => mediaQuery.removeListener(handleChange)
     }
   }, [])
