@@ -111,7 +111,8 @@ export function WhatWeOffer() {
                           onClick={() => {
                             if (item.title.includes('Product Videos')) setIsVideoModalOpen(true)
                             else {
-                              const galleryTitle = item.title.split(' → ')?.trim() || item.title
+                              // Fixed the string array split error here
+                              const galleryTitle = item.title.split(' → ').pop()?.trim() || item.title
                               setSelectedGalleryTitle(galleryTitle)
                               setGalleryOpen(true)
                             }
