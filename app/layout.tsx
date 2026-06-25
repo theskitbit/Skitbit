@@ -1,17 +1,18 @@
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next' // 1. Added SpeedInsights Import
 import { ContactOverlayProvider } from '@/components/contact-overlay'
 import { SEOSchema } from '@/components/seo-schema'
 import { ThemeDetector } from '@/components/theme-detector'
-import { CookieConsent } from '@/components/cookie-consent' // 1. Added Import
+import { CookieConsent } from '@/components/cookie-consent'
 import Script from 'next/script'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
-// 1. Metadata Object - FIXED FOR SEO
+// Metadata Object - FIXED FOR SEO
 export const metadata: Metadata = {
   metadataBase: new URL('https://theskitbit.com'),
   title: '3D Product Rendering for E-commerce Brands | No Photoshoots Needed',
@@ -130,7 +131,8 @@ export default function RootLayout({
         </ContactOverlayProvider>
 
         <Analytics />
-        <CookieConsent /> {/* 2. Added Component here */}
+        <SpeedInsights /> {/* 2. Added Component here */}
+        <CookieConsent /> 
 
         <noscript>
           <img
