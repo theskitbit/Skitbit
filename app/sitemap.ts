@@ -93,7 +93,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   locations.forEach((location) => {
     sitemapEntries.push({
       url: `${baseUrl}/locations/${location.slug}`,
-      lastModified: location.updatedAt ? new Date(location.updatedAt) : new Date(),
+      // TS Fix: Cast to string since the ternary checks existence
+      lastModified: location.updatedAt ? new Date(location.updatedAt as string) : new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
     })
@@ -101,9 +102,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Add Blog Pages
   blogPosts.forEach((post) => {
+    const postDate = post.updatedAt || post.publishedAt;
     sitemapEntries.push({
       url: `${baseUrl}/blog/${post.slug}`,
-      lastModified: (post.updatedAt || post.publishedAt) ? new Date(post.updatedAt || post.publishedAt) : new Date(),
+      // TS Fix: Cast to string since the ternary checks existence
+      lastModified: postDate ? new Date(postDate as string) : new Date(),
       changeFrequency: "weekly",
       priority: 0.75,
     })
