@@ -37,9 +37,7 @@ export function ThemeDetector() {
     }
     // Older browsers
     else if ('addListener' in mediaQuery) {
-      // @ts-expect-error - legacy fallback for older browsers
       mediaQuery.addListener(handleChange)
-      // @ts-expect-error - legacy fallback for older browsers
       return () => mediaQuery.removeListener(handleChange)
     }
   }, [])
