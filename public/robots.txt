@@ -1,9 +1,41 @@
-# *
+# Allow all crawlers
 User-agent: *
 Allow: /
 
-# Host
-Host: https://nextjs-marketing-website.basehub.com
+# Specifically allow Google, Bing, and AI crawlers
+User-agent: Googlebot
+Allow: /
 
-# Sitemaps
-Sitemap: https://nextjs-marketing-website.basehub.com/sitemap.xml
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Perplexity-Bot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Block bad bots
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+# Sitemap location
+Sitemap: https://theskitbit.com/sitemap.xml
+
+# Crawl delay to prevent server overload
+Crawl-delay: 1

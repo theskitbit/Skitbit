@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&display=swap');
+
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* =========================
+   COLOR SYSTEM (REFINED)
+   ========================= */
+
+:root {
+  --background: #F6F7ED;
+  --foreground: #001F3F;
+
+  --card: #FFFFFF;
+  --card-foreground: #001F3F;
+
+  --popover: #FFFFFF;
+  --popover-foreground: #001F3F;
+
+  --primary: #DBE64C;
+  --primary-foreground: #001F3F;
+
+  --secondary: #F1F3E6;
+  --secondary-foreground: #001F3F;
+
+  --accent: #1E488F;
+  --accent-foreground: #F6F7ED;
+
+  --muted: #EEF1E4;
+  --muted-foreground: #5B6B7C;
+
+  --destructive: #D64545;
+  --destructive-foreground: #FFFFFF;
+
+  --border: #E4E7DA;
+  --input: #EEF1E4;
+  --ring: #1E488F;
+
+  --sidebar: #F6F7ED;
+  --sidebar-foreground: #001F3F;
+  --sidebar-primary: #001F3F;
+  --sidebar-primary-foreground: #F6F7ED;
+  --sidebar-accent: #DBE64C;
+  --sidebar-accent-foreground: #001F3F;
+  --sidebar-border: #E4E7DA;
+  --sidebar-ring: #1E488F;
+
+  --radius: 0.625rem;
+}
+
+/* =========================
+   DARK MODE (CONTROLLED)
+   ========================= */
+
+.dark {
+  --background: #001F3F;
+  --foreground: #F6F7ED;
+
+  --card: #002A52;
+  --card-foreground: #F6F7ED;
+
+  --popover: #002A52;
+  --popover-foreground: #F6F7ED;
+
+  --primary: #DBE64C;
+  --primary-foreground: #001F3F;
+
+  --secondary: #003A66;
+  --secondary-foreground: #F6F7ED;
+
+  --accent: #1E488F;
+  --accent-foreground: #F6F7ED;
+
+  --muted: #002A52;
+  --muted-foreground: #A8B6C4;
+
+  --border: #1A3A5A;
+  --input: #1A3A5A;
+  --ring: #DBE64C;
+
+  --sidebar: #001F3F;
+  --sidebar-foreground: #F6F7ED;
+  --sidebar-primary: #F6F7ED;
+  --sidebar-primary-foreground: #001F3F;
+  --sidebar-accent: #DBE64C;
+  --sidebar-accent-foreground: #001F3F;
+  --sidebar-border: #1A3A5A;
+  --sidebar-ring: #DBE64C;
+}
+
+/* =========================
+   THEME TOKENS
+   ========================= */
+
+@theme inline {
+  --font-sans: 'Open Sans', sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* =========================
+   BASE STYLES
+   ========================= */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+/* Hide scrollbar */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Firework widget — force block context */
+fw-widget {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+/* Force-hide the Vercel injected badge */
+div[id^="v0-built-with-button"] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
