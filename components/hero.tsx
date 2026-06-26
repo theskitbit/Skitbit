@@ -14,23 +14,11 @@ type HeroCardStyle = CSSProperties & {
   '--rx'?: string;
   '--ry'?: string;
 };
-// 🔥 SEO & Copy Fix: The "Pass the Heinz" punchy audit metrics
+
 const auditItems = [
-  {
-    label: 'Hook',
-    sub: 'Make them look.',
-    width: '84%',
-  },
-  {
-    label: 'Clarity',
-    sub: 'Make it obvious.',
-    width: '95%',
-  },
-  {
-    label: 'Trust',
-    sub: 'Make it real.',
-    width: '88%',
-  },
+  { label: 'Hook', sub: 'Make them look.', width: '84%' },
+  { label: 'Clarity', sub: 'Make it obvious.', width: '95%' },
+  { label: 'Trust', sub: 'Make it real.', width: '88%' },
 ];
 
 export function Hero() {
@@ -39,63 +27,37 @@ export function Hero() {
   const rafRef = useRef<number | null>(null);
   const { open } = useContactOverlay();
 
-  const handleContactClick = () => {
-    open();
-  };
+  const handleContactClick = () => open();
 
-  // 🎯 Smooth scroll handler targeting the Firework Widget section
   const handleWorkClick = () => {
-    const target = document.getElementById('work');
-
-    target?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+    document.getElementById('work')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const handleCardMouseMove = (event: MouseEvent<HTMLDivElement>) => {
     if (typeof window === 'undefined') return;
-
-    const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
-    if (!hasFinePointer || prefersReducedMotion) return;
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const rect = event.currentTarget.getBoundingClientRect();
-
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
-    const mx = `${(x / rect.width) * 100}%`;
-    const my = `${(y / rect.height) * 100}%`;
-    const ry = `${((x / rect.width) - 0.5) * 7}deg`;
-    const rx = `${((y / rect.height) - 0.5) * -7}deg`;
-
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
-    }
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
 
     rafRef.current = requestAnimationFrame(() => {
       const card = cardRef.current;
       if (!card) return;
-
-      card.style.setProperty('--mx', mx);
-      card.style.setProperty('--my', my);
-      card.style.setProperty('--rx', rx);
-      card.style.setProperty('--ry', ry);
+      card.style.setProperty('--mx', `${(x / rect.width) * 100}%`);
+      card.style.setProperty('--my', `${(y / rect.height) * 100}%`);
+      card.style.setProperty('--ry', `${((x / rect.width) - 0.5) * 7}deg`);
+      card.style.setProperty('--rx', `${((y / rect.height) - 0.5) * -7}deg`);
     });
   };
 
   const handleCardMouseLeave = () => {
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
-    }
-
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
     const card = cardRef.current;
     if (!card) return;
-
     card.style.setProperty('--mx', '50%');
     card.style.setProperty('--my', '50%');
     card.style.setProperty('--rx', '0deg');
@@ -106,11 +68,7 @@ export function Hero() {
     const video = videoRef.current;
     if (!video) return;
 
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
-    if (prefersReducedMotion) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       video.pause();
       return;
     }
@@ -118,30 +76,19 @@ export function Hero() {
     let isInView = false;
 
     const playVideo = () => {
-      if (!document.hidden && isInView) {
-        video.play().catch(() => { });
-      }
+      if (!document.hidden && isInView) video.play().catch(() => {});
     };
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         isInView = entry.isIntersecting;
-
-        if (isInView) {
-          playVideo();
-        } else {
-          video.pause();
-        }
+        isInView ? playVideo() : video.pause();
       },
       { threshold: 0.25 }
     );
 
     const handleVisibilityChange = () => {
-      if (document.hidden) {
-        video.pause();
-      } else {
-        playVideo();
-      }
+      document.hidden ? video.pause() : playVideo();
     };
 
     observer.observe(video);
@@ -150,10 +97,7 @@ export function Hero() {
     return () => {
       observer.unobserve(video);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
@@ -165,61 +109,30 @@ export function Hero() {
     >
       <style>{`
         @keyframes skitbit-scan {
-          0% {
-            transform: translateY(-120%);
-            opacity: 0;
-          }
-          18% {
-            opacity: 0.18;
-          }
-          70% {
-            opacity: 0.1;
-          }
-          100% {
-            transform: translateY(120%);
-            opacity: 0;
-          }
+          0% { transform: translateY(-120%); opacity: 0; }
+          18% { opacity: 0.18; }
+          70% { opacity: 0.1; }
+          100% { transform: translateY(120%); opacity: 0; }
         }
-
         @keyframes skitbit-float-a {
-          0%, 100% {
-            transform: translate3d(0, 0, 0);
-          }
-          50% {
-            transform: translate3d(0, -6px, 0);
-          }
+          0%, 100% { transform: translate3d(0, 0, 0); }
+          50% { transform: translate3d(0, -6px, 0); }
         }
-
         @keyframes skitbit-shimmer {
-          0% {
-            transform: translateX(-120%);
-          }
-          100% {
-            transform: translateX(160%);
-          }
+          0% { transform: translateX(-120%); }
+          100% { transform: translateX(160%); }
         }
-
-        .skitbit-scan-line {
-          animation: skitbit-scan 5s ease-in-out infinite;
-        }
-
-        .skitbit-float-a {
-          animation: skitbit-float-a 5.8s ease-in-out infinite;
-        }
-
-        .skitbit-button-shimmer {
-          animation: skitbit-shimmer 3.2s ease-in-out infinite;
-        }
-
+        .skitbit-scan-line { animation: skitbit-scan 5s ease-in-out infinite; }
+        .skitbit-float-a { animation: skitbit-float-a 5.8s ease-in-out infinite; }
+        .skitbit-button-shimmer { animation: skitbit-shimmer 3.2s ease-in-out infinite; }
         @media (prefers-reduced-motion: reduce) {
           .skitbit-scan-line,
           .skitbit-float-a,
-          .skitbit-button-shimmer {
-            animation: none !important;
-          }
+          .skitbit-button-shimmer { animation: none !important; }
         }
       `}</style>
 
+      {/* Grid texture */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-[0.03]"
@@ -230,45 +143,35 @@ export function Hero() {
         }}
       />
 
+      {/* Ambient blobs — solid, no blur-3xl glassmorphism */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-[-18%] top-[18%] h-[460px] w-[460px] rounded-full bg-primary/12 blur-3xl"
+        className="pointer-events-none absolute left-[-18%] top-[18%] h-[460px] w-[460px] rounded-full bg-primary/8 blur-2xl"
       />
-
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-[-20%] right-[-12%] h-[560px] w-[560px] rounded-full bg-foreground/6 blur-3xl"
+        className="pointer-events-none absolute bottom-[-20%] right-[-12%] h-[560px] w-[560px] rounded-full bg-foreground/4 blur-2xl"
       />
 
       <div className="relative mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-11 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 xl:gap-20">
+
           {/* LEFT */}
           <div className="order-1 flex flex-col justify-center">
             <div className="max-w-2xl">
-              <span className="inline-flex items-center gap-2 rounded-full bg-muted px-4 py-2 text-[12px] font-medium text-foreground/70 shadow-sm ring-1 ring-foreground/5 sm:text-[13px]">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
-                </span>
-                {/* 🔥 SEO FIX: High-value target keyword in the eyebrow */}
-                3D Product Rendering & Animation
-              </span>
-
-              {/* 🔥 SEO FIX: The Master H1 Tag */}
-              <h1 className="mt-5 max-w-[820px] text-[43px] font-medium leading-[0.9] tracking-[-0.065em] text-foreground sm:text-[60px] md:text-[70px] lg:text-[78px] xl:text-[88px] m-0">
-                Stop explaining.<br />{' '}Show it in 3D.
+              <h1 className="mt-0 max-w-[820px] text-[43px] font-medium leading-[0.9] tracking-[-0.065em] text-foreground sm:text-[60px] md:text-[70px] lg:text-[78px] xl:text-[88px] m-0">
+                Stop Explaining.<br />{' '}Show it in 3D.
               </h1>
 
-              {/* 🔥 SEO FIX: High-value keywords woven naturally into the paragraph */}
               <p className="mt-6 max-w-[530px] text-base leading-relaxed text-foreground/60 sm:text-lg m-0">
-                Words tell. Visuals sell. I turn physical products into high-end 3D creatives that instantly communicate your value across Shopify, Meta, and TikTok.
+                Words tell. Visuals sell. I turn physical products into high-end 3D creatives that communicate your value across Shopify, Meta, and TikTok — without photoshoots.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <button
                   type="button"
                   onClick={handleContactClick}
-                  className="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_14px_34px_rgba(0,0,0,0.10)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_20px_50px_rgba(0,0,0,0.14)] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 focus:ring-offset-background active:scale-[0.98] sm:w-auto"
+                  className="btn-primary rounded-full group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden transition-all duration-300 hover:scale-[1.03] hover:opacity-90 focus:outline-none focus-ring active:scale-[0.98] sm:w-auto"
                 >
                   <span
                     aria-hidden="true"
@@ -286,14 +189,13 @@ export function Hero() {
                 <button
                   type="button"
                   onClick={handleWorkClick}
-                  className="inline-flex w-full items-center justify-center rounded-full bg-muted px-6 py-3.5 text-sm font-semibold text-foreground shadow-sm ring-1 ring-foreground/5 transition-all duration-300 hover:scale-[1.03] hover:bg-foreground/10 focus:outline-none focus:ring-2 focus:ring-foreground/15 focus:ring-offset-2 focus:ring-offset-background active:scale-[0.98] sm:w-auto"
+                  className="btn-ghost rounded-full inline-flex w-full items-center justify-center transition-all duration-300 hover:scale-[1.03] focus:outline-none focus-ring active:scale-[0.98] sm:w-auto"
                 >
                   View Our Work
                 </button>
               </div>
 
               <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-foreground/45">
-                <span>Free visual audit</span>
                 <span className="hidden h-1 w-1 rounded-full bg-foreground/25 sm:block" />
                 <span>No pitch</span>
                 <span className="hidden h-1 w-1 rounded-full bg-foreground/25 sm:block" />
@@ -308,33 +210,25 @@ export function Hero() {
               ref={cardRef}
               onMouseMove={handleCardMouseMove}
               onMouseLeave={handleCardMouseLeave}
-              style={
-                {
-                  '--mx': '50%',
-                  '--my': '50%',
-                  '--rx': '0deg',
-                  '--ry': '0deg',
-                } as HeroCardStyle
-              }
+              style={{ '--mx': '50%', '--my': '50%', '--rx': '0deg', '--ry': '0deg' } as HeroCardStyle}
               className="relative mx-auto w-full max-w-[680px] transition-transform duration-300 ease-out lg:ml-auto"
             >
+              {/* Card wrapper — solid fill, no backdrop-blur, no glassmorphism */}
               <div
-                className="relative rounded-[30px] bg-background/60 p-1.5 shadow-[0_28px_90px_rgba(0,0,0,0.12)] ring-1 ring-foreground/10 backdrop-blur-xl sm:rounded-[36px] sm:p-2"
+                className="relative rounded-3xl bg-background p-1.5 shadow-[0_28px_90px_rgba(0,0,0,0.12)] ring-1 ring-foreground/10 sm:p-2"
                 style={{
-                  transform:
-                    'perspective(1300px) rotateX(var(--rx)) rotateY(var(--ry))',
+                  transform: 'perspective(1300px) rotateX(var(--rx)) rotateY(var(--ry))',
                 }}
               >
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 rounded-[30px] opacity-0 transition-opacity duration-300 hover:opacity-100 sm:rounded-[36px]"
+                  className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-300 hover:opacity-100"
                   style={{
-                    background:
-                      'radial-gradient(circle at var(--mx) var(--my), rgba(255,255,255,0.5), transparent 32%)',
+                    background: 'radial-gradient(circle at var(--mx) var(--my), rgba(255,255,255,0.5), transparent 32%)',
                   }}
                 />
 
-                <div className="relative overflow-hidden rounded-[25px] bg-foreground/5 sm:rounded-[30px]">
+                <div className="relative overflow-hidden rounded-3xl bg-foreground/5">
                   <div className="relative h-[470px] w-full sm:h-[530px] lg:h-[610px]">
                     <video
                       ref={videoRef}
@@ -355,17 +249,11 @@ export function Hero() {
                       aria-hidden="true"
                       className="skitbit-scan-line pointer-events-none absolute left-0 top-0 h-full w-full bg-gradient-to-b from-transparent via-white/20 to-transparent"
                     />
-
-                    <div className="skitbit-float-a absolute left-4 top-4 rounded-full bg-background/92 px-3.5 py-2 text-xs font-medium text-foreground shadow-lg ring-1 ring-foreground/10 backdrop-blur sm:left-7 sm:top-7 sm:px-4 sm:text-sm">
-                      Infinite variations/Reuseable Assets
-                    </div>
-
                     <div className="hidden sm:block">
-                      <div className="skitbit-float-a absolute bottom-[188px] left-7 rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background shadow-lg">
+                      <div className="skitbit-float-a absolute bottom-[188px] left-7 rounded-sm bg-foreground px-4 py-2 text-sm font-medium text-background shadow-lg">
                         Social
                       </div>
-
-                      <div className="skitbit-float-a absolute bottom-[188px] right-7 rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background shadow-lg">
+                      <div className="skitbit-float-a absolute bottom-[188px] right-7 rounded-sm bg-foreground px-4 py-2 text-sm font-medium text-background shadow-lg">
                         E-commerce
                       </div>
                     </div>
@@ -375,29 +263,26 @@ export function Hero() {
                       className="pointer-events-none absolute bottom-0 left-0 right-0 h-[48%] bg-gradient-to-t from-background/35 via-background/12 to-transparent"
                     />
 
-                    {/* Mobile + desktop responsive audit card */}
-                    <div className="absolute bottom-4 left-4 right-4 overflow-hidden rounded-[24px] bg-background/97 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.18)] ring-1 ring-foreground/10 backdrop-blur-xl sm:bottom-7 sm:left-7 sm:right-7 sm:rounded-[28px] sm:p-6">
+                    {/* Audit card — solid fill, no backdrop-blur */}
+                    <div className="absolute bottom-4 left-4 right-4 overflow-hidden rounded-3xl bg-background p-4 shadow-[0_20px_60px_rgba(0,0,0,0.18)] ring-1 ring-foreground/10 sm:bottom-7 sm:left-7 sm:right-7 sm:p-6">
                       <div
                         aria-hidden="true"
                         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent"
                       />
-
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-muted px-3 py-1.5 ring-1 ring-foreground/5 sm:mb-3">
+                          <div className="mb-2 inline-flex items-center gap-2 rounded-sm bg-muted px-3 py-1.5 ring-1 ring-foreground/5 sm:mb-3">
                             <span className="h-2 w-2 rounded-full bg-primary" />
                             <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-foreground/50 sm:text-[11px]">
                               Visual Audit
                             </span>
                           </div>
-
-                          {/* 🔥 SEO FIX: Card Title is now an H2 */}
                           <h2 className="max-w-[420px] text-[20px] font-semibold leading-[1.12] tracking-[-0.04em] text-foreground sm:text-[28px] m-0">
                             They aren't reading your copy.
                           </h2>
                         </div>
 
-                        <span className="shrink-0 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-sm sm:px-4 sm:py-2 sm:text-sm">
+                        <span className="shrink-0 rounded-sm bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-sm sm:px-4 sm:py-2 sm:text-sm">
                           Free
                         </span>
                       </div>
@@ -406,20 +291,17 @@ export function Hero() {
                         {auditItems.map((item) => (
                           <div
                             key={item.label}
-                            className="min-w-0 rounded-2xl border border-foreground/10 bg-background p-3 sm:p-4"
+                            className="card-base rounded-2xl min-w-0 p-3 sm:p-4"
                           >
-                            {/* 🔥 SEO FIX: Metrics are now H3s */}
                             <h3 className="truncate text-[13px] font-semibold leading-none text-foreground sm:text-[17px] m-0">
                               {item.label}
                             </h3>
-
                             <p className="mt-1 truncate text-[10px] leading-none text-foreground/50 sm:mt-2 sm:text-[13px] m-0">
                               {item.sub}
                             </p>
-
-                            <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-foreground/10 sm:mt-4 sm:h-2">
+                            <div className="mt-3 h-1.5 overflow-hidden rounded-sm bg-foreground/10 sm:mt-4 sm:h-2">
                               <div
-                                className="h-full rounded-full bg-primary"
+                                className="h-full rounded-sm bg-primary"
                                 style={{ width: item.width }}
                               />
                             </div>
@@ -433,7 +315,7 @@ export function Hero() {
 
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute -bottom-7 left-1/2 h-14 w-[84%] -translate-x-1/2 rounded-full bg-foreground/12 blur-2xl"
+                className="pointer-events-none absolute -bottom-7 left-1/2 h-14 w-[84%] -translate-x-1/2 rounded-full bg-foreground/10 blur-xl"
               />
             </div>
           </div>
