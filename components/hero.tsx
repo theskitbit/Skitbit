@@ -252,7 +252,7 @@ export function Hero() {
 
                     {/* Floating label — solid bg, no backdrop-blur */}
                     <div className="skitbit-float-a absolute left-4 top-4 rounded-sm bg-background px-3.5 py-2 text-xs font-medium text-foreground shadow-lg ring-1 ring-foreground/10 sm:left-7 sm:top-7 sm:px-4 sm:text-sm">
-                      Infinite variations / Reusable Assets
+                      Confused customers never buy
                     </div>
 
                     <div className="hidden sm:block">
