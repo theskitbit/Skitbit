@@ -179,7 +179,7 @@ export function Hero() {
                 <button
                   type="button"
                   onClick={handleContactClick}
-                  className="btn-primary group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden transition-all duration-300 hover:scale-[1.03] hover:opacity-90 focus:outline-none focus-ring active:scale-[0.98] sm:w-auto"
+                  className="btn-primary rounded-full group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden transition-all duration-300 hover:scale-[1.03] hover:opacity-90 focus:outline-none focus-ring active:scale-[0.98] sm:w-auto"
                 >
                   <span
                     aria-hidden="true"
@@ -197,7 +197,7 @@ export function Hero() {
                 <button
                   type="button"
                   onClick={handleWorkClick}
-                  className="btn-ghost inline-flex w-full items-center justify-center transition-all duration-300 hover:scale-[1.03] focus:outline-none focus-ring active:scale-[0.98] sm:w-auto"
+                  className="btn-ghost rounded-full inline-flex w-full items-center justify-center transition-all duration-300 hover:scale-[1.03] focus:outline-none focus-ring active:scale-[0.98] sm:w-auto"
                 >
                   View Our Work
                 </button>
@@ -224,20 +224,20 @@ export function Hero() {
             >
               {/* Card wrapper — solid fill, no backdrop-blur, no glassmorphism */}
               <div
-                className="relative rounded-md bg-background p-1.5 shadow-[0_28px_90px_rgba(0,0,0,0.12)] ring-1 ring-foreground/10 sm:p-2"
+                className="relative rounded-3xl bg-background p-1.5 shadow-[0_28px_90px_rgba(0,0,0,0.12)] ring-1 ring-foreground/10 sm:p-2"
                 style={{
                   transform: 'perspective(1300px) rotateX(var(--rx)) rotateY(var(--ry))',
                 }}
               >
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 rounded-md opacity-0 transition-opacity duration-300 hover:opacity-100"
+                  className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-300 hover:opacity-100"
                   style={{
                     background: 'radial-gradient(circle at var(--mx) var(--my), rgba(255,255,255,0.5), transparent 32%)',
                   }}
                 />
 
-                <div className="relative overflow-hidden rounded-sm bg-foreground/5">
+                <div className="relative overflow-hidden rounded-3xl bg-foreground/5">
                   <div className="relative h-[470px] w-full sm:h-[530px] lg:h-[610px]">
                     <video
                       ref={videoRef}
@@ -279,7 +279,7 @@ export function Hero() {
                     />
 
                     {/* Audit card — solid fill, no backdrop-blur */}
-                    <div className="absolute bottom-4 left-4 right-4 overflow-hidden rounded-sm bg-background p-4 shadow-[0_20px_60px_rgba(0,0,0,0.18)] ring-1 ring-foreground/10 sm:bottom-7 sm:left-7 sm:right-7 sm:p-6">
+                    <div className="absolute bottom-4 left-4 right-4 overflow-hidden rounded-3xl bg-background p-4 shadow-[0_20px_60px_rgba(0,0,0,0.18)] ring-1 ring-foreground/10 sm:bottom-7 sm:left-7 sm:right-7 sm:p-6">
                       <div
                         aria-hidden="true"
                         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent"
@@ -307,7 +307,7 @@ export function Hero() {
                         {auditItems.map((item) => (
                           <div
                             key={item.label}
-                            className="card-base min-w-0 p-3 sm:p-4"
+                            className="card-base rounded-2xl min-w-0 p-3 sm:p-4"
                           >
                             <h3 className="truncate text-[13px] font-semibold leading-none text-foreground sm:text-[17px] m-0">
                               {item.label}
