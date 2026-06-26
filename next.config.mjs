@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Your other config settings here...
+  // ... existing compiler config
   async rewrites() {
     return [
       {
@@ -10,5 +10,4 @@ const nextConfig = {
     ];
   },
 }
-
-module.exports = nextConfig; // Ensure you export as module.exports
+module.exports = nextConfig;

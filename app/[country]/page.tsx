@@ -14,6 +14,10 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ country: string }> }): Promise<Metadata> {
   const { country } = await params
+  
+  // Guard Clause: If the route is hijacked, return empty metadata immediately
+  if (country === 'sitemap.xml') return {}
+
   const countryContent = getCountryPage(country)
 
   if (!countryContent) {
@@ -50,6 +54,12 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
 
 export default async function CountryPage({ params }: { params: Promise<{ country: string }> }) {
   const { country } = await params
+
+  // Guard Clause: If the route is hijacked, force a 404 to stop execution
+  if (country === 'sitemap.xml') {
+    notFound()
+  }
+
   const countryContent = getCountryPage(country)
 
   if (!countryContent) {
