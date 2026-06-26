@@ -159,15 +159,7 @@ export function Hero() {
           {/* LEFT */}
           <div className="order-1 flex flex-col justify-center">
             <div className="max-w-2xl">
-              <span className="inline-flex items-center gap-2 rounded-sm bg-muted px-4 py-2 text-[12px] font-medium text-foreground/70 ring-1 ring-foreground/5 sm:text-[13px]">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
-                </span>
-                3D Product Rendering & Animation
-              </span>
-
-              <h1 className="mt-5 max-w-[820px] text-[43px] font-medium leading-[0.9] tracking-[-0.065em] text-foreground sm:text-[60px] md:text-[70px] lg:text-[78px] xl:text-[88px] m-0">
+              <h1 className="mt-0 max-w-[820px] text-[43px] font-medium leading-[0.9] tracking-[-0.065em] text-foreground sm:text-[60px] md:text-[70px] lg:text-[78px] xl:text-[88px] m-0">
                 Stop explaining.<br />{' '}Show it in 3D.
               </h1>
 
