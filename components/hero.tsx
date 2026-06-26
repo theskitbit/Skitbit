@@ -164,7 +164,7 @@ export function Hero() {
               </h1>
 
               <p className="mt-6 max-w-[530px] text-base leading-relaxed text-foreground/60 sm:text-lg m-0">
-                Words tell. Visuals sell. I turn physical products into high-end 3D creatives that communicate your value across Shopify, Meta, and TikTok — without photoshoots.
+                Your 3D production department. We deliver high-end campaign creatives so your team can focus on rollout.
               </p>
 
               <div className="mt-8">
