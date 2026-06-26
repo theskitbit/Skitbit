@@ -28,7 +28,7 @@ const offerings: Offering[] = [
     usd: 'High-performance visual assets specifically formatted and designed to lower CPA and drive conversions across Instagram and Meta. From $350.',
   },
   {
-    title: 'Boost Engagement → Product Videos',
+    title: '3D Product Animation Videos',
     inr: 'Scroll-stopping 3D animations and motion graphics built to drive engagement and sales. Optimized for Reels, TikTok, and paid social. From ₹30,000.',
     usd: 'Scroll-stopping 3D animations and motion graphics built to drive engagement and sales. Optimized for Reels, TikTok, and paid social. From $1500.',
   },
