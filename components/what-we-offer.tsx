@@ -13,24 +13,24 @@ type Offering = {
 
 const offerings: Offering[] = [
   {
-    title: 'Optimize PDPs → Web Images',
+    title: 'Shopify → Product Renders',
     inr: 'High-converting, flawless 3D product images built for your Shopify store and PDPs. Designed to replace expensive photoshoots and increase clicks. From ₹8,000.',
-    usd: 'High-converting, flawless 3D product images built for your Shopify store and PDPs. Designed to replace expensive photoshoots and increase clicks. From $100.',
+    usd: 'High-converting, flawless 3D product images built for your Shopify store and PDPs. Designed to replace expensive photoshoots and increase clicks. From $300.',
   },
   {
-    title: 'Build Context → Lifestyle Images',
+    title: 'Lifestyle Product Renders',
     inr: 'Photorealistic 3D environments that place your product in the perfect setting. Build premium brand aesthetics without the cost of a physical set. From ₹15,000.',
-    usd: 'Photorealistic 3D environments that place your product in the perfect setting. Build premium brand aesthetics without the cost of a physical set. From $200.',
+    usd: 'Photorealistic 3D environments that place your product in the perfect setting. Build premium brand aesthetics without the cost of a physical set. From $800.',
   },
   {
-    title: 'Scale Campaigns → Ad Creatives',
+    title: 'Meta-ready Ad Creatives',
     inr: 'High-performance visual assets specifically formatted and designed to lower CPA and drive conversions across Instagram and Meta. From ₹12,000.',
-    usd: 'High-performance visual assets specifically formatted and designed to lower CPA and drive conversions across Instagram and Meta. From $150.',
+    usd: 'High-performance visual assets specifically formatted and designed to lower CPA and drive conversions across Instagram and Meta. From $350.',
   },
   {
     title: 'Boost Engagement → Product Videos',
     inr: 'Scroll-stopping 3D animations and motion graphics built to drive engagement and sales. Optimized for Reels, TikTok, and paid social. From ₹30,000.',
-    usd: 'Scroll-stopping 3D animations and motion graphics built to drive engagement and sales. Optimized for Reels, TikTok, and paid social. From $500.',
+    usd: 'Scroll-stopping 3D animations and motion graphics built to drive engagement and sales. Optimized for Reels, TikTok, and paid social. From $1500.',
   },
 ]
 
