@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Open_Sans } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
-import { SpeedInsights } from '@vercel/speed-insights/next' // 1. Added SpeedInsights Import
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { ContactOverlayProvider } from '@/components/contact-overlay'
 import { SEOSchema } from '@/components/seo-schema'
 import { ThemeDetector } from '@/components/theme-detector'
@@ -9,15 +9,18 @@ import { CookieConsent } from '@/components/cookie-consent'
 import Script from 'next/script'
 import './globals.css'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-sans',
+  display: 'swap',
+})
 
-// Metadata Object - FIXED FOR SEO
 export const metadata: Metadata = {
   metadataBase: new URL('https://theskitbit.com'),
   title: '3D Product Rendering for E-commerce Brands | No Photoshoots Needed',
   description: 'High-end 3D product visuals designed for performance. Create consistent creatives across ads, PDPs, and social—without production delays.',
-  generator: 'Skitbit International',
+  // ← generator field removed entirely
   keywords: ['3D product rendering', 'e-commerce product visuals', 'product photography alternative', 'CGI product images', 'digital product rendering', 'ad creatives', 'product visualization'],
   authors: [{ name: 'Skitbit International' }],
   openGraph: {
@@ -63,7 +66,7 @@ export const metadata: Metadata = {
     apple: '/apple-icon.png',
   },
   alternates: {
-    canonical: '/', 
+    canonical: '/',
   },
 }
 
@@ -73,8 +76,8 @@ export const viewport: Viewport = {
   maximumScale: 5,
   userScalable: true,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#000000' },
+    { media: '(prefers-color-scheme: light)', color: '#F6F7ED' },
+    { media: '(prefers-color-scheme: dark)', color: '#001F3F' },
   ],
 }
 
@@ -84,7 +87,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={openSans.variable}>
       <head>
         <Script
           id="tracking-scripts"
@@ -101,8 +104,8 @@ export default function RootLayout({
                 b.head.appendChild(t);
                 }(window, document,'script',
                 'https://connect.facebook.net/en_US/fbevents.js');
-                
-                fbq('set', 'autoConfig', false, '936091006015773'); 
+
+                fbq('set', 'autoConfig', false, '936091006015773');
                 fbq('init', '936091006015773');
                 fbq('track', 'PageView');
 
@@ -129,11 +132,9 @@ export default function RootLayout({
         <ContactOverlayProvider>
           {children}
         </ContactOverlayProvider>
-
         <Analytics />
-        <SpeedInsights /> {/* 2. Added Component here */}
-        <CookieConsent /> 
-
+        <SpeedInsights />
+        <CookieConsent />
         <noscript>
           <img
             height="1"
