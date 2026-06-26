@@ -160,14 +160,14 @@ export function Hero() {
           <div className="order-1 flex flex-col justify-center">
             <div className="max-w-2xl">
               <h1 className="mt-0 max-w-[820px] text-[43px] font-medium leading-[0.9] tracking-[-0.065em] text-foreground sm:text-[60px] md:text-[70px] lg:text-[78px] xl:text-[88px] m-0">
-                Stop Explaining.<br />{' '}Show it in 3D.
+                Stop explaining.<br />{' '}Show it in 3D.
               </h1>
 
               <p className="mt-6 max-w-[530px] text-base leading-relaxed text-foreground/60 sm:text-lg m-0">
-                Words tell. Visuals sell. I turn physical products into high-end 3D creatives that communicate your value across Shopify, Meta, and TikTok — without photoshoots.
+                Your 3D production department. We deliver high-end campaign creatives so your team can focus on rollout.
               </p>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-8">
                 <button
                   type="button"
                   onClick={handleContactClick}
@@ -185,21 +185,6 @@ export function Hero() {
                     →
                   </span>
                 </button>
-
-                <button
-                  type="button"
-                  onClick={handleWorkClick}
-                  className="btn-ghost rounded-full inline-flex w-full items-center justify-center transition-all duration-300 hover:scale-[1.03] focus:outline-none focus-ring active:scale-[0.98] sm:w-auto"
-                >
-                  View Our Work
-                </button>
-              </div>
-
-              <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-foreground/45">
-                <span className="hidden h-1 w-1 rounded-full bg-foreground/25 sm:block" />
-                <span>No pitch</span>
-                <span className="hidden h-1 w-1 rounded-full bg-foreground/25 sm:block" />
-                <span>Clear fixes you can use</span>
               </div>
             </div>
           </div>
@@ -269,6 +254,7 @@ export function Hero() {
                         aria-hidden="true"
                         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent"
                       />
+
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
                           <div className="mb-2 inline-flex items-center gap-2 rounded-sm bg-muted px-3 py-1.5 ring-1 ring-foreground/5 sm:mb-3">

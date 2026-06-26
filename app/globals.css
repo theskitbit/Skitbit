@@ -209,7 +209,6 @@
 .btn-primary {
   background-color: var(--primary);
   color: var(--primary-foreground);
-  border-radius: var(--radius);
   font-weight: 600;
   font-size: var(--text-small);
   letter-spacing: 0.02em;
@@ -226,7 +225,6 @@
   background-color: transparent;
   color: var(--foreground);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
   transition: background-color var(--transition-base);
   padding: 0.625rem 1.25rem;
 }
