@@ -249,12 +249,6 @@ export function Hero() {
                       aria-hidden="true"
                       className="skitbit-scan-line pointer-events-none absolute left-0 top-0 h-full w-full bg-gradient-to-b from-transparent via-white/20 to-transparent"
                     />
-
-                    {/* Floating label — solid bg, no backdrop-blur */}
-                    <div className="skitbit-float-a absolute left-4 top-4 rounded-sm bg-background px-3.5 py-2 text-xs font-medium text-foreground shadow-lg ring-1 ring-foreground/10 sm:left-7 sm:top-7 sm:px-4 sm:text-sm">
-                      Confused customers never buy
-                    </div>
-
                     <div className="hidden sm:block">
                       <div className="skitbit-float-a absolute bottom-[188px] left-7 rounded-sm bg-foreground px-4 py-2 text-sm font-medium text-background shadow-lg">
                         Social
