@@ -3,6 +3,9 @@ import { Metadata } from 'next'
 import { getCountryPage, getAllCountryCodes } from '@/data/country-pages'
 import { CountryPageTemplate } from '@/components/country-page-template'
 
+// This prevents the route from catching non-country paths like /sitemap.xml
+export const dynamicParams = false; 
+
 export async function generateStaticParams() {
   return getAllCountryCodes().map((code) => ({
     country: code,
@@ -32,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
       type: 'website',
     },
     alternates: {
-      canonical: url, // Fixed: Moved inside alternates
+      canonical: url,
       languages: {
         en: 'https://theskitbit.com/',
         'en-US': 'https://theskitbit.com/us',
