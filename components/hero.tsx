@@ -269,7 +269,6 @@ export function Hero() {
                         aria-hidden="true"
                         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent"
                       />
-
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
                           <div className="mb-2 inline-flex items-center gap-2 rounded-sm bg-muted px-3 py-1.5 ring-1 ring-foreground/5 sm:mb-3">
