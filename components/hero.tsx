@@ -196,7 +196,6 @@ export function Hero() {
               </div>
 
               <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-foreground/45">
-                <span>Free visual audit</span>
                 <span className="hidden h-1 w-1 rounded-full bg-foreground/25 sm:block" />
                 <span>No pitch</span>
                 <span className="hidden h-1 w-1 rounded-full bg-foreground/25 sm:block" />
