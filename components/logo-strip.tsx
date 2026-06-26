@@ -38,7 +38,7 @@ const logos = [
     ),
   },
   {
-    label: 'SUPLIFUL',
+    label: 'Mahina co',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
@@ -63,7 +63,7 @@ const logos = [
     ),
   },
   {
-    label: 'TRUMP WATCHES',
+    label: 'NEEMANS',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
