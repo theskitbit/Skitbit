@@ -160,7 +160,7 @@ export function Hero() {
           <div className="order-1 flex flex-col justify-center">
             <div className="max-w-2xl">
               <h1 className="mt-0 max-w-[820px] text-[43px] font-medium leading-[0.9] tracking-[-0.065em] text-foreground sm:text-[60px] md:text-[70px] lg:text-[78px] xl:text-[88px] m-0">
-                Stop explaining.<br />{' '}Show it in 3D.
+                Stop Explaining.<br />{' '}Show it in 3D.
               </h1>
 
               <p className="mt-6 max-w-[530px] text-base leading-relaxed text-foreground/60 sm:text-lg m-0">
