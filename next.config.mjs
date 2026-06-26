@@ -1,10 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  compiler: {
-    removeConsole: process.env.NODE_ENV === "production" ? {
-      exclude: ["error"],
-    } : false,
-  },
+  // Your other config settings here...
   async rewrites() {
     return [
       {
@@ -15,4 +11,4 @@ const nextConfig = {
   },
 }
 
-export default nextConfig;
+module.exports = nextConfig; // Ensure you export as module.exports
