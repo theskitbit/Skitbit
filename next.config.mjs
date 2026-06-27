@@ -1,13 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // ... existing compiler config
-  async rewrites() {
-    return [
-      {
-        source: '/sitemap.xml',
-        destination: '/sitemap.xml',
-      },
-    ];
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production" ? {
+      exclude: ["error"],
+    } : false,
   },
-}
-module.exports = nextConfig;
+};
+
+export default nextConfig;
