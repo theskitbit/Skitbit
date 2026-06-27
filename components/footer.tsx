@@ -77,6 +77,13 @@ function FooterNav({ title, links }: { title: string; links: { href: string; lab
 }
 
 export function Footer() {
+  const handlePrivacyReset = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Clear the stored consent and refresh so the banner reappears
+    localStorage.removeItem('skitbit-cookie-consent');
+    window.location.reload();
+  };
+
   return (
     <footer
       className="border-t mt-24"
@@ -171,6 +178,15 @@ export function Footer() {
             >
               Cookie Policy
             </Link>
+            <span className="opacity-30">•</span>
+            {/* Added CCPA Compliance Button */}
+            <button
+              onClick={handlePrivacyReset}
+              className="hover:opacity-100 opacity-70 cursor-pointer"
+              style={{ transition: 'opacity var(--transition-base)' }}
+            >
+              Do Not Sell or Share My Personal Information
+            </button>
           </div>
         </div>
       </div>
