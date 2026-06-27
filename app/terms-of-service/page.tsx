@@ -13,7 +13,7 @@ export default function TermsOfService() {
 
       <section className="mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-semibold tracking-[-0.065em] sm:text-5xl">Terms of Service</h1>
-        <p className="mt-6 text-muted-foreground">Last updated: June 27, 2026</p>
+        <p className="mt-6 text-muted-foreground">Last updated: June 21, 2024</p>
 
         <div className="mt-12 space-y-8 text-base leading-8 text-foreground/80">
 
