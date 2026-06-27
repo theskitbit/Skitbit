@@ -20,7 +20,6 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://theskitbit.com'),
   title: '3D Product Rendering for E-commerce Brands | No Photoshoots Needed',
   description: 'High-end 3D product visuals designed for performance. Create consistent creatives across ads, PDPs, and social—without production delays.',
-  // ← generator field removed entirely
   keywords: ['3D product rendering', 'e-commerce product visuals', 'product photography alternative', 'CGI product images', 'digital product rendering', 'ad creatives', 'product visualization'],
   authors: [{ name: 'Skitbit International' }],
   openGraph: {
@@ -89,52 +88,59 @@ export default function RootLayout({
   return (
     <html lang="en" className={openSans.variable}>
       <head>
+        {/* Conditional tracking scripts — only load if user consents */}
         <Script
-          id="tracking-scripts"
+          id="conditional-tracking"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-              try {
-                !function(f,b,e,v,n,t,s)
-                {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-                n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-                n.queue=[];t=b.createElement(e);t.async=!0;
-                t.src=v;
-                b.head.appendChild(t);
-                }(window, document,'script',
-                'https://connect.facebook.net/en_US/fbevents.js');
+              (function() {
+                try {
+                  const consent = localStorage.getItem('skitbit-cookie-consent');
+                  const hasConsent = consent ? JSON.parse(consent) : false;
+                  
+                  if (!hasConsent) {
+                    console.log('User has not consented to marketing cookies. Tracking disabled.');
+                    return;
+                  }
 
-                fbq('set', 'autoConfig', false, '936091006015773');
-                fbq('init', '936091006015773');
-                fbq('track', 'PageView');
+                  // Meta Pixel
+                  !function(f,b,e,v,n,t,s)
+                  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                  n.queue=[];t=b.createElement(e);t.async=!0;
+                  t.src=v;
+                  b.head.appendChild(t);
+                  }(window, document,'script',
+                  'https://connect.facebook.net/en_US/fbevents.js');
 
-                const script = document.createElement('script');
-                script.async = true;
-                script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-10791428257';
-                document.head.appendChild(script);
+                  fbq('set', 'autoConfig', false, '936091006015773');
+                  fbq('init', '936091006015773');
+                  fbq('track', 'PageView');
 
-                window.dataLayer = window.dataLayer || [];
-                window.gtag = function(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', 'AW-10791428257');
+                  // Google Ads Tag Manager
+                  const script = document.createElement('script');
+                  script.async = true;
+                  script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-10791428257';
+                  document.head.appendChild(script);
 
-              } catch(e) {
-                console.warn('Tracking initialization warning:', e.message);
-              }
+                  window.dataLayer = window.dataLayer || [];
+                  window.gtag = function(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', 'AW-10791428257');
+
+                  console.log('Marketing tracking enabled (Meta Pixel + Google Ads)');
+
+                } catch(e) {
+                  console.warn('Tracking initialization warning:', e.message);
+                }
+              })();
             `,
           }}
         />
-      </head>
-      <body className="font-sans antialiased">
-        <SEOSchema />
-        <ThemeDetector />
-        <ContactOverlayProvider>
-          {children}
-        </ContactOverlayProvider>
-        <Analytics />
-        <SpeedInsights />
-        <CookieConsent />
+
+        {/* Noscript fallback for Meta Pixel (only fires if user accepted) */}
         <noscript>
           <img
             height="1"
@@ -144,6 +150,21 @@ export default function RootLayout({
             alt="fb-pixel"
           />
         </noscript>
+      </head>
+
+      <body className="font-sans antialiased">
+        <SEOSchema />
+        <ThemeDetector />
+        <ContactOverlayProvider>
+          {children}
+        </ContactOverlayProvider>
+
+        {/* Vercel Analytics — separate from consent (anonymized) */}
+        <Analytics />
+        <SpeedInsights />
+
+        {/* Cookie Consent Banner */}
+        <CookieConsent />
       </body>
     </html>
   )

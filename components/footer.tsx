@@ -147,7 +147,7 @@ export function Footer() {
           >
             © {new Date().getFullYear()} Skitbit International Group. All rights reserved.
           </p>
-          <div className="flex gap-6 text-xs font-medium" style={{ color: 'var(--muted-foreground)' }}>
+          <div className="flex gap-4 flex-wrap justify-center text-xs font-medium" style={{ color: 'var(--muted-foreground)' }}>
             <Link
               href="/privacy-policy"
               className="hover:opacity-100 opacity-70"
@@ -155,12 +155,21 @@ export function Footer() {
             >
               Privacy Policy
             </Link>
+            <span className="opacity-30">•</span>
             <Link
               href="/terms-of-service"
               className="hover:opacity-100 opacity-70"
               style={{ transition: 'opacity var(--transition-base)' }}
             >
               Terms of Service
+            </Link>
+            <span className="opacity-30">•</span>
+            <Link
+              href="/cookie-policy"
+              className="hover:opacity-100 opacity-70"
+              style={{ transition: 'opacity var(--transition-base)' }}
+            >
+              Cookie Policy
             </Link>
           </div>
         </div>
