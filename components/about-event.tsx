@@ -44,12 +44,9 @@ export function AboutEvent() {
           {/* Left – text */}
           <div className="bg-primary p-10 lg:p-14 flex flex-col justify-between min-h-[320px]">
             <div>
-              {/* 🔥 SEO FIX: The section label is now a powerful H2 keyword target */}
               <h2 className="inline-block text-xs font-medium text-primary-foreground border border-primary-foreground/40 rounded-full px-3 py-1 mb-6 m-0">
                 High-Performing Ad Creatives
               </h2>
-              
-              {/* 🔥 SEO FIX: The long descriptive text is now a standard <p> instead of an <h2> */}
               <p className="text-4xl lg:text-[2.55rem] font-bold tracking-tight leading-[1.15] text-primary-foreground m-0">
                 Turn underperforming product visuals into high-converting creatives that drive clicks and sales.
               </p>
@@ -68,7 +65,8 @@ export function AboutEvent() {
                 }`}
             >
               <Image
-                src="/images/Before.webp"
+                // FIX 1: Changed to lowercase 'b'. Make sure your actual file is named 'before.webp'
+                src="/images/before.webp" 
                 alt="3D PRODUCT RENDER"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -88,6 +86,7 @@ export function AboutEvent() {
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
+                unoptimized // FIX 2: Bypasses the optimizer error for Blob storage
               />
             </div>
           </div>
@@ -109,6 +108,7 @@ export function AboutEvent() {
                 fill
                 sizes="100vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
+                unoptimized // FIX 2: Bypasses the optimizer error for the file with a space in the name
               />
 
               <span className="absolute bottom-16 left-4 bg-foreground text-white text-sm font-semibold px-4 py-2 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-default">
@@ -126,7 +126,6 @@ export function AboutEvent() {
           {/* CTA card (STAYS VISIBLE ON MOBILE) */}
           <div className="bg-primary rounded-3xl p-8 lg:p-10 flex flex-col justify-between min-h-[360px]">
             <div>
-              {/* 🔥 SEO FIX: This is now an H3 nested beneath the section's top H2 */}
               <h3 className="text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-primary-foreground mb-4 m-0">
                 Start Fast –<br />Sell faster.
               </h3>
@@ -135,7 +134,6 @@ export function AboutEvent() {
               </p>
             </div>
 
-            {/* Mobile Stack layout, Desktop Row layout */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-8 gap-6 sm:gap-0">
               <button onClick={open} className="bg-foreground text-white font-semibold text-sm px-6 py-3 rounded-full hover:opacity-90 hover:shadow-lg hover:scale-105 transition-all duration-200 active:scale-95">
                 Start now!
@@ -166,7 +164,6 @@ export function AboutEvent() {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
