@@ -1,10 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Script from 'next/script'
 
 export function FireworkWidget() {
-  // We start false, and only flip to true when Next.js confirms the script is fully downloaded
   const [isReady, setIsReady] = useState(false)
 
   return (
@@ -14,16 +13,21 @@ export function FireworkWidget() {
       <Script 
         src="https://asset.fwcdn3.com/js/fwn.js" 
         strategy="afterInteractive"
-        // 2. This is the magic bullet. It triggers our widget ONLY when the script is fully ready
         onReady={() => setIsReady(true)}
       />
 
+      {/* 2. Aggressive CSS to force the Shadow DOM element to respect height */}
       <style jsx global>{`
-        fw-widget, 
+        fw-widget {
+          display: block !important;
+          width: 100% !important;
+          min-height: 400px !important; /* Force the widget to stay open */
+          height: 100% !important;
+        }
         fw-widget > div, 
         fw-widget iframe {
           width: 100% !important;
-          display: block !important;
+          height: 100% !important;
         }
       `}</style>
 
@@ -35,12 +39,13 @@ export function FireworkWidget() {
           </h2>
         </div>
         
-        <div className="w-full min-h-[300px] relative">
-          {/* 3. The widget only renders when isReady is true */}
+        {/* 3. The container that holds the space */}
+        <div className="w-full min-h-[400px] relative">
           {isReady && (
             <div 
+              className="w-full h-full"
               dangerouslySetInnerHTML={{ 
-                __html: '<fw-widget widget_config_id="95D10o_efc" class="w-full" autoplay="true" loop="true" muted="true"></fw-widget>' 
+                __html: '<fw-widget widget_config_id="95D10o_efc" class="w-full h-full" autoplay="true" loop="true" muted="true"></fw-widget>' 
               }} 
             />
           )}
