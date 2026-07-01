@@ -37,7 +37,7 @@ const offerings: Offering[] = [
     galleryKey: '3D Animation',
     isVideo: true,
     inr: 'Scroll-stopping 3D animation and motion graphics built for Reels, TikTok, and paid social. From ₹30,000.',
-    usd: 'Scroll-stopping 3D animation and motion graphics built for Reels, TikTok, and paid social. From $1500.',
+    usd: 'Scroll-stopping 3D animation and motion graphics built for Reels, TikTok, and paid social. From $750.',
   },
 ]
 
