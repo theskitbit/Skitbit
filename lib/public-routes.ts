@@ -1,5 +1,6 @@
 import { countryPages } from '@/data/country-pages'
-import { services } from '@/data/services-data'
+// ✅ Changed from 'services' to 'servicesData'
+import { servicesData } from '@/data/services-data' 
 import { locations } from '@/data/locations'
 
 export type RouteConfig = {
@@ -27,7 +28,7 @@ export const EXCLUDED_ROUTES = ['/admin', '/private', '/api', '/test', '/staging
 export async function getAllPublicRoutes(): Promise<RouteConfig[]> {
   const routes: RouteConfig[] = [...STATIC_ROUTES]
 
-  // Map Country Pages (Assuming it's an object/dictionary)
+  // Map Country Pages
   if (countryPages) {
     Object.keys(countryPages).forEach(countryCode => {
       routes.push({
@@ -39,9 +40,10 @@ export async function getAllPublicRoutes(): Promise<RouteConfig[]> {
     })
   }
 
-  // Map Service Pages (Assuming it's an array)
-  if (services) {
-    services.forEach((service: any) => {
+  // Map Service Pages
+  // ✅ Updated to use servicesData
+  if (servicesData) {
+    servicesData.forEach((service: any) => {
       if (service.slug) {
         routes.push({
           path: `/services/${service.slug}`,
@@ -53,7 +55,7 @@ export async function getAllPublicRoutes(): Promise<RouteConfig[]> {
     })
   }
 
-  // Map Location Pages (Assuming it's an array)
+  // Map Location Pages
   if (locations) {
     locations.forEach((location: any) => {
       if (location.slug) {
