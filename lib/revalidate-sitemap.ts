@@ -2,22 +2,10 @@
 
 import { revalidateTag } from 'next/cache'
 
-/**
- * On-demand sitemap revalidation
- * Call this whenever you update:
- * - Country pages in data/country-pages.ts
- * - Blog posts in Sanity
- * - Locations in Sanity or data/locations.ts
- * 
- * Usage:
- * import { revalidateSitemap } from '@/lib/revalidate-sitemap'
- * await revalidateSitemap()
- */
 export async function revalidateSitemap() {
   try {
-    // Revalidate all sitemap-related tags
-    revalidateTag('sitemap')
-    revalidateTag('sanity-content')
+    revalidateTag('sitemap', 'max')
+    revalidateTag('sanity-content', 'max')
     console.log('[Revalidate] Sitemap cache cleared')
     return { success: true, message: 'Sitemap revalidated' }
   } catch (error) {
@@ -26,26 +14,23 @@ export async function revalidateSitemap() {
   }
 }
 
-/**
- * Selective revalidation - use when only specific content changed
- */
 export async function revalidateSitemapFor(contentType: 'blog' | 'locations' | 'countries' | 'all') {
   try {
     switch (contentType) {
       case 'blog':
-        revalidateTag('sitemap')
-        revalidateTag('sanity-content')
+        revalidateTag('sitemap', 'max')
+        revalidateTag('sanity-content', 'max')
         break
       case 'locations':
-        revalidateTag('sitemap')
-        revalidateTag('sanity-content')
+        revalidateTag('sitemap', 'max')
+        revalidateTag('sanity-content', 'max')
         break
       case 'countries':
-        revalidateTag('sitemap')
+        revalidateTag('sitemap', 'max')
         break
       case 'all':
-        revalidateTag('sitemap')
-        revalidateTag('sanity-content')
+        revalidateTag('sitemap', 'max')
+        revalidateTag('sanity-content', 'max')
         break
     }
     console.log(`[Revalidate] Sitemap revalidated for: ${contentType}`)
