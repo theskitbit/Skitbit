@@ -1,5 +1,4 @@
 import { countryPages } from '@/data/country-pages'
-// ✅ Changed from 'services' to 'servicesData'
 import { servicesData } from '@/data/services-data' 
 import { locations } from '@/data/locations'
 
@@ -40,33 +39,42 @@ export async function getAllPublicRoutes(): Promise<RouteConfig[]> {
     })
   }
 
-  // Map Service Pages
-  // ✅ Updated to use servicesData
+  // Map Service Pages (Iterating over object keys since it's a dictionary)
   if (servicesData) {
-    servicesData.forEach((service: any) => {
-      if (service.slug) {
-        routes.push({
-          path: `/services/${service.slug}`,
-          priority: 0.85,
-          changeFrequency: 'monthly',
-          lastModified: new Date(),
-        })
-      }
+    Object.keys(servicesData).forEach(slug => {
+      routes.push({
+        path: `/services/${slug}`,
+        priority: 0.85,
+        changeFrequency: 'monthly',
+        lastModified: new Date(),
+      })
     })
   }
 
   // Map Location Pages
   if (locations) {
-    locations.forEach((location: any) => {
-      if (location.slug) {
+    // Handling safely in case locations is an array or an object
+    if (Array.isArray(locations)) {
+      locations.forEach((location: any) => {
+        if (location.slug) {
+          routes.push({
+            path: `/locations/${location.slug}`,
+            priority: 0.8,
+            changeFrequency: 'monthly',
+            lastModified: new Date(),
+          })
+        }
+      })
+    } else {
+      Object.keys(locations).forEach(slug => {
         routes.push({
-          path: `/locations/${location.slug}`,
+          path: `/locations/${slug}`,
           priority: 0.8,
           changeFrequency: 'monthly',
           lastModified: new Date(),
         })
-      }
-    })
+      })
+    }
   }
 
   return routes
