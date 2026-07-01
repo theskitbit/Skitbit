@@ -1,21 +1,71 @@
-export type PublicRoute = {
-  path: string
-  priority?: number
-  changeFrequency?: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never"
-  lastModified?: Date
+import { countryPages } from '@/data/country-pages'
+import { services } from '@/data/services-data'
+import { locations } from '@/data/locations'
+
+export type RouteConfig = {
+  path: string;
+  priority: number;
+  changeFrequency: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
+  lastModified?: Date;
 }
 
-export const getAllPublicRoutes = async (): Promise<PublicRoute[]> => {
-  return [
-    { path: "/", priority: 1, changeFrequency: "daily" },
-    { path: "/blog", priority: 0.9, changeFrequency: "weekly" },
-    { path: "/services", priority: 0.9, changeFrequency: "monthly" },
-    { path: "/services/performance-creative-management", priority: 0.8, changeFrequency: "monthly" },
-    { path: "/pricing", priority: 0.8, changeFrequency: "monthly" },
-    { path: "/contact-form", priority: 0.8, changeFrequency: "monthly" },
-    { path: "/contact-success", priority: 0.5, changeFrequency: "monthly" },
-    { path: "/sitemap-index", priority: 0.5, changeFrequency: "monthly" },
-    { path: "/privacy-policy", priority: 0.5, changeFrequency: "monthly" },
-    { path: "/terms-of-service", priority: 0.5, changeFrequency: "monthly" },
-  ]
+// 1. Core Static Pages
+export const STATIC_ROUTES: RouteConfig[] = [
+  { path: '', priority: 1.0, changeFrequency: 'weekly', lastModified: new Date() },
+  { path: '/work', priority: 0.9, changeFrequency: 'weekly', lastModified: new Date() },
+  { path: '/services', priority: 0.9, changeFrequency: 'weekly', lastModified: new Date() },
+  { path: '/pricing', priority: 0.8, changeFrequency: 'weekly', lastModified: new Date() },
+  { path: '/contact', priority: 0.8, changeFrequency: 'weekly', lastModified: new Date() },
+  { path: '/locations', priority: 0.8, changeFrequency: 'monthly', lastModified: new Date() },
+  { path: '/llms.txt', priority: 1.0, changeFrequency: 'monthly', lastModified: new Date() },
+]
+
+// 2. Routes strictly blocked from the sitemap
+export const EXCLUDED_ROUTES = ['/admin', '/private', '/api', '/test', '/staging', '/internal']
+
+// 3. The compiler function
+export async function getAllPublicRoutes(): Promise<RouteConfig[]> {
+  const routes: RouteConfig[] = [...STATIC_ROUTES]
+
+  // Map Country Pages (Assuming it's an object/dictionary)
+  if (countryPages) {
+    Object.keys(countryPages).forEach(countryCode => {
+      routes.push({
+        path: `/${countryCode.toLowerCase()}`,
+        priority: 0.9,
+        changeFrequency: 'weekly',
+        lastModified: new Date(),
+      })
+    })
+  }
+
+  // Map Service Pages (Assuming it's an array)
+  if (services) {
+    services.forEach((service: any) => {
+      if (service.slug) {
+        routes.push({
+          path: `/services/${service.slug}`,
+          priority: 0.85,
+          changeFrequency: 'monthly',
+          lastModified: new Date(),
+        })
+      }
+    })
+  }
+
+  // Map Location Pages (Assuming it's an array)
+  if (locations) {
+    locations.forEach((location: any) => {
+      if (location.slug) {
+        routes.push({
+          path: `/locations/${location.slug}`,
+          priority: 0.8,
+          changeFrequency: 'monthly',
+          lastModified: new Date(),
+        })
+      }
+    })
+  }
+
+  return routes
 }

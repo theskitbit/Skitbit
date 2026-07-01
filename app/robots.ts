@@ -1,45 +1,37 @@
 import { MetadataRoute } from 'next'
+import { EXCLUDED_ROUTES } from '@/lib/public-routes'
 
 /**
  * Robots.txt configuration
- * Points to the dynamic sitemap which automatically includes:
- * - All static pages
- * - All country landing pages (/us, /uk, /ca, /au, /ae, /de, /fr, /nl, /se, /ch)
- * - All service pages (/services/*)
- * - All location pages (/locations/*)
- * 
- * Excludes private routes and admin areas
+ * Points to the dynamic sitemap which automatically includes all public routes.
+ * * Explicitly optimized for LLM crawlers (OpenAI, ChatGPT) to ensure
+ * business signals and public documentation are properly indexed.
  */
-
-const publicDisallow = [
-  '/admin',
-  '/admin/',
-  '/private',
-  '/private/',
-]
-
 export default function robots(): MetadataRoute.Robots {
+  // Automatically generate both '/route' and '/route/' for the robots.txt rules
+  const disallowedRoutes = EXCLUDED_ROUTES.flatMap(route => [route, `${route}/`])
+
   return {
     rules: [
       {
         userAgent: 'OAI-SearchBot',
         allow: '/',
-        disallow: publicDisallow,
+        disallow: disallowedRoutes,
       },
       {
         userAgent: 'GPTBot',
         allow: '/',
-        disallow: publicDisallow,
+        disallow: disallowedRoutes,
       },
       {
         userAgent: 'ChatGPT-User',
         allow: '/',
-        disallow: publicDisallow,
+        disallow: disallowedRoutes,
       },
       {
         userAgent: '*',
         allow: '/',
-        disallow: publicDisallow,
+        disallow: disallowedRoutes,
       },
     ],
     // Dynamic sitemap with all public routes
