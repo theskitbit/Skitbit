@@ -2,8 +2,20 @@ import { MetadataRoute } from 'next'
 import { getAllPublicRoutes } from "@/lib/public-routes"
 import { getAllCountryCodes } from "@/data/country-pages"
 
-export const dynamic = "force-dynamic"
-export const revalidate = 0
+/**
+ * NEXT.JS 16 CACHING FIX:
+ * - Removed `force-dynamic` (was preventing proper ISR)
+ * - Changed `revalidate = 0` to `revalidate = 3600` (1 hour ISR)
+ * - Added explicit revalidation tags for on-demand updates
+ * - Updated fetch calls with proper cache strategy
+ * 
+ * This ensures:
+ * 1. Sitemap pre-generates at build time
+ * 2. Revalidates automatically every 1 hour
+ * 3. Can be manually revalidated via revalidateTag('sitemap')
+ * 4. Respects updates to country pages, blog posts, and locations
+ */
+export const revalidate = 3600 // Revalidate every 1 hour (ISR)
 
 const baseUrl = "https://www.theskitbit.com"
 
@@ -12,75 +24,103 @@ async function fetchSanity(query: string) {
   try {
     const url = new URL(`https://rhuq6lk0.api.sanity.io/v2024-01-01/data/query/production`)
     url.searchParams.set("query", query)
-    const res = await fetch(url.toString(), { cache: "no-store" })
-    if (!res.ok) return []
+    // Proper caching config: revalidate every 1 hour with tags for on-demand updates
+    const res = await fetch(url.toString(), { 
+      next: { revalidate: 3600, tags: ['sitemap', 'sanity-content'] }
+    })
+    if (!res.ok) {
+      console.warn("Sanity fetch non-OK:", res.status)
+      return []
+    }
     const json = await res.json()
     return Array.isArray(json.result) ? json.result : []
   } catch (e) {
-    console.error("Sanity fetch failed", e)
+    console.error("Sanity fetch error:", e)
     return []
   }
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const now = new Date()
   const sitemapEntries: MetadataRoute.Sitemap = [
-    { url: baseUrl, lastModified: new Date(), changeFrequency: "daily", priority: 1 },
-    { url: `${baseUrl}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
+    { url: baseUrl, lastModified: now, changeFrequency: "daily", priority: 1 },
+    { url: `${baseUrl}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
   ]
 
-  // 1. Static Routes (Safe)
+  // 1. Static Routes
   try {
     const routes = await getAllPublicRoutes()
-    routes.forEach((route) => {
-      sitemapEntries.push({
-        url: `${baseUrl}${route.path.startsWith('/') ? route.path : '/' + route.path}`,
-        lastModified: route.lastModified ? new Date(route.lastModified) : new Date(),
-        changeFrequency: "monthly",
-        priority: 0.7,
+    if (routes && Array.isArray(routes)) {
+      routes.forEach((route) => {
+        sitemapEntries.push({
+          url: `${baseUrl}${route.path.startsWith('/') ? route.path : '/' + route.path}`,
+          lastModified: route.lastModified ? new Date(route.lastModified) : now,
+          changeFrequency: route.changeFrequency || "monthly",
+          priority: route.priority || 0.7,
+        })
       })
-    })
-  } catch (e) { console.error("Routes error", e) }
+    }
+  } catch (e) { 
+    console.error("[Sitemap] Static routes error:", e) 
+  }
 
-  // 2. Country Pages (Safe)
+  // 2. Country Pages
   try {
     const countryCodes = getAllCountryCodes()
-    countryCodes.forEach((code) => {
-      sitemapEntries.push({
-        url: `${baseUrl}/${code}`,
-        lastModified: new Date(),
-        changeFrequency: "monthly",
-        priority: 0.8,
+    if (countryCodes && Array.isArray(countryCodes)) {
+      countryCodes.forEach((code) => {
+        sitemapEntries.push({
+          url: `${baseUrl}/${code}`,
+          lastModified: now,
+          changeFrequency: "weekly",
+          priority: 0.9,
+        })
       })
-    })
-  } catch (e) { console.error("Countries error", e) }
+    }
+  } catch (e) { 
+    console.error("[Sitemap] Country pages error:", e) 
+  }
 
-  // 3. Blog Pages (Sanity Fetch - Wrapped)
+  // 3. Blog Posts (from Sanity)
   try {
     const blogQuery = `*[_type == "blogPost" && defined(slug.current)] { "slug": slug.current, "updatedAt": _updatedAt }`
     const blogPosts = await fetchSanity(blogQuery)
-    blogPosts.forEach((post: any) => {
-      sitemapEntries.push({
-        url: `${baseUrl}/blog/${post.slug}`,
-        lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(),
-        changeFrequency: "weekly",
-        priority: 0.7,
+    if (blogPosts && Array.isArray(blogPosts)) {
+      blogPosts.forEach((post: any) => {
+        if (post.slug) {
+          sitemapEntries.push({
+            url: `${baseUrl}/blog/${post.slug}`,
+            lastModified: post.updatedAt ? new Date(post.updatedAt) : now,
+            changeFrequency: "weekly",
+            priority: 0.75,
+          })
+        }
       })
-    })
-  } catch (e) { console.error("Blog fetch error", e) }
+    }
+  } catch (e) { 
+    console.error("[Sitemap] Blog posts error:", e) 
+  }
 
-  // 4. Locations (Sanity Fetch - Wrapped)
+  // 4. Locations (from Sanity)
   try {
     const locQuery = `*[_type == "location" && defined(slug.current)] { "slug": slug.current, "updatedAt": _updatedAt }`
     const locations = await fetchSanity(locQuery)
-    locations.forEach((loc: any) => {
-      sitemapEntries.push({
-        url: `${baseUrl}/locations/${loc.slug}`,
-        lastModified: loc.updatedAt ? new Date(loc.updatedAt) : new Date(),
-        changeFrequency: "monthly",
-        priority: 0.8,
+    if (locations && Array.isArray(locations)) {
+      locations.forEach((loc: any) => {
+        if (loc.slug) {
+          sitemapEntries.push({
+            url: `${baseUrl}/locations/${loc.slug}`,
+            lastModified: loc.updatedAt ? new Date(loc.updatedAt) : now,
+            changeFrequency: "monthly",
+            priority: 0.8,
+          })
+        }
       })
-    })
-  } catch (e) { console.error("Location fetch error", e) }
+    }
+  } catch (e) { 
+    console.error("[Sitemap] Locations error:", e) 
+  }
 
+  console.log(`[Sitemap] Generated ${sitemapEntries.length} entries`)
   return sitemapEntries
 }
