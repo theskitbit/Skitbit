@@ -8,16 +8,16 @@ import { revalidateTag } from 'next/cache'
  * - Country pages in data/country-pages.ts
  * - Blog posts in Sanity
  * - Locations in Sanity or data/locations.ts
- * 
- * Usage:
+ * * Usage:
  * import { revalidateSitemap } from '@/lib/revalidate-sitemap'
  * await revalidateSitemap()
  */
 export async function revalidateSitemap() {
   try {
-    // Revalidate all sitemap-related tags
-    revalidateTag('sitemap')
-    revalidateTag('sanity-content')
+    // ✅ Next.js 16 requires the second argument ('max')
+    revalidateTag('sitemap', 'max')
+    revalidateTag('sanity-content', 'max')
+    
     console.log('[Revalidate] Sitemap cache cleared')
     return { success: true, message: 'Sitemap revalidated' }
   } catch (error) {
@@ -33,25 +33,12 @@ export async function revalidateSitemapFor(contentType: 'blog' | 'locations' | '
   try {
     switch (contentType) {
       case 'blog':
-        revalidateTag('sitemap')
-        revalidateTag('sanity-content')
+        revalidateTag('sitemap', 'max')
+        revalidateTag('sanity-content', 'max')
         break
       case 'locations':
-        revalidateTag('sitemap')
-        revalidateTag('sanity-content')
+        revalidateTag('sitemap', 'max')
+        revalidateTag('sanity-content', 'max')
         break
       case 'countries':
-        revalidateTag('sitemap')
-        break
-      case 'all':
-        revalidateTag('sitemap')
-        revalidateTag('sanity-content')
-        break
-    }
-    console.log(`[Revalidate] Sitemap revalidated for: ${contentType}`)
-    return { success: true }
-  } catch (error) {
-    console.error(`[Revalidate] Failed to revalidate ${contentType}:`, error)
-    return { success: false, error: String(error) }
-  }
-}
+        revalidateTag
