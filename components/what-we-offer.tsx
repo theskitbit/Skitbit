@@ -7,30 +7,37 @@ import { galleryData } from '@/data/gallery-images'
 
 type Offering = {
   title: string
+  galleryKey: string
+  isVideo?: boolean
   inr: string
   usd: string
 }
 
 const offerings: Offering[] = [
   {
-    title: 'Shopify → Product Renders',
-    inr: 'High-converting, flawless 3D product images built for your Shopify store and PDPs. Designed to replace expensive photoshoots and increase clicks. From ₹8,000.',
-    usd: 'High-converting, flawless 3D product images built for your Shopify store and PDPs. Designed to replace expensive photoshoots and increase clicks. From $300.',
+    title: 'Product Renders',
+    galleryKey: 'Product Renders',
+    inr: 'Photorealistic 3D product shots built for Shopify and Amazon PDPs — no photoshoot required. From ₹8,000.',
+    usd: 'Photorealistic 3D product shots built for Shopify and Amazon PDPs — no photoshoot required. From $300.',
   },
   {
-    title: 'Lifestyle Product Renders',
-    inr: 'Photorealistic 3D environments that place your product in the perfect setting. Build premium brand aesthetics without the cost of a physical set. From ₹15,000.',
-    usd: 'Photorealistic 3D environments that place your product in the perfect setting. Build premium brand aesthetics without the cost of a physical set. From $800.',
+    title: 'Lifestyle Renders',
+    galleryKey: 'Lifestyle Product Renders',
+    inr: 'Your product placed in premium, styled environments — full-set visuals without the studio cost. From ₹15,000.',
+    usd: 'Your product placed in premium, styled environments — full-set visuals without the studio cost. From $800.',
   },
   {
-    title: 'Meta-ready Ad Creatives',
-    inr: 'High-performance visual assets specifically formatted and designed to lower CPA and drive conversions across Instagram and Meta. From ₹12,000.',
-    usd: 'High-performance visual assets specifically formatted and designed to lower CPA and drive conversions across Instagram and Meta. From $350.',
+    title: 'Packaging Renders',
+    galleryKey: 'Packaging Renders',
+    inr: 'Pre-production packaging and bundle visuals — see the box before you print a single unit. From ₹12,000.',
+    usd: 'Pre-production packaging and bundle visuals — see the box before you print a single unit. From $350.',
   },
   {
-    title: '3D Product Animation Videos',
-    inr: 'Scroll-stopping 3D animations and motion graphics built to drive engagement and sales. Optimized for Reels, TikTok, and paid social. From ₹30,000.',
-    usd: 'Scroll-stopping 3D animations and motion graphics built to drive engagement and sales. Optimized for Reels, TikTok, and paid social. From $1500.',
+    title: '3D Animation',
+    galleryKey: '3D Animation',
+    isVideo: true,
+    inr: 'Scroll-stopping 3D animation and motion graphics built for Reels, TikTok, and paid social. From ₹30,000.',
+    usd: 'Scroll-stopping 3D animation and motion graphics built for Reels, TikTok, and paid social. From $750.',
   },
 ]
 
@@ -109,11 +116,10 @@ export function WhatWeOffer() {
                         </p>
                         <button
                           onClick={() => {
-                            if (item.title.includes('Product Videos')) setIsVideoModalOpen(true)
-                            else {
-                              // Fixed the string array split error here
-                              const galleryTitle = item.title.split(' → ').pop()?.trim() || item.title
-                              setSelectedGalleryTitle(galleryTitle)
+                            if (item.isVideo) {
+                              setIsVideoModalOpen(true)
+                            } else {
+                              setSelectedGalleryTitle(item.galleryKey)
                               setGalleryOpen(true)
                             }
                           }}
