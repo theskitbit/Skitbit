@@ -2,7 +2,7 @@
 'use client'
 
 import { useMemo, useState, useEffect } from 'react'
-import { workItems, type WorkType } from '@/lib/work-data'
+import { workItems, type WorkItem, type WorkType } from '@/lib/work-data'
 import { WorkFilterBar } from '@/components/work/work-filter-bar'
 import { WorkMedia } from '@/components/work/work-media'
 import { Header } from '@/components/header'
@@ -11,37 +11,44 @@ import { Footer } from '@/components/footer'
 export default function WorkPage() {
   const [typeFilter, setTypeFilter] = useState<'all' | WorkType>('all')
   const [industryFilter, setIndustryFilter] = useState<string>('all')
-  
-  // State for pagination/Load More
   const [visibleCount, setVisibleCount] = useState(6)
+  
+  // State to hold the final display items so we can shuffle them safely on the client side
+  const [displayItems, setDisplayItems] = useState<WorkItem[]>([])
 
   const industries = useMemo(
     () => Array.from(new Set(workItems.map((i) => i.industry))).sort(),
     []
   )
 
-  const filtered = useMemo(() => {
-    return workItems.filter((item) => {
+  useEffect(() => {
+    // 1. Filter the items
+    const filtered = workItems.filter((item) => {
       const typeMatch = typeFilter === 'all' || item.type === typeFilter
       const industryMatch = industryFilter === 'all' || item.industry === industryFilter
       return typeMatch && industryMatch
     })
-  }, [typeFilter, industryFilter])
 
-  // Reset the visible count whenever a filter changes
-  useEffect(() => {
+    // 2. Shuffle randomly if "All" is selected, otherwise keep standard order
+    if (typeFilter === 'all') {
+      const shuffled = [...filtered].sort(() => Math.random() - 0.5)
+      setDisplayItems(shuffled)
+    } else {
+      setDisplayItems(filtered)
+    }
+    
+    // 3. Reset pagination
     setVisibleCount(6)
   }, [typeFilter, industryFilter])
 
-  // Slice the array to only show the currently visible items
-  const visibleItems = filtered.slice(0, visibleCount)
+  const visibleItems = displayItems.slice(0, visibleCount)
 
   return (
     <main className="min-h-screen bg-[#F9F9F6] text-[#0A192F]">
       <Header />
 
-      {/* Added pt-28 md:pt-36 to push content down below the fixed navbar */}
-      <section className="mx-auto max-w-[1400px] px-5 sm:px-6 lg:px-8 pt-28 md:pt-36 pb-12 md:pb-20">
+      {/* Changed max-w-[1400px] to max-w-7xl to match global header width */}
+      <section className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pt-28 md:pt-36 pb-12 md:pb-20">
         
         <div className="max-w-2xl mb-10 md:mb-14">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-[-0.04em] mb-4 text-[#0A192F]">
@@ -60,10 +67,8 @@ export default function WorkPage() {
           onIndustryChange={setIndustryFilter}
         />
 
-        {/* Increased column counts to shrink item width and height, 
-          allowing more items (5-6) to fit vertically on the screen.
-        */}
-        <div className="columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-4 space-y-4">
+        {/* Changed default columns-2 to columns-1 for mobile (1 item per row) */}
+        <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 md:gap-6 space-y-4 md:space-y-6">
           {visibleItems.map((item) => (
             <div key={item.id} className="break-inside-avoid">
               <WorkMedia item={item} />
@@ -71,14 +76,13 @@ export default function WorkPage() {
           ))}
         </div>
 
-        {filtered.length === 0 && (
+        {displayItems.length === 0 && (
           <p className="text-center text-gray-500 py-20">
             No work found for this filter.
           </p>
         )}
 
-        {/* Load More Button - Only shows if there are more items to reveal */}
-        {filtered.length > visibleCount && (
+        {displayItems.length > visibleCount && (
           <div className="mt-16 flex justify-center pb-10">
             <button 
               onClick={() => setVisibleCount(prev => prev + 6)}
