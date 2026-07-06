@@ -8,8 +8,7 @@ import { getAllCountryCodes } from "@/data/country-pages"
  * - Changed `revalidate = 0` to `revalidate = 3600` (1 hour ISR)
  * - Added explicit revalidation tags for on-demand updates
  * - Updated fetch calls with proper cache strategy
- * 
- * This ensures:
+ * * This ensures:
  * 1. Sitemap pre-generates at build time
  * 2. Revalidates automatically every 1 hour
  * 3. Can be manually revalidated via revalidateTag('sitemap')
@@ -42,9 +41,12 @@ async function fetchSanity(query: string) {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
+  
+  // Explicitly add your primary top-level routes here
   const sitemapEntries: MetadataRoute.Sitemap = [
     { url: baseUrl, lastModified: now, changeFrequency: "daily", priority: 1 },
     { url: `${baseUrl}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/works`, lastModified: now, changeFrequency: "weekly", priority: 0.9 }, // Added the works page
   ]
 
   // 1. Static Routes
@@ -52,12 +54,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const routes = await getAllPublicRoutes()
     if (routes && Array.isArray(routes)) {
       routes.forEach((route) => {
-        sitemapEntries.push({
-          url: `${baseUrl}${route.path.startsWith('/') ? route.path : '/' + route.path}`,
-          lastModified: route.lastModified ? new Date(route.lastModified) : now,
-          changeFrequency: route.changeFrequency || "monthly",
-          priority: route.priority || 0.7,
-        })
+        // Prevent duplicates if /works or /blog are somehow also returned by getAllPublicRoutes
+        const cleanPath = route.path.startsWith('/') ? route.path : '/' + route.path
+        if (cleanPath !== '/blog' && cleanPath !== '/works' && cleanPath !== '/') {
+          sitemapEntries.push({
+            url: `${baseUrl}${cleanPath}`,
+            lastModified: route.lastModified ? new Date(route.lastModified) : now,
+            changeFrequency: route.changeFrequency || "monthly",
+            priority: route.priority || 0.7,
+          })
+        }
       })
     }
   } catch (e) { 
