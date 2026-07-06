@@ -13,41 +13,49 @@ export default function WorkPage() {
   const [industryFilter, setIndustryFilter] = useState<string>('all')
   const [visibleCount, setVisibleCount] = useState(6)
   
-  // State to hold the final display items so we can shuffle them safely on the client side
-  const [displayItems, setDisplayItems] = useState<WorkItem[]>([])
+  // 1. Initialize with real data so the Server HTML matches the Client HTML
+  const [displayItems, setDisplayItems] = useState<WorkItem[]>(workItems)
+  const [isMounted, setIsMounted] = useState(false)
 
   const industries = useMemo(
     () => Array.from(new Set(workItems.map((i) => i.industry))).sort(),
     []
   )
 
+  // 2. Mark as mounted on the client safely
   useEffect(() => {
-    // 1. Filter the items
+    setIsMounted(true)
+  }, [])
+
+  useEffect(() => {
     const filtered = workItems.filter((item) => {
       const typeMatch = typeFilter === 'all' || item.type === typeFilter
       const industryMatch = industryFilter === 'all' || item.industry === industryFilter
       return typeMatch && industryMatch
     })
 
-    // 2. Shuffle randomly if "All" is selected, otherwise keep standard order
-    if (typeFilter === 'all') {
+    // 3. Only run the random shuffle AFTER the component mounts to avoid hydration errors
+    if (typeFilter === 'all' && isMounted) {
       const shuffled = [...filtered].sort(() => Math.random() - 0.5)
       setDisplayItems(shuffled)
     } else {
       setDisplayItems(filtered)
     }
     
-    // 3. Reset pagination
     setVisibleCount(6)
-  }, [typeFilter, industryFilter])
+  }, [typeFilter, industryFilter, isMounted])
 
   const visibleItems = displayItems.slice(0, visibleCount)
+
+  // Prevent rendering the UI until the client is mounted to absolutely guarantee no mismatch
+  if (!isMounted) {
+    return null // or a simple loading spinner if preferred
+  }
 
   return (
     <main className="min-h-screen bg-[#F9F9F6] text-[#0A192F]">
       <Header />
 
-      {/* Changed max-w-[1400px] to max-w-7xl to match global header width */}
       <section className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pt-28 md:pt-36 pb-12 md:pb-20">
         
         <div className="max-w-2xl mb-10 md:mb-14">
@@ -67,7 +75,6 @@ export default function WorkPage() {
           onIndustryChange={setIndustryFilter}
         />
 
-        {/* Changed default columns-2 to columns-1 for mobile (1 item per row) */}
         <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 md:gap-6 space-y-4 md:space-y-6">
           {visibleItems.map((item) => (
             <div key={item.id} className="break-inside-avoid">
