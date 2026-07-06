@@ -30,7 +30,7 @@ export default function WorkPage() {
       <Header />
 
       <section className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-16">
-        <h1 className="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] mb-12">
+        <h1 className="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] mb-10">
           Our Work
         </h1>
 
@@ -42,23 +42,20 @@ export default function WorkPage() {
           onIndustryChange={setIndustryFilter}
         />
 
-        {/* Breathing room between filters and grid */}
-        <div className="mt-12">
-          {/* Masonry via CSS columns — handles mixed 9:16 / 4:5 without gaps */}
-          <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
-            {filtered.map((item) => (
-              <div key={item.id} className="mb-4 break-inside-avoid">
-                <WorkMedia item={item} />
-              </div>
-            ))}
-          </div>
-
-          {filtered.length === 0 && (
-            <p className="text-center text-foreground/50 py-20">
-              No work found for this filter.
-            </p>
-          )}
+        {/* Masonry via CSS columns — handles mixed 9:16 / 4:5 without gaps */}
+        <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
+          {filtered.map((item) => (
+            <div key={item.id} className="mb-4 break-inside-avoid">
+              <WorkMedia item={item} />
+            </div>
+          ))}
         </div>
+
+        {filtered.length === 0 && (
+          <p className="text-center text-foreground/50 py-20">
+            No work found for this filter.
+          </p>
+        )}
       </section>
 
       <Footer />
