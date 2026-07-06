@@ -3,11 +3,11 @@
 
 import type { WorkType } from '@/lib/work-data'
 
-// Ensure these keys exactly match the `type` property in your lib/work-data.ts items!
+// We map your exact data keys ('animation' / 'render') to the display labels
 const TYPE_TABS: { key: 'all' | WorkType; label: string }[] = [
   { key: 'all', label: 'All Projects' },
-  { key: '3d-animations', label: '3D Animations' },
-  { key: '3d-renders', label: '3D Renders' },
+  { key: 'animation', label: '3D Animations' },
+  { key: 'render', label: '3D Renders' },
 ]
 
 interface WorkFilterBarProps {
@@ -28,6 +28,7 @@ export function WorkFilterBar({
   return (
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-10 w-full">
       
+      {/* Left side: Type tabs */}
       <div className="flex flex-wrap items-center gap-2 md:gap-3">
         {TYPE_TABS.map((tab) => {
           const isActive = typeFilter === tab.key;
@@ -38,7 +39,7 @@ export function WorkFilterBar({
               onClick={() => onTypeChange(tab.key)}
               className={`rounded-full px-5 py-2 text-sm font-medium transition-all duration-200 border ${
                 isActive
-                  ? 'bg-[#D9FF00] text-[#0A192F] border-[#D9FF00]' // Adjusted to neon green primary
+                  ? 'bg-[#D9FF00] text-[#0A192F] border-[#D9FF00]' // Matches your Skitbit neon yellow/green
                   : 'bg-transparent text-foreground border-border hover:border-foreground/30 hover:bg-foreground/5'
               }`}
             >
@@ -48,6 +49,7 @@ export function WorkFilterBar({
         })}
       </div>
 
+      {/* Right side: Industry chips */}
       <div className="flex flex-wrap items-center gap-2 md:gap-3">
         <span className="text-[10px] sm:text-xs font-bold tracking-[0.1em] text-muted-foreground uppercase mr-1 sm:mr-2">
           Industry:
