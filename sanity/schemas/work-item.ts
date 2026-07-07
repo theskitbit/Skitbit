@@ -1,5 +1,3 @@
-// sanity/schemas/work-item.ts
-
 import {defineField, defineType} from 'sanity'
 
 export default defineType({
@@ -36,21 +34,17 @@ export default defineType({
       name: 'mediaUrl',
       title: 'Media URL (Blob Link)',
       type: 'url',
-      description: 'Paste your Vercel Blob link here (e.g., https://your-blob-storage.blob.vercel-storage.com/video.mp4)',
+      description: 'Paste your Vercel Blob link here',
       validation: (Rule) => Rule.required().uri({scheme: ['https']}),
     }),
     defineField({
       name: 'posterUrl',
       title: 'Poster Image (Blob Link - Animations Only)',
       type: 'url',
-      description: 'Shown before video loads and after it unloads. Required for animations.',
       validation: (Rule) => {
         return Rule.custom((value, context) => {
           if (context.document?.type === 'animation' && !value) {
             return 'Poster image is required for animations'
-          }
-          if (value && !value.startsWith('https://')) {
-            return 'Must be a valid HTTPS URL'
           }
           return true
         })
@@ -58,14 +52,14 @@ export default defineType({
     }),
     defineField({
       name: 'formatTag',
-      title: 'Format Tag (Mobile)',
+      title: 'Format Tag',
       type: 'string',
-      description: 'e.g., "3D PRODUCT ANIMATION", "STILL LIFE", "PRODUCT RENDER"',
+      description: 'e.g., "3D PRODUCT ANIMATION", "STILL LIFE"',
       validation: (Rule) => Rule.required().max(30),
     }),
     defineField({
       name: 'industries',
-      title: 'Industries (Filtering)',
+      title: 'Industries',
       type: 'array',
       of: [
         {
@@ -78,8 +72,6 @@ export default defineType({
               {title: 'Beauty', value: 'Beauty'},
               {title: 'Fashion', value: 'Fashion'},
               {title: 'Luxury Goods', value: 'Luxury Goods'},
-              {title: 'E-commerce', value: 'E-commerce'},
-              {title: 'Food & Beverage', value: 'Food & Beverage'},
             ],
           },
         },
@@ -88,14 +80,14 @@ export default defineType({
     }),
     defineField({
       name: 'fidelityTag',
-      title: 'Fidelity Tag (Mobile)',
+      title: 'Fidelity Tag',
       type: 'string',
-      description: 'e.g., "4K PRODUCTION", "2K PRODUCTION", "8K PRODUCTION"',
+      description: 'e.g., "4K PRODUCTION", "2K PRODUCTION"',
       validation: (Rule) => Rule.required().max(30),
     }),
     defineField({
       name: 'slug',
-      title: 'Slug (URL)',
+      title: 'Slug',
       type: 'slug',
       options: {
         source: 'title',
@@ -103,17 +95,4 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
   ],
-  preview: {
-    select: {
-      title: 'title',
-      media: 'posterUrl',
-      type: 'type',
-    },
-    prepare(selection) {
-      return {
-        title: `${selection.title} (${selection.type})`,
-        media: selection.media,
-      }
-    },
-  },
 })
