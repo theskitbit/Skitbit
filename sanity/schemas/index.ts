@@ -1,6 +1,8 @@
-import blockContent from "./block-content"
-import blogPost from "./blog-post"
-import location from "./location"
-import servicePage from "./service-page"
+// sanity/schemas/index.ts
 
-export default [blockContent, blogPost, location, servicePage]
+import blockContent from './block-content'
+import blogPost from './blog-post'
+import location from './location'
+import workItem from './work-item'
+
+export const schemaTypes = [blockContent, blogPost, location, workItem]
