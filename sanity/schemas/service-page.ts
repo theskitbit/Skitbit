@@ -1,317 +1,98 @@
-import { defineArrayMember, defineField, defineType } from "sanity"
+import {defineField, defineType} from 'sanity'
 
 export default defineType({
-  name: "servicePage",
-  title: "Service Page",
-  type: "document",
-
-  groups: [
-    {
-      name: "content",
-      title: "Content",
-      default: true,
-    },
-    {
-      name: "hero",
-      title: "Hero",
-    },
-    {
-      name: "sections",
-      title: "Sections",
-    },
-    {
-      name: "seo",
-      title: "SEO",
-    },
-  ],
-
+  name: 'servicePage',
+  title: 'Service Page',
+  type: 'document',
   fields: [
     defineField({
-      name: "title",
-      title: "Service Title",
-      type: "string",
-      group: "content",
-      validation: (Rule) => Rule.required(),
+      name: 'title',
+      title: 'Title',
+      type: 'string',
+      validation: (Rule) => Rule.required().max(60),
     }),
-
     defineField({
-      name: "slug",
-      title: "Slug",
-      type: "slug",
-      group: "content",
-      options: {
-        source: "title",
-        maxLength: 96,
-      },
-      validation: (Rule) => Rule.required(),
+      name: 'description',
+      title: 'Description (Mobile Card)',
+      type: 'text',
+      description: 'Short description shown on mobile cards. Keep under 120 characters for optimal display.',
+      validation: (Rule) => Rule.required().max(120),
     }),
-
     defineField({
-      name: "excerpt",
-      title: "Short Excerpt",
-      type: "text",
-      rows: 3,
-      group: "content",
-      validation: (Rule) => Rule.required().max(260),
-    }),
-
-    defineField({
-      name: "eyebrow",
-      title: "Hero Eyebrow",
-      type: "string",
-      group: "hero",
-      initialValue: "Skitbit Service",
-    }),
-
-    defineField({
-      name: "heroTitle",
-      title: "Hero Title",
-      type: "string",
-      group: "hero",
-      validation: (Rule) => Rule.required(),
-    }),
-
-    defineField({
-      name: "heroDescription",
-      title: "Hero Description",
-      type: "text",
-      rows: 4,
-      group: "hero",
-      validation: (Rule) => Rule.required(),
-    }),
-
-    defineField({
-      name: "heroMediaType",
-      title: "Hero Media Type",
-      type: "string",
-      group: "hero",
-      initialValue: "default",
+      name: 'type',
+      title: 'Media Type',
+      type: 'string',
       options: {
         list: [
-          { title: "Default Design Card", value: "default" },
-          { title: "Image", value: "image" },
-          { title: "Direct Video / MP4", value: "video" },
-          { title: "YouTube Embed", value: "youtube" },
+          {title: '3D Animation (9:16)', value: 'animation'},
+          {title: '3D Render (4:5)', value: 'render'},
         ],
-        layout: "radio",
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'mediaUrl',
+      title: 'Media URL (Blob Link)',
+      type: 'url',
+      description: 'Paste your Vercel Blob link here',
+      validation: (Rule) => Rule.required().uri({scheme: ['https']}),
+    }),
+    defineField({
+      name: 'posterUrl',
+      title: 'Poster Image (Blob Link - Animations Only)',
+      type: 'url',
+      validation: (Rule) => {
+        return Rule.custom((value, context) => {
+          if (context.document?.type === 'animation' && !value) {
+            return 'Poster image is required for animations'
+          }
+          return true
+        })
       },
     }),
-
     defineField({
-      name: "heroImage",
-      title: "Hero Image / Video Poster",
-      type: "image",
-      group: "hero",
-      options: {
-        hotspot: true,
-      },
-      hidden: ({ document }) => document?.heroMediaType === "default",
-      description:
-        "Used as hero image or as poster image for video. Recommended: 1400x1200 or 1600x1200.",
-      fields: [
-        defineField({
-          name: "alt",
-          title: "Alt Text",
-          type: "string",
-        }),
-      ],
+      name: 'formatTag',
+      title: 'Format Tag',
+      type: 'string',
+      description: 'e.g., "3D PRODUCT ANIMATION", "STILL LIFE"',
+      validation: (Rule) => Rule.required().max(30),
     }),
-
     defineField({
-      name: "heroVideoUrl",
-      title: "Hero Video URL",
-      type: "string",
-      group: "hero",
-      hidden: ({ document }) =>
-        document?.heroMediaType !== "video" &&
-        document?.heroMediaType !== "youtube",
-      description:
-        "Use a direct MP4/Cloudinary video URL for Video, or a YouTube URL for YouTube Embed.",
-    }),
-
-    defineField({
-      name: "primaryCtaLabel",
-      title: "Primary CTA Label",
-      type: "string",
-      group: "hero",
-      initialValue: "Start a project",
-    }),
-
-    defineField({
-      name: "primaryCtaHref",
-      title: "Primary CTA Link",
-      type: "string",
-      group: "hero",
-      initialValue: "/contact-form",
-    }),
-
-    defineField({
-      name: "secondaryCtaLabel",
-      title: "Secondary CTA Label",
-      type: "string",
-      group: "hero",
-    }),
-
-    defineField({
-      name: "secondaryCtaHref",
-      title: "Secondary CTA Link",
-      type: "string",
-      group: "hero",
-    }),
-
-    defineField({
-      name: "serviceHighlights",
-      title: "Service Highlights",
-      type: "array",
-      group: "sections",
+      name: 'industries',
+      title: 'Industries',
+      type: 'array',
       of: [
-        defineArrayMember({
-          type: "object",
-          name: "highlight",
-          fields: [
-            defineField({
-              name: "title",
-              title: "Title",
-              type: "string",
-              validation: (Rule) => Rule.required(),
-            }),
-            defineField({
-              name: "description",
-              title: "Description",
-              type: "text",
-              rows: 3,
-            }),
-          ],
-          preview: {
-            select: {
-              title: "title",
-              subtitle: "description",
-            },
-          },
-        }),
-      ],
-    }),
-
-    defineField({
-      name: "body",
-      title: "Page Body",
-      type: "array",
-      group: "sections",
-      of: [
-        defineArrayMember({
-          type: "block",
-          styles: [
-            { title: "Normal", value: "normal" },
-            { title: "Heading 2", value: "h2" },
-            { title: "Heading 3", value: "h3" },
-            { title: "Heading 4", value: "h4" },
-            { title: "Quote", value: "blockquote" },
-          ],
-          lists: [
-            { title: "Bullet", value: "bullet" },
-            { title: "Number", value: "number" },
-          ],
-          marks: {
-            decorators: [
-              { title: "Bold", value: "strong" },
-              { title: "Italic", value: "em" },
-            ],
-            annotations: [
-              {
-                name: "link",
-                title: "Link",
-                type: "object",
-                fields: [
-                  defineField({
-                    name: "href",
-                    title: "URL",
-                    type: "url",
-                  }),
-                ],
-              },
-            ],
-          },
-        }),
-
-        defineArrayMember({
-          type: "image",
-          title: "Inline Image",
+        {
+          type: 'string',
           options: {
-            hotspot: true,
+            list: [
+              {title: 'Jewelry', value: 'Jewelry'},
+              {title: 'Wellness & Health', value: 'Wellness & Health'},
+              {title: 'Skincare & Cosmetics', value: 'Skincare & Cosmetics'},
+              {title: 'Beauty', value: 'Beauty'},
+              {title: 'Fashion', value: 'Fashion'},
+              {title: 'Luxury Goods', value: 'Luxury Goods'},
+            ],
           },
-          fields: [
-            defineField({
-              name: "alt",
-              title: "Alt Text",
-              type: "string",
-            }),
-            defineField({
-              name: "caption",
-              title: "Caption",
-              type: "string",
-            }),
-          ],
-        }),
+        },
       ],
+      validation: (Rule) => Rule.required().min(1),
     }),
-
     defineField({
-      name: "faqs",
-      title: "FAQs",
-      type: "array",
-      group: "sections",
-      of: [
-        defineArrayMember({
-          type: "object",
-          name: "faq",
-          fields: [
-            defineField({
-              name: "question",
-              title: "Question",
-              type: "string",
-              validation: (Rule) => Rule.required(),
-            }),
-            defineField({
-              name: "answer",
-              title: "Answer",
-              type: "text",
-              rows: 4,
-              validation: (Rule) => Rule.required(),
-            }),
-          ],
-          preview: {
-            select: {
-              title: "question",
-              subtitle: "answer",
-            },
-          },
-        }),
-      ],
+      name: 'fidelityTag',
+      title: 'Fidelity Tag',
+      type: 'string',
+      description: 'e.g., "4K PRODUCTION", "2K PRODUCTION"',
+      validation: (Rule) => Rule.required().max(30),
     }),
-
     defineField({
-      name: "seoTitle",
-      title: "SEO Title",
-      type: "string",
-      group: "seo",
-      validation: (Rule) => Rule.max(70),
-    }),
-
-    defineField({
-      name: "seoDescription",
-      title: "SEO Description",
-      type: "text",
-      rows: 3,
-      group: "seo",
-      validation: (Rule) => Rule.max(160),
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+      },
+      validation: (Rule) => Rule.required(),
     }),
   ],
-
-  preview: {
-    select: {
-      title: "title",
-      subtitle: "excerpt",
-      media: "heroImage",
-    },
-  },
 })
