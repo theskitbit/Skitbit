@@ -1,4 +1,4 @@
-// app/work/page.tsx
+// app/works/page.tsx
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
@@ -14,7 +14,6 @@ export default function WorkPage() {
   const [typeFilter, setTypeFilter] = useState<'all' | 'animation' | 'render'>('all')
   const [industryFilter, setIndustryFilter] = useState<string>('all')
 
-  // Fetch work items from Sanity
   useEffect(() => {
     async function fetchWork() {
       try {
@@ -26,11 +25,9 @@ export default function WorkPage() {
         setLoading(false)
       }
     }
-
     fetchWork()
   }, [])
 
-  // Extract unique industries
   const industries = useMemo(() => {
     const all = new Set<string>()
     items.forEach((item) => {
@@ -39,7 +36,6 @@ export default function WorkPage() {
     return Array.from(all).sort()
   }, [items])
 
-  // Apply filters
   const filtered = useMemo(() => {
     return items.filter((item) => {
       const typeMatch = typeFilter === 'all' || item.type === typeFilter
@@ -52,11 +48,14 @@ export default function WorkPage() {
     return (
       <main className="min-h-screen bg-background text-foreground">
         <Header />
-        <section className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-16">
-          <h1 className="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] mb-12">
-            Our Work
-          </h1>
-          <p className="text-foreground/50">Loading...</p>
+        {/* MATCHED PADDING HERE: pt-32 mobile, pt-40 desktop */}
+        <section className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pt-32 pb-16 md:pt-40 md:pb-24" aria-busy="true">
+          <header className="mb-12 md:mb-16">
+            <h1 className="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] mb-2">
+              Our Work
+            </h1>
+          </header>
+          <p className="text-foreground/50">Loading projects...</p>
         </section>
         <Footer />
       </main>
@@ -67,15 +66,18 @@ export default function WorkPage() {
     <main className="min-h-screen bg-background text-foreground">
       <Header />
 
-      <section className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-16">
-        <div className="mb-12">
-          <h1 className="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] mb-2">
+      {/* INCREASED PADDING: pt-32 (128px) on mobile, pt-40 (160px) on desktop to clear fixed header */}
+      <section className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pt-32 pb-16 md:pt-40 md:pb-24">
+        
+        {/* INCREASED MARGIN: mb-12 on mobile, mb-16 on desktop for breathing room before filters */}
+        <header className="mb-12 md:mb-16">
+          <h1 className="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] mb-3">
             Our Work
           </h1>
-          <p className="text-foreground/60">
+          <p className="text-foreground/60 text-lg">
             Precision-crafted 3D experiences for high-growth brands.
           </p>
-        </div>
+        </header>
 
         <WorkFilterBar
           typeFilter={typeFilter}
@@ -85,8 +87,7 @@ export default function WorkPage() {
           onIndustryChange={setIndustryFilter}
         />
 
-        {/* Masonry grid */}
-        <div className="mt-12">
+        <div className="mt-12 md:mt-16" aria-live="polite">
           <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
             {filtered.map((item) => (
               <WorkCard key={item._id} item={item} />
