@@ -25,15 +25,14 @@ export function WorkFilterBar({
   onIndustryChange,
 }: WorkFilterBarProps) {
   return (
-    // Note: Removed "overflow-hidden" from the parent so the negative margins can escape!
-    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-10 w-full">
+    // Added min-w-0 to the parent
+    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-10 w-full min-w-0">
       
-      {/* Left side: Type tabs 
-        - Bleeds off BOTH left and right edges on mobile (-mx-5)
-        - Re-aligns the first/last item with padding (px-5)
-      */}
-      <div className="-mx-5 sm:-mx-6 lg:mx-0 w-full lg:w-auto">
-        <div className="flex items-center overflow-x-auto gap-2 md:gap-3 pb-2 lg:pb-0 px-5 sm:px-6 lg:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      {/* Left side: Type tabs */}
+      {/* Added min-w-0 to enforce bounds on desktop flex-row */}
+      <div className="-mx-5 sm:-mx-6 lg:mx-0 w-full lg:w-auto min-w-0">
+        {/* Changed px-5 to pl-5. We handle the right padding with a spacer div below */}
+        <div className="flex items-center overflow-x-auto gap-2 md:gap-3 pb-2 lg:pb-0 pl-5 sm:pl-6 lg:pl-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {TYPE_TABS.map((tab) => {
             const isActive = typeFilter === tab.key;
             return (
@@ -51,21 +50,21 @@ export function WorkFilterBar({
               </button>
             )
           })}
+          {/* Explicit spacer guarantees the gap isn't eaten by browser rendering bugs */}
+          <div className="w-5 sm:w-6 lg:w-0 shrink-0" aria-hidden="true" />
         </div>
       </div>
 
-      {/* Right side: Industry chips
-        - The text label stays locked in place.
-        - The scrollable track bleeds off ONLY the right edge (-mr-5).
-      */}
-      <div className="flex items-center w-full lg:w-auto">
+      {/* Right side: Industry chips */}
+      {/* ADDED min-w-0 here! This stops the wrapper from expanding infinitely off-screen */}
+      <div className="flex items-center w-full lg:w-auto min-w-0">
         <span className="shrink-0 text-[10px] sm:text-xs font-bold tracking-[0.1em] text-muted-foreground uppercase mr-3">
           Industry:
         </span>
         
-        {/* min-w-0 prevents the flex child from blowing past the screen width */}
         <div className="flex-1 min-w-0 -mr-5 sm:-mr-6 lg:mr-0">
-          <div className="flex items-center overflow-x-auto gap-2 md:gap-3 pb-2 lg:pb-0 pr-5 sm:pr-6 lg:pr-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          {/* Removed pr-5. We handle the right padding with the spacer div below */}
+          <div className="flex items-center overflow-x-auto gap-2 md:gap-3 pb-2 lg:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {industries.map((industry) => {
               const isActive = industryFilter === industry;
               return (
@@ -83,6 +82,8 @@ export function WorkFilterBar({
                 </button>
               )
             })}
+            {/* Explicit spacer guarantees the gap isn't eaten by browser rendering bugs */}
+            <div className="w-5 sm:w-6 lg:w-0 shrink-0" aria-hidden="true" />
           </div>
         </div>
       </div>
