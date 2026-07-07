@@ -2,14 +2,18 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Our Work | SKITBIT',
+  // Expanded title to hit the ~50-60 character sweet spot for SEO
+  title: 'Our Work | 3D Product Animation & Rendering | SKITBIT',
   description: 'Precision-crafted 3D experiences and premium product visualizations for high-growth brands.',
+  alternates: {
+    // FIX: Forces Google to index this specific page rather than falling back to the homepage
+    canonical: 'https://theskitbit.com/works',
+  },
   openGraph: {
-    title: 'Our Work | SKITBIT',
+    title: 'Our Work | 3D Product Animation & Rendering | SKITBIT',
     description: 'Precision-crafted 3D experiences and premium product visualizations for high-growth brands.',
     type: 'website',
-    // url: 'https://skitbit.com/works',
-    // images: ['/og-works.jpg'], // Add an Open Graph image path here later
+    url: 'https://theskitbit.com/works',
   }
 }
 
