@@ -93,6 +93,10 @@ export function WorkCard({ item }: { item: WorkItem }) {
             loading="lazy"
             className="h-full w-full object-cover"
           />
+          {/* ADDED: Format tag overlay for still images */}
+          <div className="absolute bottom-3 left-3 inline-flex items-center rounded-full bg-foreground/90 px-3 py-1.5 text-[10px] font-semibold text-background uppercase">
+            {item.formatTag}
+          </div>
         </div>
 
         {/* Mobile metadata */}
@@ -151,7 +155,7 @@ export function WorkCard({ item }: { item: WorkItem }) {
           )
         )}
 
-        {/* Format tag overlay */}
+        {/* Format tag overlay for videos */}
         <div className="absolute bottom-3 left-3 inline-flex items-center rounded-full bg-foreground/90 px-3 py-1.5 text-[10px] font-semibold text-background uppercase">
           {item.formatTag}
         </div>
