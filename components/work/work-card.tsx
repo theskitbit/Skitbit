@@ -93,7 +93,6 @@ export function WorkCard({ item }: { item: WorkItem }) {
             loading="lazy"
             className="h-full w-full object-cover"
           />
-          {/* ADDED: Format tag overlay for still images */}
           <div className="absolute bottom-3 left-3 inline-flex items-center rounded-full bg-foreground/90 px-3 py-1.5 text-[10px] font-semibold text-background uppercase">
             {item.formatTag}
           </div>
@@ -101,7 +100,8 @@ export function WorkCard({ item }: { item: WorkItem }) {
 
         {/* Mobile metadata */}
         <div className="mt-3 space-y-2">
-          <h3 className="text-sm font-semibold text-foreground">{item.title}</h3>
+          {/* CHANGED FROM h3 TO h2 FOR SEO */}
+          <h2 className="text-sm font-semibold text-foreground">{item.title}</h2>
           <p className="text-xs text-foreground/60 line-clamp-2">
             {item.description}
           </p>
@@ -155,7 +155,6 @@ export function WorkCard({ item }: { item: WorkItem }) {
           )
         )}
 
-        {/* Format tag overlay for videos */}
         <div className="absolute bottom-3 left-3 inline-flex items-center rounded-full bg-foreground/90 px-3 py-1.5 text-[10px] font-semibold text-background uppercase">
           {item.formatTag}
         </div>
@@ -163,7 +162,8 @@ export function WorkCard({ item }: { item: WorkItem }) {
 
       {/* Mobile metadata */}
       <div className="mt-3 space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">{item.title}</h3>
+        {/* CHANGED FROM h3 TO h2 FOR SEO */}
+        <h2 className="text-sm font-semibold text-foreground">{item.title}</h2>
         <p className="text-xs text-foreground/60 line-clamp-2">
           {item.description}
         </p>

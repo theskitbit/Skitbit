@@ -1,4 +1,4 @@
-// app/work/page.tsx
+// app/works/page.tsx
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
@@ -14,7 +14,6 @@ export default function WorkPage() {
   const [typeFilter, setTypeFilter] = useState<'all' | 'animation' | 'render'>('all')
   const [industryFilter, setIndustryFilter] = useState<string>('all')
 
-  // Fetch work items from Sanity
   useEffect(() => {
     async function fetchWork() {
       try {
@@ -26,11 +25,9 @@ export default function WorkPage() {
         setLoading(false)
       }
     }
-
     fetchWork()
   }, [])
 
-  // Extract unique industries
   const industries = useMemo(() => {
     const all = new Set<string>()
     items.forEach((item) => {
@@ -39,7 +36,6 @@ export default function WorkPage() {
     return Array.from(all).sort()
   }, [items])
 
-  // Apply filters
   const filtered = useMemo(() => {
     return items.filter((item) => {
       const typeMatch = typeFilter === 'all' || item.type === typeFilter
@@ -52,11 +48,14 @@ export default function WorkPage() {
     return (
       <main className="min-h-screen bg-background text-foreground">
         <Header />
-        <section className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-16">
-          <h1 className="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] mb-12">
-            Our Work
-          </h1>
-          <p className="text-foreground/50">Loading...</p>
+        {/* Added aria-busy for accessibility during load */}
+        <section className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-16" aria-busy="true">
+          <header className="mb-12">
+            <h1 className="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] mb-2">
+              Our Work
+            </h1>
+          </header>
+          <p className="text-foreground/50">Loading projects...</p>
         </section>
         <Footer />
       </main>
@@ -68,14 +67,15 @@ export default function WorkPage() {
       <Header />
 
       <section className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-16">
-        <div className="mb-12">
+        {/* Upgraded from div to semantic header */}
+        <header className="mb-12">
           <h1 className="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] mb-2">
             Our Work
           </h1>
           <p className="text-foreground/60">
             Precision-crafted 3D experiences for high-growth brands.
           </p>
-        </div>
+        </header>
 
         <WorkFilterBar
           typeFilter={typeFilter}
@@ -85,8 +85,8 @@ export default function WorkPage() {
           onIndustryChange={setIndustryFilter}
         />
 
-        {/* Masonry grid */}
-        <div className="mt-12">
+        {/* Added aria-live so screen readers announce filter changes */}
+        <div className="mt-12" aria-live="polite">
           <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
             {filtered.map((item) => (
               <WorkCard key={item._id} item={item} />
