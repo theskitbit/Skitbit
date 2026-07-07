@@ -48,9 +48,9 @@ export default function WorkPage() {
     return (
       <main className="min-h-screen bg-background text-foreground">
         <Header />
-        {/* Added aria-busy for accessibility during load */}
-        <section className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-16" aria-busy="true">
-          <header className="mb-12">
+        {/* MATCHED PADDING HERE: pt-32 mobile, pt-40 desktop */}
+        <section className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pt-32 pb-16 md:pt-40 md:pb-24" aria-busy="true">
+          <header className="mb-12 md:mb-16">
             <h1 className="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] mb-2">
               Our Work
             </h1>
@@ -66,13 +66,15 @@ export default function WorkPage() {
     <main className="min-h-screen bg-background text-foreground">
       <Header />
 
-      <section className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-16">
-        {/* Upgraded from div to semantic header */}
-        <header className="mb-12">
-          <h1 className="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] mb-2">
+      {/* INCREASED PADDING: pt-32 (128px) on mobile, pt-40 (160px) on desktop to clear fixed header */}
+      <section className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pt-32 pb-16 md:pt-40 md:pb-24">
+        
+        {/* INCREASED MARGIN: mb-12 on mobile, mb-16 on desktop for breathing room before filters */}
+        <header className="mb-12 md:mb-16">
+          <h1 className="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] mb-3">
             Our Work
           </h1>
-          <p className="text-foreground/60">
+          <p className="text-foreground/60 text-lg">
             Precision-crafted 3D experiences for high-growth brands.
           </p>
         </header>
@@ -85,8 +87,7 @@ export default function WorkPage() {
           onIndustryChange={setIndustryFilter}
         />
 
-        {/* Added aria-live so screen readers announce filter changes */}
-        <div className="mt-12" aria-live="polite">
+        <div className="mt-12 md:mt-16" aria-live="polite">
           <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
             {filtered.map((item) => (
               <WorkCard key={item._id} item={item} />
