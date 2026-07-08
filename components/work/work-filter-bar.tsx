@@ -28,8 +28,9 @@ export function WorkFilterBar({
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-10 w-full min-w-0">
       
       {/* Left side: Type tabs */}
-      <div className="-mx-5 sm:-mx-6 lg:mx-0 w-full lg:w-auto min-w-0">
-        {/* Swapped inline scrollbar hacks for your custom 'scrollbar-none' utility */}
+      {/* FIX: Removed w-full. Letting the div naturally expand with the negative margins fixes the cut-off. */}
+      <div className="-mx-5 sm:-mx-6 lg:mx-0 lg:w-auto min-w-0">
+        {/* Restored whitespace-nowrap and shrink-0 on buttons for a single scrolling row */}
         <div className="flex items-center overflow-x-auto gap-2 md:gap-3 pb-2 lg:pb-0 pl-5 sm:pl-6 lg:pl-0 scrollbar-none">
           {TYPE_TABS.map((tab) => {
             const isActive = typeFilter === tab.key;
@@ -40,9 +41,7 @@ export function WorkFilterBar({
                 onClick={() => onTypeChange(tab.key)}
                 className={`whitespace-nowrap shrink-0 rounded-full px-5 py-2 text-sm font-medium transition-all duration-200 border ${
                   isActive
-                    // Uses --primary and --primary-foreground from your CSS
                     ? 'bg-primary text-primary-foreground border-primary' 
-                    // Uses --foreground, --border, and --muted for semantic hovering
                     : 'bg-transparent text-foreground border-border hover:border-foreground/30 hover:bg-muted'
                 }`}
               >
@@ -50,6 +49,7 @@ export function WorkFilterBar({
               </button>
             )
           })}
+          {/* Spacer guarantees the final gap isn't eaten by browser rendering bugs */}
           <div className="w-5 sm:w-6 lg:w-0 shrink-0" aria-hidden="true" />
         </div>
       </div>
@@ -61,7 +61,6 @@ export function WorkFilterBar({
         </span>
         
         <div className="flex-1 min-w-0 -mr-5 sm:-mr-6 lg:mr-0">
-          {/* Swapped inline scrollbar hacks for your custom 'scrollbar-none' utility */}
           <div className="flex items-center overflow-x-auto gap-2 md:gap-3 pb-2 lg:pb-0 scrollbar-none">
             {industries.map((industry) => {
               const isActive = industryFilter === industry;
@@ -72,9 +71,7 @@ export function WorkFilterBar({
                   onClick={() => onIndustryChange(isActive ? 'all' : industry)}
                   className={`whitespace-nowrap shrink-0 rounded-full px-4 py-1.5 text-xs sm:text-sm font-medium transition-all duration-200 border ${
                     isActive
-                      // Inverts using --foreground and --background variables
                       ? 'bg-foreground text-background border-foreground'
-                      // Uses --muted-foreground for unselected state
                       : 'bg-transparent text-muted-foreground border-border hover:text-foreground hover:border-foreground/30'
                   }`}
                 >
@@ -82,6 +79,7 @@ export function WorkFilterBar({
                 </button>
               )
             })}
+            {/* Spacer guarantees the final gap isn't eaten by browser rendering bugs */}
             <div className="w-5 sm:w-6 lg:w-0 shrink-0" aria-hidden="true" />
           </div>
         </div>
