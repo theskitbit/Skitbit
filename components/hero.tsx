@@ -185,7 +185,7 @@ export function Hero() {
 
                 {/* Secondary 'Our Work' button - Now routes to the /work page */}
                 <Link
-                  href="/work"
+                  href="/works"
                   className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-foreground/15 bg-transparent px-8 py-3.5 text-sm font-semibold text-foreground transition-all duration-300 hover:scale-[1.03] hover:border-foreground/30 hover:bg-foreground/5 focus:outline-none focus-ring active:scale-[0.98] sm:w-auto"
                 >
                   Our Work
