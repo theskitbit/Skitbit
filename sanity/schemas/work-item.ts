@@ -54,8 +54,8 @@ export default defineType({
       name: 'formatTag',
       title: 'Format Tag',
       type: 'string',
-      description: 'e.g., "3D PRODUCT ANIMATION", "STILL LIFE"',
-      validation: (Rule) => Rule.required().max(30),
+      description: 'Custom tag for the image overlay (e.g., "CAMPAIGN ASSET", "STUDIO RENDER")',
+      validation: (Rule) => Rule.required().max(40),
     }),
     defineField({
       name: 'industries',
