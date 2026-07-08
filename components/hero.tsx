@@ -6,6 +6,7 @@ import {
   type CSSProperties,
   type MouseEvent,
 } from 'react';
+import Link from 'next/link';
 import { useContactOverlay } from './contact-overlay';
 
 type HeroCardStyle = CSSProperties & {
@@ -28,10 +29,6 @@ export function Hero() {
   const { open } = useContactOverlay();
 
   const handleContactClick = () => open();
-
-  const handleWorkClick = () => {
-    document.getElementById('work')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
 
   const handleCardMouseMove = (event: MouseEvent<HTMLDivElement>) => {
     if (typeof window === 'undefined') return;
@@ -143,7 +140,7 @@ export function Hero() {
         }}
       />
 
-      {/* Ambient blobs — solid, no blur-3xl glassmorphism */}
+      {/* Ambient blobs */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-[-18%] top-[18%] h-[460px] w-[460px] rounded-full bg-primary/8 blur-2xl"
@@ -167,7 +164,7 @@ export function Hero() {
                 Your 3D production department. We deliver high-end campaign creatives so your team can focus on rollout.
               </p>
 
-              <div className="mt-8">
+              <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row">
                 <button
                   type="button"
                   onClick={handleContactClick}
@@ -185,6 +182,14 @@ export function Hero() {
                     →
                   </span>
                 </button>
+
+                {/* Secondary 'Our Work' button - Now routes to the /work page */}
+                <Link
+                  href="/works"
+                  className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-foreground/15 bg-transparent px-8 py-3.5 text-sm font-semibold text-foreground transition-all duration-300 hover:scale-[1.03] hover:border-foreground/30 hover:bg-foreground/5 focus:outline-none focus-ring active:scale-[0.98] sm:w-auto"
+                >
+                  Our Work
+                </Link>
               </div>
             </div>
           </div>
@@ -198,7 +203,6 @@ export function Hero() {
               style={{ '--mx': '50%', '--my': '50%', '--rx': '0deg', '--ry': '0deg' } as HeroCardStyle}
               className="relative mx-auto w-full max-w-[680px] transition-transform duration-300 ease-out lg:ml-auto"
             >
-              {/* Card wrapper — solid fill, no backdrop-blur, no glassmorphism */}
               <div
                 className="relative rounded-3xl bg-background p-1.5 shadow-[0_28px_90px_rgba(0,0,0,0.12)] ring-1 ring-foreground/10 sm:p-2"
                 style={{
@@ -248,7 +252,6 @@ export function Hero() {
                       className="pointer-events-none absolute bottom-0 left-0 right-0 h-[48%] bg-gradient-to-t from-background/35 via-background/12 to-transparent"
                     />
 
-                    {/* Audit card — solid fill, no backdrop-blur */}
                     <div className="absolute bottom-4 left-4 right-4 overflow-hidden rounded-3xl bg-background p-4 shadow-[0_20px_60px_rgba(0,0,0,0.18)] ring-1 ring-foreground/10 sm:bottom-7 sm:left-7 sm:right-7 sm:p-6">
                       <div
                         aria-hidden="true"
