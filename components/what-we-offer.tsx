@@ -104,13 +104,13 @@ export function WhatWeOffer() {
 
                   {isActive && (
                     <div className="overflow-hidden transition-all duration-300" onClick={(e) => e.stopPropagation()}>
-                      <div className="px-4 pb-7">
+                      <div className="px-4 pb-7 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
                         <p className="text-base text-primary-foreground/80 max-w-2xl leading-relaxed m-0">
                           {highlightPrice(description)}
                         </p>
                         <a
                           href="/works"
-                          className="w-full sm:w-auto inline-flex mt-6 px-6 py-3 rounded-full bg-background text-foreground text-sm font-medium transition-all hover:opacity-90 hover:shadow-md hover:scale-105 active:scale-95"
+                          className="w-full sm:w-auto inline-flex justify-center sm:justify-start mt-0 px-6 py-3 rounded-full bg-background text-foreground text-sm font-medium transition-all hover:opacity-90 hover:shadow-md hover:scale-105 active:scale-95 shrink-0"
                         >
                           View Examples →
                         </a>

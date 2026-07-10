@@ -796,63 +796,7 @@ export async function generateStaticParams() {
   }
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
-  const { slug } = await params
 
-  let post: BlogPost | null = null
-
-  try {
-    post = await client.fetch<BlogPost | null>(BLOG_POST_QUERY, { slug })
-  } catch (error) {
-    console.error("Failed to fetch blog metadata:", error)
-  }
-
-  if (!post) {
-    return {
-      title: "Blog Post | Skitbit",
-    }
-  }
-
-  const title = post.seoTitle || `${post.title} | Skitbit`
-  const description =
-    post.seoDescription ||
-    post.excerpt ||
-    "Insights from Skitbit on 3D product rendering, product animation, creative strategy, and performance marketing."
-
-  const imageUrl = getImageUrl(post.image, 1200, 630)
-
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: `/blog/${slug}`,
-    },
-    openGraph: {
-      title,
-      description,
-      type: "article",
-      url: `/blog/${slug}`,
-      images: imageUrl
-        ? [
-            {
-              url: imageUrl,
-              width: 1200,
-              height: 630,
-              alt: post.title,
-            },
-          ]
-        : [],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: imageUrl ? [imageUrl] : [],
-    },
-  }
-}
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params
