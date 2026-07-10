@@ -1,6 +1,7 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
-import { FooterClientOnly } from './footer-client'
 
 const PARTNER_LOGOS = [
   { id: 'top-rated', src: "https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/top%20rated%20agency.png", alt: "Top Rated Agency", width: 110, height: 45 },
@@ -71,6 +72,24 @@ function FooterNav({ title, links }: { title: string; links: { href: string; lab
   )
 }
 
+function FooterPolicies() {
+  return (
+    <div className="flex flex-wrap gap-4 justify-center">
+      <Link href="/privacy-policy" className="text-xs text-muted-foreground hover:text-foreground transition">
+        Privacy Policy
+      </Link>
+      <span className="text-xs text-muted-foreground">/</span>
+      <Link href="/terms-of-service" className="text-xs text-muted-foreground hover:text-foreground transition">
+        Terms of Service
+      </Link>
+      <span className="text-xs text-muted-foreground">/</span>
+      <Link href="/cookie-policy" className="text-xs text-muted-foreground hover:text-foreground transition">
+        Cookie Policy
+      </Link>
+    </div>
+  )
+}
+
 export function Footer() {
   const currentYear = new Date().getFullYear()
 
@@ -122,7 +141,7 @@ export function Footer() {
           <p className="text-sm text-center font-medium text-muted-foreground">
             © {currentYear} Skitbit International Group. All rights reserved.
           </p>
-          <FooterClientOnly />
+          <FooterPolicies />
         </div>
       </div>
     </footer>
