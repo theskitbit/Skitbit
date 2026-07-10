@@ -18,7 +18,7 @@ import {
 } from "@/lib/sanity/queries"
 import { urlFor } from "@/lib/sanity/image"
 
-export const revalidate = 60
+export const revalidate = 30
 export const dynamicParams = true
 
 type PageProps = {

@@ -9,7 +9,7 @@ import {
 } from "@/lib/sanity/queries"
 import { servicesData } from "@/data/services-data"
 
-export const revalidate = 60
+export const revalidate = 30
 export const dynamicParams = true
 
 type PageProps = {

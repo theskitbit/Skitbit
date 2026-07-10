@@ -269,7 +269,7 @@ export function Hero() {
                         </span>
                       </div>
 
-                      <div className="mt-4 grid grid-cols-3 gap-2 sm:mt-5 sm:gap-3">
+                      <div className="hidden md:grid mt-4 grid-cols-3 gap-2 sm:mt-5 sm:gap-3">
                         {auditItems.map((item) => (
                           <div
                             key={item.label}
