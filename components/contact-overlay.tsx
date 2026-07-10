@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, ReactNode, lazy, Suspense } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 const ContactOverlayContext = createContext<any>(null)
@@ -16,7 +16,9 @@ export function ContactOverlayProvider({ children }: { children: ReactNode }) {
   return (
     <ContactOverlayContext.Provider value={{ open: () => setIsOpen(true), close: () => setIsOpen(false) }}>
       {children}
-      <ContactOverlay isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <Suspense fallback={null}>
+        <ContactOverlay isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      </Suspense>
     </ContactOverlayContext.Provider>
   )
 }
@@ -44,7 +46,6 @@ function ContactOverlay({ isOpen, onClose }: any) {
   const [step, setStep] = useState<Step>(1)
   const [direction, setDirection] = useState(1)
   const [error, setError] = useState('')
-
   const [data, setData] = useState({ category: '', needs: [] as string[], timeline: '', product: '', name: '', contact: '' })
 
   useEffect(() => {
@@ -55,20 +56,26 @@ function ContactOverlay({ isOpen, onClose }: any) {
 
   useEffect(() => { setMounted(true); if (isOpen) setStep(1) }, [isOpen])
 
-  if (!mounted) return null
+  if (!mounted || !isOpen) return null
 
   const messageText = `Hi Adnan, brief for: ${data.product}\nCategory: ${data.category}\nNeeds: ${data.needs.join(', ')}\nTimeline: ${data.timeline}\n\nName: ${data.name}\nContact: ${data.contact}`
   const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(messageText)}`
 
-  const next = async () => {
-    if (step === 1 && !data.category) return setError('Please select a category')
+  const validateStep = () => {
+    if (step === 1 && !data.category) return 'Please select a category'
     if (step === 2) {
-      if (data.needs.length === 0) return setError('Select at least one requirement')
-      if (!data.product.trim()) return setError('Enter your brand name or link')
+      if (data.needs.length === 0) return 'Select at least one requirement'
+      if (!data.product.trim()) return 'Enter your brand name or link'
     }
     if (step === 3) {
-      if (!data.timeline || !data.name.trim() || !data.contact.trim()) return setError('Please complete the details')
+      if (!data.timeline || !data.name.trim() || !data.contact.trim()) return 'Please complete the details'
     }
+    return ''
+  }
+
+  const next = async () => {
+    const validationError = validateStep()
+    if (validationError) return setError(validationError)
     
     setError('')
     
@@ -76,15 +83,17 @@ function ContactOverlay({ isOpen, onClose }: any) {
       setDirection(1)
       setStep((step + 1) as Step) 
     } else { 
-      // 1. Instant WhatsApp open
-      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-      // 2. Instant Redirect to success page for Page Load conversion tracking
-      window.location.href = `/contact-success`;
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
+      window.location.href = `/contact-success`
     }
   }
 
+  const categoryOptions = ['Health & Wellness', 'Beauty & Cosmetics', 'Fine Jewelry', 'Luxury Watches', 'Food & Beverage', 'Consumer Tech']
+  const needsOptions = ['Web Images', 'Lifestyle Images', 'Ad Creatives', 'Product Videos']
+  const timelineOptions = ['ASAP', 'Within 2 weeks', 'Next month']
+
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence>
       {isOpen && (
         <motion.div className="fixed inset-0 z-50 bg-[#F6F7F2] overflow-y-auto text-foreground flex flex-col" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <div className="w-full h-1 bg-muted fixed top-0 left-0 z-50">
@@ -93,22 +102,22 @@ function ContactOverlay({ isOpen, onClose }: any) {
 
           <div className="flex justify-between items-center px-6 py-6 sm:py-8 max-w-5xl w-full mx-auto shrink-0">
             <div className="flex items-center gap-3 select-none">
-              <span className="flex items-center justify-center w-7 h-7 rounded-full bg-black/5 text-[#0B1A28] text-xs font-bold leading-none">{step}</span>
-              <span className="text-sm font-medium text-slate-400 leading-none">of {TOTAL_STEPS}</span>
+              <span className="flex items-center justify-center w-7 h-7 rounded-full bg-black/5 text-[#0B1A28] text-xs font-bold">{step}</span>
+              <span className="text-sm font-medium text-slate-400">of {TOTAL_STEPS}</span>
             </div>
-            <button onClick={onClose} className="w-10 h-10 rounded-full border border-black/5 flex items-center justify-center hover:bg-black/5 text-slate-400 transition-colors">✕</button>
+            <button onClick={onClose} className="w-10 h-10 rounded-full border border-black/5 flex items-center justify-center hover:bg-black/5 text-slate-400 transition-colors" aria-label="Close dialog">✕</button>
           </div>
 
           <div className="flex-1 flex flex-col px-6 pb-8 sm:pb-12">
             <div className="max-w-xl w-full mx-auto flex-1 flex flex-col">
               <div className="flex-1 flex flex-col justify-center pb-8">
-                <AnimatePresence mode="wait" custom={direction}>
-                  <motion.div key={step} custom={direction} initial={{ x: direction > 0 ? 30 : -30, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: direction > 0 ? -30 : 30, opacity: 0 }} transition={{ duration: 0.3 }} className="flex flex-col gap-10 w-full">
+                <AnimatePresence mode="wait">
+                  <motion.div key={step} initial={{ x: direction > 0 ? 30 : -30, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: direction > 0 ? -30 : 30, opacity: 0 }} transition={{ duration: 0.3 }} className="flex flex-col gap-10 w-full">
                     {step === 1 && (
                       <div className="space-y-8">
                         <h2 className="text-[34px] leading-tight sm:text-4xl font-semibold text-[#0B1A28]">What are you<br className="sm:hidden"/> building?</h2>
                         <div className="flex flex-wrap gap-3">
-                          {['Health & Wellness', 'Beauty & Cosmetics', 'Fine Jewelry', 'Luxury Watches', 'Food & Beverage', 'Consumer Tech'].map(o => (
+                          {categoryOptions.map(o => (
                             <motion.div key={o} onClick={() => setData({ ...data, category: o })} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className={`flex flex-auto sm:flex-initial justify-center items-center px-5 py-3.5 rounded-full border cursor-pointer transition-all text-sm font-medium ${data.category === o ? 'bg-[#D4F05A] text-[#0B1A28] border-[#D4F05A]' : 'border-black/10 text-slate-600 hover:border-black/20 bg-transparent'}`}>
                               {data.category === o ? <CheckIcon /> : CategoryIcons[o]}
                               <span className="whitespace-nowrap">{o}</span>
@@ -122,7 +131,7 @@ function ContactOverlay({ isOpen, onClose }: any) {
                         <div className="space-y-8">
                           <h2 className="text-[34px] leading-tight sm:text-4xl font-semibold text-[#0B1A28]">What do you need?</h2>
                           <div className="flex flex-wrap gap-3">
-                            {['Web Images', 'Lifestyle Images', 'Ad Creatives', 'Product Videos'].map((o) => {
+                            {needsOptions.map((o) => {
                               const active = data.needs.includes(o)
                               return (
                                 <motion.div key={o} onClick={() => setData({ ...data, needs: active ? data.needs.filter(n => n !== o) : [...data.needs, o] })} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className={`flex flex-auto sm:flex-initial justify-center items-center px-5 py-3.5 rounded-full border cursor-pointer transition-all text-sm font-medium ${active ? 'bg-[#D4F05A] text-[#0B1A28] border-[#D4F05A]' : 'border-black/10 text-slate-600 bg-transparent'}`}>
@@ -140,7 +149,7 @@ function ContactOverlay({ isOpen, onClose }: any) {
                       <div className="space-y-8">
                         <h2 className="text-[34px] leading-tight sm:text-4xl font-semibold text-[#0B1A28]">The Timeline</h2>
                         <div className="flex flex-wrap gap-3">
-                          {['ASAP', 'Within 2 weeks', 'Next month'].map(o => (
+                          {timelineOptions.map(o => (
                             <motion.button key={o} onClick={() => setData({ ...data, timeline: o })} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className={`flex flex-auto sm:flex-initial justify-center items-center px-5 py-3.5 rounded-full border cursor-pointer transition-all text-sm font-medium ${data.timeline === o ? 'bg-[#D4F05A] text-[#0B1A28] border-[#D4F05A]' : 'border-black/10 text-slate-600 bg-transparent'}`}>
                               {data.timeline === o && <CheckIcon />}
                               <span className="whitespace-nowrap">{o}</span>

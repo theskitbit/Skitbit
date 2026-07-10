@@ -32,11 +32,7 @@ export function CookieConsent() {
           userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
           url: typeof window !== 'undefined' ? window.location.href : 'unknown',
         }),
-      }).catch(() => {
-        // Fail silently
-      })
-    } catch (e) {
-      console.log('Consent logging skipped')
+      }).catch(() => {})
     } finally {
       setIsLogging(false)
     }

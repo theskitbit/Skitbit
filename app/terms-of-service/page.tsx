@@ -1,9 +1,25 @@
+import type { Metadata } from "next"
+
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 
-export const metadata = {
-  title: "Terms of Service | Skitbit International Group",
+export const metadata: Metadata = {
+  metadataBase: new URL("https://theskitbit.com"),
+  title: "Terms of Service | Skitbit",
   description: "Terms and conditions for Skitbit International Group 3D rendering and performance marketing services.",
+  alternates: {
+    canonical: "/terms-of-service",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    url: "https://theskitbit.com/terms-of-service",
+    title: "Terms of Service | Skitbit",
+    description: "Terms and conditions for Skitbit International Group 3D rendering and performance marketing services.",
+  },
 }
 
 export default function TermsOfService() {

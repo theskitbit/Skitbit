@@ -1,9 +1,25 @@
+import type { Metadata } from "next"
+
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 
-export const metadata = {
-  title: "Privacy Policy | Skitbit International Group",
+export const metadata: Metadata = {
+  metadataBase: new URL("https://theskitbit.com"),
+  title: "Privacy Policy | Skitbit",
   description: "Skitbit's privacy policy covering data collection, processing, retention, and your rights under GDPR and CCPA.",
+  alternates: {
+    canonical: "/privacy-policy",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    url: "https://theskitbit.com/privacy-policy",
+    title: "Privacy Policy | Skitbit",
+    description: "Skitbit's privacy policy covering data collection, processing, retention, and your rights under GDPR and CCPA.",
+  },
 }
 
 export default function PrivacyPolicy() {

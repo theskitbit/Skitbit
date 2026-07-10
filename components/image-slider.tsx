@@ -88,6 +88,8 @@ export function ImageSlider() {
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 160px, 256px"
+                  loading="lazy"
+                  quality={75}
                 />
               </div>
             ))}

@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import Link from "next/link"
+import type { Metadata } from "next"
 import type { ReactNode } from "react"
 
 import { Header } from "@/components/header"
@@ -31,10 +32,49 @@ interface BlogPost {
   image?: SanityImage | string
 }
 
-export const metadata = {
-  title: "Blog | Skitbit",
+export const metadata: Metadata = {
+  metadataBase: new URL("https://theskitbit.com"),
+  title: "Blog | Skitbit – 3D Rendering, CGI Creative, and D2C Insights",
   description:
     "Practical insights on 3D product rendering, CGI product animation, performance creative, Shopify visuals, and premium D2C launch content.",
+  alternates: {
+    canonical: "/blog",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    url: "https://theskitbit.com/blog",
+    title: "Blog | Skitbit – 3D Rendering, CGI Creative, and D2C Insights",
+    description:
+      "Practical insights on 3D product rendering, CGI product animation, performance creative, Shopify visuals, and premium D2C launch content.",
+    images: [
+      {
+        url: "/skien.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Skitbit Blog",
+      },
+    ],
+    siteName: "Skitbit",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog | Skitbit – 3D Rendering, CGI Creative, and D2C Insights",
+    description:
+      "Practical insights on 3D product rendering, CGI product animation, performance creative, Shopify visuals, and premium D2C launch content.",
+    creator: "@skitbit",
+    images: ["/skien.jpg"],
+  },
 }
 
 async function getBlogPosts(): Promise<BlogPost[]> {
