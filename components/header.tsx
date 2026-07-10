@@ -2,10 +2,11 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
+import { useContactOverlay } from './contact-overlay'
 
 export function Header() {
-  const [isOpen, setIsOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const { open } = useContactOverlay()
 
   useEffect(() => {
     setMounted(true)
@@ -38,10 +39,15 @@ export function Header() {
         </div>
 
         <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium transition-colors bg-foreground text-background hover:opacity-90"
+          type="button"
+          onClick={() => open()}
+          className="btn-primary rounded-full group relative inline-flex items-center justify-center gap-2 overflow-hidden transition-all duration-300 hover:scale-[1.03] hover:opacity-90 focus:outline-none focus-ring active:scale-[0.98] px-6 py-3 text-sm font-semibold"
         >
-          Contact
+          <span
+            aria-hidden="true"
+            className="skitbit-button-shimmer pointer-events-none absolute inset-y-0 -left-16 w-12 rotate-12 bg-white/35 blur-md"
+          />
+          <span className="relative z-10">Contact</span>
         </button>
       </nav>
     </header>

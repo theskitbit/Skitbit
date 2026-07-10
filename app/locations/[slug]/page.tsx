@@ -55,7 +55,7 @@ async function sanityFetch<T>(
   })
 
   const res = await fetch(url.toString(), {
-    next: { revalidate: 60 },
+    next: { revalidate: 30 },
   })
 
   if (!res.ok) {
