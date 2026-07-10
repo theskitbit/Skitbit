@@ -28,8 +28,6 @@ export function Hero() {
   const rafRef = useRef<number | null>(null);
   const { open } = useContactOverlay();
 
-  const handleContactClick = () => open();
-
   const handleCardMouseMove = (event: MouseEvent<HTMLDivElement>) => {
     if (typeof window === 'undefined') return;
     if (!window.matchMedia('(pointer: fine)').matches) return;
@@ -129,7 +127,6 @@ export function Hero() {
         }
       `}</style>
 
-      {/* Grid texture */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-[0.03]"
@@ -140,7 +137,6 @@ export function Hero() {
         }}
       />
 
-      {/* Ambient blobs */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-[-18%] top-[18%] h-[460px] w-[460px] rounded-full bg-primary/8 blur-2xl"
@@ -153,7 +149,6 @@ export function Hero() {
       <div className="relative mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-11 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 xl:gap-20">
 
-          {/* LEFT */}
           <div className="order-1 flex flex-col justify-center">
             <div className="max-w-2xl">
               <h1 className="mt-0 max-w-[820px] text-[43px] font-medium leading-[0.9] tracking-[-0.065em] text-foreground sm:text-[60px] md:text-[70px] lg:text-[78px] xl:text-[88px] m-0">
@@ -167,7 +162,7 @@ export function Hero() {
               <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row">
                 <button
                   type="button"
-                  onClick={handleContactClick}
+                  onClick={() => open()}
                   className="btn-primary rounded-full group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden transition-all duration-300 hover:scale-[1.03] hover:opacity-90 focus:outline-none focus-ring active:scale-[0.98] sm:w-auto"
                 >
                   <span
@@ -183,7 +178,6 @@ export function Hero() {
                   </span>
                 </button>
 
-                {/* Secondary 'Our Work' button - Now routes to the /work page */}
                 <Link
                   href="/works"
                   className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-foreground/15 bg-transparent px-8 py-3.5 text-sm font-semibold text-foreground transition-all duration-300 hover:scale-[1.03] hover:border-foreground/30 hover:bg-foreground/5 focus:outline-none focus-ring active:scale-[0.98] sm:w-auto"
@@ -194,7 +188,6 @@ export function Hero() {
             </div>
           </div>
 
-          {/* RIGHT */}
           <div className="order-2">
             <div
               ref={cardRef}
