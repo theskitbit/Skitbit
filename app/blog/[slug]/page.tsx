@@ -27,6 +27,83 @@ type PageProps = {
   }>
 }
 
+export async function generateMetadata(
+  { params }: PageProps
+): Promise<Metadata> {
+  const { slug } = await params
+
+  try {
+    const post = await client.fetch<BlogPost>(
+      `*[_type == "blogPost" && slug.current == $slug && !(_id in path("drafts.**"))][0]`,
+      { slug }
+    )
+
+    if (!post) {
+      return {
+        title: "Blog Post | Skitbit",
+        description: "Read insights on 3D product rendering and CGI creative systems.",
+        robots: { index: false, follow: false },
+      }
+    }
+
+    const canonicalUrl = `https://theskitbit.com/blog/${post.slug.current}`
+    const imageUrl = getImageUrl(post.image, 1200, 630)
+
+    return {
+      metadataBase: new URL("https://theskitbit.com"),
+      title: post.seoTitle || post.title,
+      description: post.seoDescription || post.excerpt || "Read this article on Skitbit.",
+      alternates: {
+        canonical: `/blog/${post.slug.current}`,
+      },
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          "max-snippet": -1,
+          "max-image-preview": "large",
+          "max-video-preview": -1,
+        },
+      },
+      openGraph: {
+        type: "article",
+        url: canonicalUrl,
+        title: post.seoTitle || post.title,
+        description: post.seoDescription || post.excerpt || "Read this article on Skitbit.",
+        images: imageUrl
+          ? [
+              {
+                url: imageUrl,
+                width: 1200,
+                height: 630,
+                alt: post.image?.alt || post.title,
+              },
+            ]
+          : [],
+        publishedTime: post.publishedAt,
+        authors: post.author ? [post.author] : ["Skitbit"],
+        siteName: "Skitbit",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: post.seoTitle || post.title,
+        description: post.seoDescription || post.excerpt || "Read this article on Skitbit.",
+        images: imageUrl ? [imageUrl] : [],
+        creator: "@skitbit",
+      },
+    }
+  } catch (error) {
+    console.error("[Blog Metadata] Error fetching post:", error)
+    return {
+      title: "Blog Post | Skitbit",
+      description: "Read insights on 3D product rendering and CGI creative systems.",
+      robots: { index: false },
+    }
+  }
+}
+
 type SanityImage = {
   asset?: {
     _ref?: string
@@ -176,7 +253,7 @@ function getInitials(name?: string) {
 }
 
 function getPostUrl(slug: string) {
-  return `https://www.theskitbit.com/blog/${slug}`
+  return `https://theskitbit.com/blog/${slug}`
 }
 
 function extractHeadings(body: PortableTextBlock[]) {

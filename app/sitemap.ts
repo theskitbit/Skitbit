@@ -16,7 +16,7 @@ import { getAllCountryCodes } from "@/data/country-pages"
  */
 export const revalidate = 3600 // Revalidate every 1 hour (ISR)
 
-const baseUrl = "https://www.theskitbit.com"
+const baseUrl = "https://theskitbit.com"
 
 // --- Helper Functions ---
 async function fetchSanity(query: string) {

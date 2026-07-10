@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import Link from "next/link"
+import type { Metadata } from "next"
 import type { ReactNode } from "react"
 import { groq } from "next-sanity"
 
@@ -59,10 +60,49 @@ const LOCATIONS_QUERY = groq`
   }
 `
 
-export const metadata = {
-  title: "Locations | Skitbit",
+export const metadata: Metadata = {
+  metadataBase: new URL("https://theskitbit.com"),
+  title: "Locations | Skitbit – Premium 3D Product Rendering Across Markets",
   description:
     "Explore Skitbit location pages for 3D product rendering, CGI visuals, product animation, ecommerce visuals, and premium D2C creative services.",
+  alternates: {
+    canonical: "/locations",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    url: "https://theskitbit.com/locations",
+    title: "Locations | Skitbit – Premium 3D Product Rendering Across Markets",
+    description:
+      "Explore Skitbit location pages for 3D product rendering, CGI visuals, product animation, ecommerce visuals, and premium D2C creative services.",
+    images: [
+      {
+        url: "/skien.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Skitbit Locations",
+      },
+    ],
+    siteName: "Skitbit",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Locations | Skitbit – Premium 3D Product Rendering Across Markets",
+    description:
+      "Explore Skitbit location pages for 3D product rendering, CGI visuals, product animation, ecommerce visuals, and premium D2C creative services.",
+    creator: "@skitbit",
+    images: ["/skien.jpg"],
+  },
 }
 
 async function getLocations(): Promise<LocationPage[]> {

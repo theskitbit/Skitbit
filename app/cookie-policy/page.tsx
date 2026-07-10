@@ -1,9 +1,25 @@
+import type { Metadata } from "next"
+
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 
-export const metadata = {
-  title: "Cookie Policy | Skitbit International Group",
+export const metadata: Metadata = {
+  metadataBase: new URL("https://theskitbit.com"),
+  title: "Cookie Policy | Skitbit",
   description: "Cookie policy explaining how Skitbit uses cookies, pixels, and tracking technologies.",
+  alternates: {
+    canonical: "/cookie-policy",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    url: "https://theskitbit.com/cookie-policy",
+    title: "Cookie Policy | Skitbit",
+    description: "Cookie policy explaining how Skitbit uses cookies, pixels, and tracking technologies.",
+  },
 }
 
 export default function CookiePolicy() {

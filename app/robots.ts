@@ -35,6 +35,6 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     // Dynamic sitemap with all public routes
-    sitemap: 'https://www.theskitbit.com/sitemap.xml',
+    sitemap: 'https://theskitbit.com/sitemap.xml',
   }
 }

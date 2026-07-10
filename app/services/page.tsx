@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import Link from "next/link"
+import type { Metadata } from "next"
 import type { ReactNode } from "react"
 import { groq } from "next-sanity"
 
@@ -57,10 +58,49 @@ const SERVICES_QUERY = groq`
   }
 `
 
-export const metadata = {
-  title: "Services | Skitbit",
+export const metadata: Metadata = {
+  metadataBase: new URL("https://theskitbit.com"),
+  title: "Services | Skitbit – 3D Product Rendering, Animation, and CGI Creative",
   description:
     "Explore Skitbit services for 3D product rendering, product animation, CGI visuals, performance creative, Shopify product visuals, and D2C launch content.",
+  alternates: {
+    canonical: "/services",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    url: "https://theskitbit.com/services",
+    title: "Services | Skitbit – 3D Product Rendering, Animation, and CGI Creative",
+    description:
+      "Explore Skitbit services for 3D product rendering, product animation, CGI visuals, performance creative, Shopify product visuals, and D2C launch content.",
+    images: [
+      {
+        url: "/skien.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Skitbit Services",
+      },
+    ],
+    siteName: "Skitbit",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Services | Skitbit – 3D Product Rendering, Animation, and CGI Creative",
+    description:
+      "Explore Skitbit services for 3D product rendering, product animation, CGI visuals, performance creative, Shopify product visuals, and D2C launch content.",
+    creator: "@skitbit",
+    images: ["/skien.jpg"],
+  },
 }
 
 async function getServices(): Promise<ServicePage[]> {
