@@ -8,7 +8,6 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 import { LogoStrip } from "@/components/logo-strip"
 import { FireworkWidget } from "@/components/firework-widget"
 import { ProductShowcase } from "@/components/product-showcase"
-import { Testimonials } from "@/components/testimonials"
 import { Footer } from "@/components/footer"
 
 type FAQ = {
@@ -257,8 +256,6 @@ export function LocationLandingTemplate({
           </div>
         </section>
       ) : null}
-
-      <Testimonials />
 
       <section className="bg-primary py-24 text-primary-foreground lg:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">

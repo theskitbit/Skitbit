@@ -18,6 +18,7 @@ interface Testimonial {
   metric2Value?: string
   rating: number
   order?: number
+  active?: boolean
 }
 
 interface TestimonialsProps {
@@ -44,66 +45,11 @@ function Stars({ count = 5 }: { count?: number }) {
   )
 }
 
-function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
-  return (
-    <div className="group relative overflow-hidden rounded-[32px] bg-gradient-to-br from-primary/10 to-transparent p-6 sm:p-8 border border-primary/20 transition-all duration-300 hover:border-primary/40">
-      {/* Metric overlays */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        {testimonial.metric1Label && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-            <div className="text-center text-white">
-              <div className="text-4xl font-bold">{testimonial.metric1Value}</div>
-              <div className="text-sm mt-2">{testimonial.metric1Label}</div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Image background */}
-      {testimonial.image && (
-        <div className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-300">
-          <Image
-            src={urlFor(testimonial.image).width(600).height(400).url()}
-            alt={testimonial.name}
-            fill
-            className="object-cover"
-            unoptimized
-          />
-        </div>
-      )}
-
-      <div className="relative z-10">
-        <Stars count={testimonial.rating} />
-
-        <blockquote className="mt-6 text-xl sm:text-2xl font-bold leading-tight text-foreground">
-          "{testimonial.headline}"
-        </blockquote>
-
-        <div className="mt-4 flex items-start gap-4">
-          <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-muted ring-2 ring-primary/20">
-            <Image
-              src={urlFor(testimonial.image).width(48).height(48).url()}
-              alt={testimonial.name}
-              fill
-              sizes="48px"
-              className="object-cover"
-              unoptimized
-            />
-          </div>
-          <div className="min-w-0">
-            <h3 className="font-semibold text-foreground">{testimonial.name}</h3>
-            <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-            <p className="text-xs text-primary mt-1">{testimonial.category}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 export function TestimonialsSanity({ testimonials }: TestimonialsProps) {
   const [loaded, setLoaded] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
+  const [isInView, setIsInView] = useState(false)
+  const [hasShuffledOnce, setHasShuffledOnce] = useState(false)
 
   const sortedTestimonials = testimonials
     .filter((t) => t.active !== false)
@@ -119,12 +65,48 @@ export function TestimonialsSanity({ testimonials }: TestimonialsProps) {
     setActiveIndex((value) => (value + 1) % sortedTestimonials.length)
   }
 
+  // Initial load animation
   useEffect(() => {
     const timeout = window.setTimeout(() => {
       setLoaded(true)
     }, 80)
     return () => window.clearTimeout(timeout)
   }, [])
+
+  // Auto-shuffle on view and every 2 seconds after
+  useEffect(() => {
+    const sectionRef = document.getElementById('testimonials')
+    if (!sectionRef) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true)
+          // Shuffle once when first entering view
+          if (!hasShuffledOnce) {
+            setHasShuffledOnce(true)
+            next()
+          }
+          observer.unobserve(sectionRef)
+        }
+      },
+      { threshold: 0.3 }
+    )
+
+    observer.observe(sectionRef)
+    return () => observer.unobserve(sectionRef)
+  }, [hasShuffledOnce, sortedTestimonials.length])
+
+  // Auto-shuffle every 2 seconds after being in view
+  useEffect(() => {
+    if (!isInView || !hasShuffledOnce) return
+
+    const interval = setInterval(() => {
+      next()
+    }, 2000)
+
+    return () => clearInterval(interval)
+  }, [isInView, hasShuffledOnce, sortedTestimonials.length])
 
   if (!sortedTestimonials.length) {
     return null
@@ -185,14 +167,16 @@ export function TestimonialsSanity({ testimonials }: TestimonialsProps) {
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-4">
                     <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-muted ring-1 ring-foreground/10">
-                      <Image
-                        src={urlFor(active.image).width(48).height(48).url()}
-                        alt={active.name}
-                        fill
-                        sizes="48px"
-                        className="object-cover"
-                        unoptimized
-                      />
+                      {active.image && (
+                        <Image
+                          src={urlFor(active.image).width(48).height(48).url()}
+                          alt={active.name}
+                          fill
+                          sizes="48px"
+                          className="object-cover"
+                          unoptimized
+                        />
+                      )}
                     </div>
                     <div className="min-w-0 text-left">
                       <h3 className="m-0 truncate text-base font-semibold text-foreground">
@@ -296,15 +280,6 @@ export function TestimonialsSanity({ testimonials }: TestimonialsProps) {
             </div>
           </article>
         </div>
-
-        {/* Grid of testimonial cards */}
-        {sortedTestimonials.length > 1 && (
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sortedTestimonials.map((testimonial) => (
-              <TestimonialCard key={testimonial._id} testimonial={testimonial} />
-            ))}
-          </div>
-        )}
       </div>
     </section>
   )
