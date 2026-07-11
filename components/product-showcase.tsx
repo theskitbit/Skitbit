@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 
 const HERO_STILLS = [
