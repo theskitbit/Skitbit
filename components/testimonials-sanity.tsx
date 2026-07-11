@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { getImageUrl } from '@/lib/sanity/image'
+import { urlFor } from '@/lib/sanity/image'
 
 interface Testimonial {
   _id: string
@@ -63,7 +63,7 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
       {testimonial.image && (
         <div className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-300">
           <Image
-            src={getImageUrl(testimonial.image, 600, 400)}
+            src={urlFor(testimonial.image).width(600).height(400).url()}
             alt={testimonial.name}
             fill
             className="object-cover"
@@ -82,7 +82,7 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
         <div className="mt-4 flex items-start gap-4">
           <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-muted ring-2 ring-primary/20">
             <Image
-              src={getImageUrl(testimonial.image, 48, 48)}
+              src={urlFor(testimonial.image).width(48).height(48).url()}
               alt={testimonial.name}
               fill
               sizes="48px"
@@ -186,7 +186,7 @@ export function TestimonialsSanity({ testimonials }: TestimonialsProps) {
                   <div className="flex items-center gap-4">
                     <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-muted ring-1 ring-foreground/10">
                       <Image
-                        src={getImageUrl(active.image, 48, 48)}
+                        src={urlFor(active.image).width(48).height(48).url()}
                         alt={active.name}
                         fill
                         sizes="48px"
