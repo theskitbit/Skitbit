@@ -8,38 +8,47 @@ import { FireworkWidget } from '@/components/firework-widget'
 import { ProductShowcase } from '@/components/product-showcase'
 import { AboutEvent } from '@/components/about-event'
 import { WhatWeOffer } from '@/components/what-we-offer'
-import { TestimonialsSanity } from '@/components/testimonials-sanity'
+import { TestimonialsInteractive } from '@/components/testimonials-interactive'
 import { CTA } from '@/components/cta'
 import { Footer } from '@/components/footer'
 import { client } from '@/lib/sanity/client'
 import { groq } from 'next-sanity'
 
-const TESTIMONIALS_QUERY = groq`
-  *[_type == "testimonial" && active == true] | order(order asc) {
-    _id,
-    name,
-    role,
-    category,
-    headline,
-    description,
-    image,
-    metric1Label,
-    metric1Value,
-    metric2Label,
-    metric2Value,
-    rating,
-    order,
-    active
+const TESTIMONIALS_SECTION_QUERY = groq`
+  *[_type == "testimonialsSection"][0] {
+    title,
+    mainHeading,
+    backgroundColor,
+    testimonialImages[] {
+      image,
+      quote,
+      attribution
+    },
+    stats[] {
+      percentage,
+      label,
+      isIncrease,
+      companyLogo
+    }
   }
 `
 
 export default async function Home() {
-  let testimonials = []
+  let testimonialsData = {
+    title: 'Our Community',
+    mainHeading: 'We make it easy for companies and their employees to contribute and manage compensation',
+    backgroundColor: 'bg-gray-50',
+    testimonialImages: [],
+    stats: [],
+  }
   
   try {
-    testimonials = await client.fetch(TESTIMONIALS_QUERY)
+    const fetchedData = await client.fetch(TESTIMONIALS_SECTION_QUERY)
+    if (fetchedData) {
+      testimonialsData = fetchedData
+    }
   } catch (error) {
-    console.error('Failed to fetch testimonials:', error)
+    console.error('Failed to fetch testimonials section:', error)
   }
 
   return (
@@ -135,7 +144,7 @@ export default async function Home() {
       <AboutEvent />
       <ProductShowcase />
       <WhatWeOffer />
-      <TestimonialsSanity testimonials={testimonials} />
+      <TestimonialsInteractive {...testimonialsData} />
       <CTA />
       <Footer />
     </main>
