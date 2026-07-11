@@ -1,5 +1,3 @@
-'use client'
-
 import Script from "next/script";
 
 import { Header } from '@/components/header'
@@ -10,11 +8,40 @@ import { FireworkWidget } from '@/components/firework-widget'
 import { ProductShowcase } from '@/components/product-showcase'
 import { AboutEvent } from '@/components/about-event'
 import { WhatWeOffer } from '@/components/what-we-offer'
-import { Testimonials } from '@/components/testimonials'
+import { TestimonialsSanity } from '@/components/testimonials-sanity'
 import { CTA } from '@/components/cta'
 import { Footer } from '@/components/footer'
+import { client } from '@/lib/sanity/client'
+import { groq } from 'next-sanity'
 
-export default function Home() {
+const TESTIMONIALS_QUERY = groq`
+  *[_type == "testimonial" && active == true] | order(order asc) {
+    _id,
+    name,
+    role,
+    category,
+    headline,
+    description,
+    image,
+    metric1Label,
+    metric1Value,
+    metric2Label,
+    metric2Value,
+    rating,
+    order,
+    active
+  }
+`
+
+export default async function Home() {
+  let testimonials = []
+  
+  try {
+    testimonials = await client.fetch(TESTIMONIALS_QUERY)
+  } catch (error) {
+    console.error('Failed to fetch testimonials:', error)
+  }
+
   return (
     <main className="bg-background text-foreground">
 
@@ -108,7 +135,7 @@ export default function Home() {
       <AboutEvent />
       <ProductShowcase />
       <WhatWeOffer />
-      <Testimonials />
+      <TestimonialsSanity testimonials={testimonials} />
       <CTA />
       <Footer />
     </main>
