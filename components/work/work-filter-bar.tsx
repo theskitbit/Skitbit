@@ -25,11 +25,11 @@ export function WorkFilterBar({
   onIndustryChange,
 }: WorkFilterBarProps) {
   return (
-    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-10 w-full min-w-0">
+    <div className="flex flex-col mb-10 w-full min-w-0">
       
-      {/* Left side: Type tabs */}
+      {/* Top row: Type tabs */}
       {/* FIX: Removed w-full. Letting the div naturally expand with the negative margins fixes the cut-off. */}
-      <div className="-mx-5 sm:-mx-6 lg:mx-0 lg:w-auto min-w-0">
+      <div className="-mx-5 sm:-mx-6 lg:mx-0 lg:w-auto min-w-0 mb-6">
         {/* Restored whitespace-nowrap and shrink-0 on buttons for a single scrolling row */}
         <div className="flex items-center overflow-x-auto gap-2 md:gap-3 pb-2 lg:pb-0 pl-5 sm:pl-6 lg:pl-0 scrollbar-none">
           {TYPE_TABS.map((tab) => {
@@ -54,13 +54,13 @@ export function WorkFilterBar({
         </div>
       </div>
 
-      {/* Right side: Industry chips */}
-      <div className="flex items-center w-full lg:w-auto min-w-0">
+      {/* Bottom row (desktop) / Second row (mobile): Industry chips */}
+      <div className="flex items-center w-full min-w-0">
         <span className="shrink-0 text-[10px] sm:text-xs font-bold tracking-[0.1em] text-muted-foreground uppercase mr-3">
           Industry:
         </span>
         
-        <div className="flex-1 min-w-0 -mr-5 sm:-mr-6 lg:mr-0">
+        <div className="flex-1 min-w-0 -mr-5 sm:-mr-6">
           <div className="flex items-center overflow-x-auto gap-2 md:gap-3 pb-2 lg:pb-0 scrollbar-none">
             {industries.map((industry) => {
               const isActive = industryFilter === industry;
