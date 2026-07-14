@@ -85,15 +85,16 @@ function ContactOverlay({ isOpen, onClose }: any) {
       setStep((step + 1) as Step) 
     } else { 
       try {
-        // AIRTABLE POPULATION
-        await saveFormToAirtable({
-          name: data.name,
-          contact: data.contact,
-          product: data.product,
-          category: data.category,
-          needs: data.needs,
-          timeline: data.timeline
-        })
+const result = await saveFormToAirtable({
+  name: data.name,
+  contact: data.contact,
+  product: data.product,
+  category: data.category,
+  needs: data.needs,
+  timeline: data.timeline,
+})
+
+console.log('Airtable Result:', result)
       } catch (err) {
         console.error('Airtable pipeline recording error:', err)
       }
