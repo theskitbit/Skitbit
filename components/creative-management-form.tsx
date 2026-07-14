@@ -7,15 +7,18 @@ import type { CSSProperties, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { saveFormToAirtable } from '@/app/actions'
 
-// ... [Keep all your existing types and constants here exactly as you had them] ...
-// I am including the component definition below with the necessary fixes
+// ... [Keep your types and configurations (Market, FormData, etc.) exactly as you had them] ...
 
-export function CreativeManagementForm({ onClose }: { onClose?: () => void }): JSX.Element {
+// REMOVED THE : JSX.Element TAG TO FIX THE BUILD ERROR
+export function CreativeManagementForm({ onClose }: { onClose?: () => void }) {
   const router = useRouter()
-  // ... [Keep your state hooks: step, formData, errors, phoneCallingCode, etc.] ...
+  const [step, setStep] = useState<1 | 2 | 3>(1)
+  const [formData, setFormData] = useState<any>(initialFormData) // Keeping as 'any' or your specific type
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  // ... [Keep all your existing hooks here] ...
 
-  // FIX: handleSubmit with correct mapping
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  // FIX: Mapping function for submission
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     if (step < TOTAL_STEPS) {
@@ -25,7 +28,7 @@ export function CreativeManagementForm({ onClose }: { onClose?: () => void }): J
 
     if (!validateStep(3)) return
 
-    // Mapping formData to the structure expected by actions.ts
+    // Mapped data object to satisfy the Airtable action requirements
     const mappedData = {
         name: formData.fullName,
         contact: formData.phone,
@@ -35,23 +38,23 @@ export function CreativeManagementForm({ onClose }: { onClose?: () => void }): J
         timeline: formData.timeline
     }
 
+    // Call the server action
     saveFormToAirtable(mappedData).catch((error) => {
       console.error('Background Airtable save failed:', error)
     })
 
     const message = buildWhatsAppMessage()
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+    const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(message)}`
 
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
     window.location.href = '/contact-success'
   }
 
-  // ... [Keep the rest of your UI/JSX code exactly as is] ...
-
+  // ... [The rest of your component's UI code remains 100% the same] ...
+  
   return (
-     /* Your entire JSX structure goes here */
-     <div className="..."> 
-        {/* ... */}
-     </div>
+    <div role="dialog" aria-modal="true" className="...">
+       {/* ... your full existing UI code ... */}
+    </div>
   )
 }
