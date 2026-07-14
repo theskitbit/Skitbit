@@ -14,11 +14,6 @@ export async function saveFormToAirtable(data: LeadData) {
   const tableName = process.env.AIRTABLE_TABLE_NAME || 'Leads'
   const airtablePat = process.env.AIRTABLE_PAT
 
-  if (!baseId || !airtablePat) {
-    console.error('Missing Airtable environment variables')
-    return { success: false, error: 'Missing configuration' }
-  }
-
   try {
     const airtableRecord = {
       fields: {
@@ -44,15 +39,9 @@ export async function saveFormToAirtable(data: LeadData) {
       }
     )
 
-    if (!response.ok) {
-      const errorData = await response.json()
-      console.error('Airtable API error:', errorData)
-      return { success: false, error: errorData.error?.message || 'Failed to save' }
-    }
-
-    return { success: true }
+    return { success: response.ok }
   } catch (error) {
     console.error('Error saving to Airtable:', error)
-    return { success: false, error: 'Unknown error' }
+    return { success: false }
   }
 }
