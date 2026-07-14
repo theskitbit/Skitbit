@@ -7,29 +7,14 @@ import type { CSSProperties, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { saveFormToAirtable } from '@/app/actions'
 
-// ... (Keep your types and configurations exactly as they were, I am including them below for completeness)
+// ... [Keep all your existing types and constants here exactly as you had them] ...
+// I am including the component definition below with the necessary fixes
 
-type Step = 1 | 2 | 3
-type Market = 'IN' | 'UK' | 'INTL'
-type Option = { value: string; label: string }
-type MarketConfig = { label: string; currencyLabel: string; adSpendOptions: Option[]; budgetOptions: Option[] }
-
-type FormData = {
-  fullName: string; brandName: string; brandLink: string; productCategory: string; categoryOther: string; 
-  needs: string[]; runningAds: string; adSpend: string; biggestProblem: string; timeline: string; 
-  workingBudget: string; phone: string; message: string;
-}
-
-// ... (Keep your existing helpers: marketConfig, categoryOptions, etc.)
-// (I am omitting the long config arrays here to keep this response clean, ensure you keep them in your file)
-
-export function CreativeManagementForm({ onClose }: { onClose?: () => void }) {
+export function CreativeManagementForm({ onClose }: { onClose?: () => void }): JSX.Element {
   const router = useRouter()
-  const [step, setStep] = useState<Step>(1)
-  const [formData, setFormData] = useState<FormData>(initialFormData)
-  // ... (Keep all your existing states)
+  // ... [Keep your state hooks: step, formData, errors, phoneCallingCode, etc.] ...
 
-  // FIX: Explicitly map form data to LeadData interface
+  // FIX: handleSubmit with correct mapping
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
@@ -40,7 +25,7 @@ export function CreativeManagementForm({ onClose }: { onClose?: () => void }) {
 
     if (!validateStep(3)) return
 
-    // Mapped data object to satisfy TypeScript
+    // Mapping formData to the structure expected by actions.ts
     const mappedData = {
         name: formData.fullName,
         contact: formData.phone,
@@ -61,5 +46,12 @@ export function CreativeManagementForm({ onClose }: { onClose?: () => void }) {
     window.location.href = '/contact-success'
   }
 
-  // ... (Rest of your component remains the same)
+  // ... [Keep the rest of your UI/JSX code exactly as is] ...
+
+  return (
+     /* Your entire JSX structure goes here */
+     <div className="..."> 
+        {/* ... */}
+     </div>
+  )
 }

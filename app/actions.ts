@@ -14,6 +14,10 @@ export async function saveFormToAirtable(data: LeadData) {
   const tableName = process.env.AIRTABLE_TABLE_NAME || 'Leads'
   const airtablePat = process.env.AIRTABLE_PAT
 
+  if (!baseId || !airtablePat) {
+    return { success: false, error: 'Missing configuration' }
+  }
+
   try {
     const airtableRecord = {
       fields: {
