@@ -1,8 +1,7 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, ReactNode, lazy, Suspense } from 'react'
+import { createContext, useContext, useState, useEffect, ReactNode, Suspense } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-// Ensure this import path matches where your actions.ts file actually lives
 import { saveFormToAirtable } from '@/app/actions'
 
 const ContactOverlayContext = createContext<any>(null)
@@ -85,9 +84,16 @@ function ContactOverlay({ isOpen, onClose }: any) {
       setDirection(1)
       setStep((step + 1) as Step) 
     } else { 
-      // THE FIX: We 'await' the server action so the browser doesn't kill it mid-flight
       try {
-        await saveFormToAirtable(data)
+        // Now this passes exactly what the LeadData interface expects
+        await saveFormToAirtable({
+          name: data.name,
+          contact: data.contact,
+          product: data.product,
+          category: data.category,
+          needs: data.needs,
+          timeline: data.timeline
+        })
       } catch (err) {
         console.error('Airtable pipeline recording error:', err)
       }
