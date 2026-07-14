@@ -15,7 +15,8 @@ export async function saveFormToAirtable(data: LeadData) {
   const airtablePat = process.env.AIRTABLE_PAT
 
   if (!baseId || !airtablePat) {
-    return { success: false, error: 'Missing configuration' }
+    console.error('Missing Airtable env variables')
+    return { success: false, error: 'Config missing' }
   }
 
   try {
@@ -25,7 +26,7 @@ export async function saveFormToAirtable(data: LeadData) {
         'Contact Info': data.contact,
         'Brand': data.product,
         'Industry': data.category,
-        'Needs': data.needs.join(', '), 
+        'Needs': data.needs.join(', '),
         'Timeline': data.timeline,
         'Status': 'New'
       },
