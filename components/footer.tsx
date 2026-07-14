@@ -150,7 +150,7 @@ export function Footer() {
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Trusted & Certified</p>
                 <Image
-                  src="https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/Certificates%20%283%29.svg"
+                  src="https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/Certificates%20%284%29.svg"
                   alt="Certifications - Security and Industry Certifications"
                   width={280}
                   height={95}

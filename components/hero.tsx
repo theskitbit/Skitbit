@@ -169,7 +169,7 @@ export function Hero() {
                     aria-hidden="true"
                     className="skitbit-button-shimmer pointer-events-none absolute inset-y-0 -left-16 w-12 rotate-12 bg-white/35 blur-md"
                   />
-                  <span className="relative z-10">Fix My Creatives</span>
+                  <span className="relative z-10">Partner With Us</span>
                   <span
                     aria-hidden="true"
                     className="relative z-10 transition-transform duration-300 group-hover:translate-x-1"

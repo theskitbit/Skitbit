@@ -5,6 +5,7 @@ import { Check } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
+import { saveFormToAirtable } from '@/app/actions'
 
 type Step = 1 | 2 | 3
 type Market = 'IN' | 'UK' | 'INTL'
@@ -889,6 +890,11 @@ export function CreativeManagementForm({ onClose }: CreativeManagementFormProps)
     }
 
     if (!validateStep(3)) return
+
+    // Save to Airtable in the background (don't await)
+    saveFormToAirtable(formData).catch((error) => {
+      console.error('Background Airtable save failed:', error)
+    })
 
     const message = buildWhatsAppMessage()
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
