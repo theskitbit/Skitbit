@@ -137,7 +137,7 @@ export function Footer() {
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Payment Partners</p>
                 <Image
-                  src="/payment-partners.svg"
+                  src="https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/Payment_Partners%20%281%29.svg"
                   alt="Payment Partners - PayPal, Stripe, Meta, Shopify, Google"
                   width={280}
                   height={70}
