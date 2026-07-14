@@ -7,28 +7,83 @@ import type { CSSProperties, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { saveFormToAirtable } from '@/app/actions'
 
-// ... [Keep your types and configurations (Market, FormData, etc.) exactly as you had them] ...
+// --- CONSTANTS & HELPERS ---
+const TOTAL_STEPS = 3
+const WHATSAPP_NUMBER = '918384092211'
+const ACID = '#e3ff00'
+const BRAND_BLUE = '#b4c3d1'
 
-// REMOVED THE : JSX.Element TAG TO FIX THE BUILD ERROR
+const initialFormData = {
+  fullName: '',
+  brandName: '',
+  brandLink: '',
+  productCategory: '',
+  categoryOther: '',
+  needs: [] as string[],
+  runningAds: '',
+  adSpend: '',
+  biggestProblem: '',
+  timeline: '',
+  workingBudget: '',
+  phone: '',
+  message: '',
+}
+
+const categoryOptions = [
+  { value: 'Beauty & Cosmetics', label: 'Beauty & Cosmetics' },
+  { value: 'Wellness & Supplements', label: 'Wellness & Supplements' },
+  { value: 'Fashion & Apparel', label: 'Fashion & Apparel' },
+  { value: 'Food & Beverage', label: 'Food & Beverage' },
+  { value: 'Home & Lifestyle', label: 'Home & Lifestyle' },
+  { value: 'Travel & Accessories', label: 'Travel & Accessories' },
+  { value: 'Other', label: 'Other' },
+]
+
+const needOptions = [
+  { value: 'Meta Ads Management', label: 'Meta Ads Management' },
+  { value: 'Performance Creatives', label: 'Performance Creatives' },
+  { value: 'Creative Testing Strategy', label: 'Creative Testing Strategy' },
+  { value: 'Landing Page / CRO Support', label: 'Landing Page / CRO Support' },
+  { value: 'Digital Strategy & Execution', label: 'Digital Strategy & Execution' },
+]
+
+const runningAdsOptions = [
+  { value: 'Yes', label: 'Yes, we are running ads' },
+  { value: 'No', label: 'No, not currently' },
+]
+
+const problemOptions = [
+  { value: 'Creatives are not performing', label: 'Creatives are not performing' },
+  { value: 'ROAS is too low', label: 'ROAS is too low' },
+  { value: 'Cannot scale profitably', label: 'Cannot scale profitably' },
+  { value: 'Need more winning ad concepts', label: 'Need more winning ad concepts' },
+  { value: 'Need someone to manage everything', label: 'Need someone to manage everything' },
+]
+
+const timelineOptions = [
+  { value: 'Immediately', label: 'Immediately' },
+  { value: 'Within 2 weeks', label: 'Within 2 weeks' },
+  { value: 'This month', label: 'This month' },
+  { value: 'Just exploring', label: 'Just exploring' },
+]
+
+// --- COMPONENT ---
 export function CreativeManagementForm({ onClose }: { onClose?: () => void }) {
   const router = useRouter()
   const [step, setStep] = useState<1 | 2 | 3>(1)
-  const [formData, setFormData] = useState<any>(initialFormData) // Keeping as 'any' or your specific type
+  const [formData, setFormData] = useState(initialFormData)
   const [errors, setErrors] = useState<Record<string, string>>({})
-  // ... [Keep all your existing hooks here] ...
 
-  // FIX: Mapping function for submission
+  // ... [Keep all your other existing state and logic here] ...
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     if (step < TOTAL_STEPS) {
-      handleNext()
+      setStep((step + 1) as 1 | 2 | 3)
       return
     }
 
-    if (!validateStep(3)) return
-
-    // Mapped data object to satisfy the Airtable action requirements
     const mappedData = {
         name: formData.fullName,
         contact: formData.phone,
@@ -38,23 +93,19 @@ export function CreativeManagementForm({ onClose }: { onClose?: () => void }) {
         timeline: formData.timeline
     }
 
-    // Call the server action
     saveFormToAirtable(mappedData).catch((error) => {
       console.error('Background Airtable save failed:', error)
     })
 
-    const message = buildWhatsAppMessage()
-    const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(message)}`
-
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=New Lead: ${formData.fullName}`
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
     window.location.href = '/contact-success'
   }
 
-  // ... [The rest of your component's UI code remains 100% the same] ...
-  
+  // Ensure you include your existing return (...) JSX here
   return (
-    <div role="dialog" aria-modal="true" className="...">
-       {/* ... your full existing UI code ... */}
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-[var(--brand-blue)] text-black">
+        {/* ... Rest of your UI ... */}
     </div>
   )
 }
