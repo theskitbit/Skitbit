@@ -18,6 +18,7 @@ interface Testimonial {
   metric2Value?: string
   rating: number
   order?: number
+  active?: boolean
 }
 
 interface TestimonialsProps {

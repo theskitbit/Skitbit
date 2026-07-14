@@ -110,6 +110,10 @@ export function Footer() {
                   height={logo.height}
                   className="object-contain max-h-10 md:max-h-11 w-auto"
                   loading="lazy"
+                  unoptimized
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none'
+                  }}
                 />
               </div>
             ))}
@@ -126,6 +130,35 @@ export function Footer() {
             <p className="text-xs mt-2 leading-relaxed text-muted-foreground">
               Trusted by brands including Messika Paris, Myntra, BellaVita, Rimowa, and The Man Company.
             </p>
+            
+            {/* Trust Badges */}
+            <div className="mt-6 space-y-4">
+              {/* Payment Partners */}
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Payment Partners</p>
+                <Image
+                  src="/payment-partners.svg"
+                  alt="Payment Partners - PayPal, Stripe, Meta, Shopify, Google"
+                  width={280}
+                  height={70}
+                  className="w-full h-auto max-w-xs object-contain"
+                  unoptimized
+                />
+              </div>
+              
+              {/* Certificates & Trust */}
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Trusted & Certified</p>
+                <Image
+                  src="/certificates.svg"
+                  alt="Certifications - Security and Industry Certifications"
+                  width={280}
+                  height={95}
+                  className="w-full h-auto max-w-xs object-contain"
+                  unoptimized
+                />
+              </div>
+            </div>
           </div>
           <FooterNav title="3D Rendering" links={NAV_3D} />
           <FooterNav title="Growth Assets" links={NAV_GROWTH} />
