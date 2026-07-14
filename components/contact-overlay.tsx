@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode, lazy, Suspense } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+// Ensure this import path matches where your actions.ts file actually lives
+import { saveFormToAirtable } from '@/app/actions'
 
 const ContactOverlayContext = createContext<any>(null)
 
@@ -83,6 +85,13 @@ function ContactOverlay({ isOpen, onClose }: any) {
       setDirection(1)
       setStep((step + 1) as Step) 
     } else { 
+      // THE FIX: We 'await' the server action so the browser doesn't kill it mid-flight
+      try {
+        await saveFormToAirtable(data)
+      } catch (err) {
+        console.error('Airtable pipeline recording error:', err)
+      }
+
       window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
       window.location.href = `/contact-success`
     }
