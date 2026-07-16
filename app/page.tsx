@@ -68,7 +68,7 @@ export default async function Home() {
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Product",
-          name: "3D Product Rendering for E-commerce",
+          name: "3D Product Animation Company | Photoreal CGI | Skitbit",
           description: "High-end 3D product rendering and ad creatives for DTC brands to improve CTR, ROAS, and conversions.",
           brand: {
             "@type": "Brand",
