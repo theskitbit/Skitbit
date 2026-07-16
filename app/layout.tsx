@@ -15,17 +15,35 @@ const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-NFLHXXGK'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://theskitbit.com'),
-  title: 'High-End 3D Product Rendering for E-commerce | Skitbit',
-  description: 'Elevate your brand with photorealistic 3D product rendering. Skitbit creates high-converting CGI visuals for ads and PDPs without the photoshoot.',
+ title: '3D Product Animation Company | Photoreal CGI | Skitbit',
+  description:
+  'Photoreal 3D product animation, CGI and product rendering for ecommerce brands. Create high-converting visuals that drive clicks, sales and product launches.',
   generator: 'Skitbit International',
-  keywords: ['3D product rendering', 'e-commerce product visuals', 'product photography alternative', 'CGI product images', 'digital product rendering', 'ad creatives', 'product visualization'],
+  keywords: [
+  '3D Product Animation',
+  '3D Product Animation Company',
+  '3D Product Animation Studio',
+  '3D Product Rendering',
+  '3D Product Video Agency',
+  'CGI Product Animation',
+  'CGI Product Rendering',
+  'Photoreal CGI',
+  'Product Visualization',
+  'Ecommerce Product Animation',
+  'Beauty Product Animation',
+  'Cosmetic Product Rendering',
+  'Luxury Product Rendering',
+  'Product Launch Animation',
+  '3D Rendering Company',
+],
   authors: [{ name: 'Skitbit International' }],
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://theskitbit.com',
-    title: 'High-End 3D Product Rendering for E-commerce | Skitbit',
-    description: 'Elevate your brand with photorealistic 3D product rendering. Skitbit creates high-converting CGI visuals for ads and PDPs without the photoshoot.',
+    title: '3D Product Animation Company | Photoreal CGI | Skitbit',
+    description:
+  'Photoreal 3D product animation, CGI and product rendering for ecommerce brands. Create high-converting visuals that drive clicks, sales and product launches.',
     images: [
       {
         url: '/skien.jpg',
@@ -38,9 +56,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'High-End 3D Product Rendering for E-commerce | Skitbit',
-    description: 'Elevate your brand with photorealistic 3D product rendering. Skitbit creates high-converting CGI visuals for ads and PDPs without the photoshoot.',
-    creator: '@skitbit',
+    title: '3D Product Animation Company | Photoreal CGI | Skitbit',
+    description:
+  'Photoreal 3D product animation, CGI and product rendering for ecommerce brands. Create high-converting visuals that drive clicks, sales and product launches.',
+    creator: '@theskitbit',
     images: ['/skien.jpg'],
   },
   robots: {

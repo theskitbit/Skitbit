@@ -156,7 +156,7 @@ export function Hero() {
               </h1>
 
               <p className="mt-6 max-w-[530px] text-base leading-relaxed text-foreground/60 sm:text-lg m-0">
-                Your 3D production department. We deliver high-end campaign creatives so your team can focus on rollout.
+                Photoreal 3D product animation, CGI and product rendering for ecommerce brands launching products worldwide.
               </p>
 
               <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row">

@@ -94,6 +94,9 @@ const result = await saveFormToAirtable({
   timeline: data.timeline,
 })
 
+console.log(result)
+alert(JSON.stringify(result, null, 2))
+
 console.log('Airtable Result:', result)
       } catch (err) {
         console.error('Airtable pipeline recording error:', err)
