@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     title: '3D Product Animation Company | Photoreal CGI | Skitbit',
     description:
   'Photoreal 3D product animation, CGI and product rendering for ecommerce brands. Create high-converting visuals that drive clicks, sales and product launches.',
-    creator: '@skitbit',
+    creator: '@theskitbit',
     images: ['/skien.jpg'],
   },
   robots: {
