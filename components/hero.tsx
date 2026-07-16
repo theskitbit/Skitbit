@@ -260,7 +260,7 @@ export function Hero() {
                             </span>
                           </div>
                           <h2 className="max-w-[420px] text-[20px] font-semibold leading-[1.12] tracking-[-0.04em] text-foreground sm:text-[28px] m-0">
-                            They aren't reading your copy.
+                            Show more. Sell more.
                           </h2>
                         </div>
 
