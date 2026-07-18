@@ -81,10 +81,10 @@ export default async function Home() {
     priceRange: "$$$",
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: "3D Rendering and Creative Strategy",
+      name: "3D Rendering and 3D Animation",
       itemListElement: [
         { "@type": "Offer", itemOffered: { "@type": "Service", name: "3D Product Animation" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "D2C Creative Strategy" } }
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "3d Product Rendering" } }
       ]
     }
   })}
@@ -123,7 +123,7 @@ export default async function Home() {
               name: "What kind of brands do you work with?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "We work with DTC brands doing $100k+ per month, primarily in wellness, beauty, and e-commerce."
+                text: "We work with D2C brands doing $100k+ per month, primarily in wellness, beauty, and e-commerce."
               }
             },
             {
