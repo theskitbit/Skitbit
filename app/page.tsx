@@ -128,7 +128,6 @@ export default async function Home() {
       </Script>
 
       <Header />
-      <Breadcrumbs />
       <Hero />
       <LogoStrip />
       <FireworkWidget />
