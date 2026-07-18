@@ -56,12 +56,12 @@ export default async function Home() {
       "Skitbit International", 
       "Skitbit International Agency", 
       "Skitbit website", 
-      "Skitbit agency"
-      "Skitbit agency uk"
-      "Skitbit agency delhi"
-      "Skitbit agency london"
-      "Skitbit agency dubai"
-      "Skitbit agency"
+      "Skitbit agency",
+      "Skitbit agency uk",
+      "Skitbit agency delhi",
+      "Skitbit agency london",
+      "Skitbit agency dubai",
+      "Skitbit agency",
     ],
     url: "https://theskitbit.com/",
     logo: "https://theskitbit.com/images/Black-icon.svg",
