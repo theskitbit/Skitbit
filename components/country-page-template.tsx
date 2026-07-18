@@ -1,3 +1,5 @@
+'use client'
+
 import Script from 'next/script'
 import Link from 'next/link'
 import { Header } from '@/components/header'
@@ -6,9 +8,8 @@ import { LogoStrip } from '@/components/logo-strip'
 import { FireworkWidget } from '@/components/firework-widget'
 import { ProductShowcase } from '@/components/product-showcase'
 import { TestimonialsSanity } from '@/components/testimonials-sanity'
-import ContactOverlay from '@/components/contact-overlay' // FIXED: Removed curly braces to handle the default export
+import { useContactOverlay } from '@/components/contact-overlay'
 import { CountryPageContent } from '@/data/country-pages'
-
 
 interface CountryPageTemplateProps {
   content: CountryPageContent
@@ -17,6 +18,9 @@ interface CountryPageTemplateProps {
 }
 
 export function CountryPageTemplate({ content, canonical, testimonials = [] }: CountryPageTemplateProps) {
+  // Initialize your custom hook
+  const { open } = useContactOverlay()
+
   const schemaData = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -91,11 +95,12 @@ export function CountryPageTemplate({ content, canonical, testimonials = [] }: C
           {content.hero.subheadline}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center z-20 relative">
-          <ContactOverlay>
-            <button className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-md bg-foreground px-8 text-sm font-medium text-background transition-colors hover:bg-foreground/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring shadow-lg cursor-pointer">
-              Start Project
-            </button>
-          </ContactOverlay>
+          <button 
+            onClick={open} 
+            className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-md bg-foreground px-8 text-sm font-medium text-background transition-colors hover:bg-foreground/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring shadow-lg cursor-pointer"
+          >
+            Start Project
+          </button>
           <Link 
             href="/works" 
             className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-md border border-border bg-background px-8 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
@@ -151,7 +156,7 @@ export function CountryPageTemplate({ content, canonical, testimonials = [] }: C
         </div>
       </section>
 
-      {/* Process Section (Center-aligned mobile, left-aligned desktop) */}
+      {/* Process Section */}
       <section className="max-w-7xl mx-auto px-6 py-24 border-t border-border">
         <div className="mb-16 text-center">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter">{content.processSection.headline}</h2>
@@ -211,11 +216,12 @@ export function CountryPageTemplate({ content, canonical, testimonials = [] }: C
             {content.finalCta.description}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <ContactOverlay>
-              <button className="inline-flex h-14 w-full sm:w-auto items-center justify-center rounded-md bg-foreground px-10 text-base font-medium text-background transition-all hover:scale-105 hover:bg-foreground/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring shadow-xl shadow-foreground/20 cursor-pointer">
-                Start Project
-              </button>
-            </ContactOverlay>
+            <button 
+              onClick={open} 
+              className="inline-flex h-14 w-full sm:w-auto items-center justify-center rounded-md bg-foreground px-10 text-base font-medium text-background transition-all hover:scale-105 hover:bg-foreground/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring shadow-xl shadow-foreground/20 cursor-pointer"
+            >
+              Start Project
+            </button>
           </div>
         </div>
       </section>

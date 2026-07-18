@@ -1,232 +1,404 @@
 'use client'
 
-import Script from 'next/script'
-import Link from 'next/link'
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
-import { LogoStrip } from '@/components/logo-strip'
-import { FireworkWidget } from '@/components/firework-widget'
-import { ProductShowcase } from '@/components/product-showcase'
-import { TestimonialsSanity } from '@/components/testimonials-sanity'
-import { useContactOverlay } from '@/components/contact-overlay'
-import { CountryPageContent } from '@/data/country-pages'
 
-interface CountryPageTemplateProps {
-  content: CountryPageContent
-  canonical: string
-  testimonials?: any[]
+
+import { createContext, useContext, useState, useEffect, ReactNode, Suspense } from 'react'
+
+import { AnimatePresence, motion } from 'framer-motion'
+
+import { saveFormToAirtable } from '@/app/actions'
+
+
+
+const ContactOverlayContext = createContext<any>(null)
+
+
+
+export function useContactOverlay() {
+
+  const ctx = useContext(ContactOverlayContext)
+
+  if (!ctx) throw new Error('Wrap app with ContactOverlayProvider')
+
+  return ctx
+
 }
 
-export function CountryPageTemplate({ content, canonical, testimonials = [] }: CountryPageTemplateProps) {
-  // Pull the open function from your overlay context
-  const { open } = useContactOverlay()
 
-  const schemaData = {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          {
-            '@type': 'ListItem',
-            position: 1,
-            name: 'Skitbit',
-            item: 'https://theskitbit.com',
-          },
-          {
-            '@type': 'ListItem',
-            position: 2,
-            name: content.name,
-            item: canonical,
-          },
-        ],
-      },
-      {
-        '@type': 'FAQPage',
-        mainEntity: content.faqSection.faqs.map((faq) => ({
-          '@type': 'Question',
-          name: faq.question,
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: faq.answer,
-          },
-        })),
-      },
-    ],
-  }
+
+export function ContactOverlayProvider({ children }: { children: ReactNode }) {
+
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <main className="relative bg-background text-foreground overflow-hidden">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none -z-10" />
 
-      <Script
-        id={`country-${content.code}-schema`}
-        type="application/ld+json"
-        strategy="afterInteractive"
-      >
-        {JSON.stringify(schemaData)}
-      </Script>
+    <ContactOverlayContext.Provider value={{ open: () => setIsOpen(true), close: () => setIsOpen(false) }}>
 
-      <Header />
+      {children}
 
-      {/* Semantic Breadcrumb Navigation */}
-      <nav aria-label="Breadcrumb" className="max-w-7xl mx-auto px-6 py-6">
-        <ol className="flex items-center space-x-2 text-xs uppercase tracking-widest text-muted-foreground/70">
-          <li>
-            <Link href="/" className="hover:text-foreground transition-colors">
-              Skitbit
-            </Link>
-          </li>
-          <li aria-hidden="true">/</li>
-          <li className="text-foreground font-semibold" aria-current="page">
-            {content.name}
-          </li>
-        </ol>
-      </nav>
+      <Suspense fallback={null}>
 
-      {/* Hero Section */}
-      <section className="relative max-w-5xl mx-auto px-6 pt-20 pb-20 text-center">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-foreground/5 blur-[120px] rounded-full pointer-events-none -z-10" />
-        
-        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-8 text-balance">
-          {content.hero.headline}
-        </h1>
-        <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto text-pretty font-medium leading-relaxed">
-          {content.hero.subheadline}
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center z-20 relative">
-          <button 
-            onClick={open} 
-            className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-md bg-foreground px-8 text-sm font-medium text-background transition-colors hover:bg-foreground/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring shadow-lg cursor-pointer"
-          >
-            Start Project
-          </button>
-          <Link 
-            href="/works" 
-            className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-md border border-border bg-background px-8 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-          >
-            View Work
-          </Link>
-        </div>
-      </section>
+        <ContactOverlay isOpen={isOpen} onClose={() => setIsOpen(false)} />
 
-      <LogoStrip />
-      <FireworkWidget />
-      <ProductShowcase />
+      </Suspense>
 
-      {/* Trust Section */}
-      <section className="border-y border-border bg-foreground/[0.02]">
-        <div className="max-w-7xl mx-auto px-6 py-16 text-center">
-          <h2 className="text-sm uppercase tracking-widest font-semibold text-muted-foreground mb-6">
-            {content.trustSection.heading}
-          </h2>
-          <p className="text-xl md:text-2xl font-medium max-w-4xl mx-auto text-balance">
-            {content.trustSection.description}
-          </p>
-        </div>
-      </section>
+    </ContactOverlayContext.Provider>
 
-      {/* Problem Section */}
-      <section className="max-w-7xl mx-auto px-6 py-24">
-        <div className="mb-16 text-center md:text-left">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter">{content.problemSection.headline}</h2>
-        </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {content.problemSection.problems.map((problem, idx) => (
-            <article 
-              key={idx} 
-              className="group p-8 rounded-2xl bg-background border border-border hover:border-foreground/20 hover:shadow-xl transition-all duration-300"
-            >
-              <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center mb-6">
-                <span className="text-destructive font-bold text-lg">!</span>
-              </div>
-              <h3 className="text-foreground/90 font-medium leading-relaxed">{problem}</h3>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section className="bg-foreground text-background py-24">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter mb-8">{content.servicesSection.headline}</h2>
-          <p className="text-lg md:text-xl text-background/80 max-w-3xl mx-auto font-medium leading-relaxed">
-            {content.servicesSection.description}
-          </p>
-        </div>
-      </section>
-
-      {/* Process Section */}
-      <section className="max-w-7xl mx-auto px-6 py-24 border-t border-border">
-        <div className="mb-16 text-center">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter">{content.processSection.headline}</h2>
-        </div>
-        <div className="grid md:grid-cols-4 gap-8 md:gap-12 relative">
-          <div className="hidden md:block absolute top-10 left-6 right-6 h-[1px] bg-border -z-10" />
-          {content.processSection.steps.map((step, idx) => (
-            <article 
-              key={idx} 
-              className="relative flex flex-col items-center text-center md:items-start md:text-left pt-4"
-            >
-              <div className="w-14 h-14 rounded-xl bg-background border-2 border-foreground text-foreground flex items-center justify-center font-bold text-xl mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]">
-                {String(idx + 1).padStart(2, '0')}
-              </div>
-              <h3 className="text-foreground/90 font-semibold text-lg md:text-xl">{step}</h3>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <div className="py-12 border-t border-border">
-        <TestimonialsSanity testimonials={testimonials} />
-      </div>
-
-      {/* FAQ Section */}
-      <section className="max-w-4xl mx-auto px-6 py-24 border-t border-border/50">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter mb-12 text-center">{content.faqSection.headline}</h2>
-        <div className="space-y-4">
-          {content.faqSection.faqs.map((faq, idx) => (
-            <details
-              key={idx}
-              className="group border border-border rounded-xl bg-background overflow-hidden [&_summary::-webkit-details-marker]:hidden"
-            >
-              <summary className="flex items-center justify-between p-6 cursor-pointer text-lg font-semibold text-foreground">
-                {faq.question}
-                <span className="ml-6 flex-shrink-0 text-muted-foreground group-open:rotate-180 transition-transform duration-300">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                </span>
-              </summary>
-              <div className="px-6 pb-6 text-muted-foreground font-medium leading-relaxed">
-                <div className="pt-2 border-t border-border/50">
-                  {faq.answer}
-                </div>
-              </div>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      {/* Final CTA Section */}
-      <section className="relative border-t border-border bg-foreground/[0.02] overflow-hidden">
-        <div className="max-w-4xl mx-auto px-6 py-32 text-center relative z-10">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-6">{content.finalCta.headline}</h2>
-          <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto font-medium leading-relaxed">
-            {content.finalCta.description}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button 
-              onClick={open} 
-              className="inline-flex h-14 w-full sm:w-auto items-center justify-center rounded-md bg-foreground px-10 text-base font-medium text-background transition-all hover:scale-105 hover:bg-foreground/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring shadow-xl shadow-foreground/20 cursor-pointer"
-            >
-              Start Project
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <Footer />
-    </main>
   )
+
 }
+
+
+
+type Step = 1 | 2 | 3
+
+const TOTAL_STEPS = 3
+
+
+
+const CheckIcon = () => (
+
+  <motion.svg initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="w-4 h-4 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+
+    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+
+  </motion.svg>
+
+)
+
+
+
+const CategoryIcons: Record<string, ReactNode> = {
+
+  'Health & Wellness': <svg className="w-4 h-4 mr-2 shrink-0 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>,
+
+  'Beauty & Cosmetics': <svg className="w-4 h-4 mr-2 shrink-0 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5" /></svg>,
+
+  'Fine Jewelry': <svg className="w-4 h-4 mr-2 shrink-0 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.5 7.5L12 21l7.5-13.5L15 3H9L4.5 7.5z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.5 7.5h15M9 3l3 4.5M15 3l-3 4.5" /></svg>,
+
+  'Luxury Watches': <svg className="w-4 h-4 mr-2 shrink-0 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="7" y="5" width="10" height="14" rx="3" strokeWidth={1.5} /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5V3m4 2V3M9 19v2m4-2v2M12 9v3l1.5 1.5" /></svg>,
+
+  'Food & Beverage': <svg className="w-4 h-4 mr-2 shrink-0 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m-8 4v10" /></svg>,
+
+  'Consumer Tech': <svg className="w-4 h-4 mr-2 shrink-0 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>,
+
+}
+
+
+
+function ContactOverlay({ isOpen, onClose }: any) {
+
+  const [mounted, setMounted] = useState(false)
+
+  const [step, setStep] = useState<Step>(1)
+
+  const [direction, setDirection] = useState(1)
+
+  const [error, setError] = useState('')
+
+  const [data, setData] = useState({ category: '', needs: [] as string[], timeline: '', product: '', name: '', contact: '' })
+
+
+
+  useEffect(() => {
+
+    const handleEsc = (e: KeyboardEvent) => { if (e.key === 'Escape' && isOpen) onClose() }
+
+    window.addEventListener('keydown', handleEsc)
+
+    return () => window.removeEventListener('keydown', handleEsc)
+
+  }, [isOpen, onClose])
+
+
+
+  useEffect(() => { setMounted(true); if (isOpen) setStep(1) }, [isOpen])
+
+
+
+  if (!mounted || !isOpen) return null
+
+
+
+  const messageText = `Hi Adnan, brief for: ${data.product}\nCategory: ${data.category}\nNeeds: ${data.needs.join(', ')}\nTimeline: ${data.timeline}\n\nName: ${data.name}\nContact: ${data.contact}`
+
+  const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(messageText)}`
+
+
+
+  const validateStep = () => {
+
+    if (step === 1 && !data.category) return 'Please select a category'
+
+    if (step === 2) {
+
+      if (data.needs.length === 0) return 'Select at least one requirement'
+
+      if (!data.product.trim()) return 'Enter your brand name or link'
+
+    }
+
+    if (step === 3) {
+
+      if (!data.timeline || !data.name.trim() || !data.contact.trim()) return 'Please complete the details'
+
+    }
+
+    return ''
+
+  }
+
+
+
+  const next = async () => {
+
+    const validationError = validateStep()
+
+    if (validationError) return setError(validationError)
+
+   
+
+    setError('')
+
+   
+
+    if (step < TOTAL_STEPS) {
+
+      setDirection(1)
+
+      setStep((step + 1) as Step)
+
+    } else {
+
+      try {
+
+const result = await saveFormToAirtable({
+
+  name: data.name,
+
+  contact: data.contact,
+
+  product: data.product,
+
+  category: data.category,
+
+  needs: data.needs,
+
+  timeline: data.timeline,
+
+})
+
+
+
+console.log(result)
+
+alert(JSON.stringify(result, null, 2))
+
+
+
+console.log('Airtable Result:', result)
+
+      } catch (err) {
+
+        console.error('Airtable pipeline recording error:', err)
+
+      }
+
+
+
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
+
+      window.location.href = `/contact-success`
+
+    }
+
+  }
+
+
+
+  const categoryOptions = ['Health & Wellness', 'Beauty & Cosmetics', 'Fine Jewelry', 'Luxury Watches', 'Food & Beverage', 'Consumer Tech']
+
+  const needsOptions = ['Web Images', 'Lifestyle Images', 'Ad Creatives', 'Product Videos']
+
+  const timelineOptions = ['ASAP', 'Within 2 weeks', 'Next month']
+
+
+
+  return (
+
+    <AnimatePresence>
+
+      {isOpen && (
+
+        <motion.div className="fixed inset-0 z-50 bg-[#F6F7F2] overflow-y-auto text-foreground flex flex-col" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+
+          <div className="w-full h-1 bg-muted fixed top-0 left-0 z-50">
+
+            <motion.div className="h-full bg-primary" animate={{ width: `${(step / TOTAL_STEPS) * 100}%` }} transition={{ duration: 0.3 }} />
+
+          </div>
+
+
+
+          <div className="flex justify-between items-center px-6 py-6 sm:py-8 max-w-5xl w-full mx-auto shrink-0">
+
+            <div className="flex items-center gap-3 select-none">
+
+              <span className="flex items-center justify-center w-7 h-7 rounded-full bg-black/5 text-[#0B1A28] text-xs font-bold">{step}</span>
+
+              <span className="text-sm font-medium text-slate-400">of {TOTAL_STEPS}</span>
+
+            </div>
+
+            <button onClick={onClose} className="w-10 h-10 rounded-full border border-black/5 flex items-center justify-center hover:bg-black/5 text-slate-400 transition-colors" aria-label="Close dialog">✕</button>
+
+          </div>
+
+
+
+          <div className="flex-1 flex flex-col px-6 pb-8 sm:pb-12">
+
+            <div className="max-w-xl w-full mx-auto flex-1 flex flex-col">
+
+              <div className="flex-1 flex flex-col justify-center pb-8">
+
+                <AnimatePresence mode="wait">
+
+                  <motion.div key={step} initial={{ x: direction > 0 ? 30 : -30, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: direction > 0 ? -30 : 30, opacity: 0 }} transition={{ duration: 0.3 }} className="flex flex-col gap-10 w-full">
+
+                    {step === 1 && (
+
+                      <div className="space-y-8">
+
+                        <h2 className="text-[34px] leading-tight sm:text-4xl font-semibold text-[#0B1A28]">What are you<br className="sm:hidden"/> building?</h2>
+
+                        <div className="flex flex-wrap gap-3">
+
+                          {categoryOptions.map(o => (
+
+                            <motion.div key={o} onClick={() => setData({ ...data, category: o })} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className={`flex flex-auto sm:flex-initial justify-center items-center px-5 py-3.5 rounded-full border cursor-pointer transition-all text-sm font-medium ${data.category === o ? 'bg-[#D4F05A] text-[#0B1A28] border-[#D4F05A]' : 'border-black/10 text-slate-600 hover:border-black/20 bg-transparent'}`}>
+
+                              {data.category === o ? <CheckIcon /> : CategoryIcons[o]}
+
+                              <span className="whitespace-nowrap">{o}</span>
+
+                            </motion.div>
+
+                          ))}
+
+                        </div>
+
+                      </div>
+
+                    )}
+
+                    {step === 2 && (
+
+                      <div className="space-y-10">
+
+                        <div className="space-y-8">
+
+                          <h2 className="text-[34px] leading-tight sm:text-4xl font-semibold text-[#0B1A28]">What do you need?</h2>
+
+                          <div className="flex flex-wrap gap-3">
+
+                            {needsOptions.map((o) => {
+
+                              const active = data.needs.includes(o)
+
+                              return (
+
+                                <motion.div key={o} onClick={() => setData({ ...data, needs: active ? data.needs.filter(n => n !== o) : [...data.needs, o] })} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className={`flex flex-auto sm:flex-initial justify-center items-center px-5 py-3.5 rounded-full border cursor-pointer transition-all text-sm font-medium ${active ? 'bg-[#D4F05A] text-[#0B1A28] border-[#D4F05A]' : 'border-black/10 text-slate-600 bg-transparent'}`}>
+
+                                  {active && <CheckIcon />}
+
+                                  <span className="whitespace-nowrap">{o}</span>
+
+                                </motion.div>
+
+                              )
+
+                            })}
+
+                          </div>
+
+                        </div>
+
+                        <input placeholder="Brand Name or Link *" className="w-full border-b border-black/15 bg-transparent py-4 text-lg sm:text-xl placeholder:text-slate-400 focus:border-[#0B1A28] outline-none text-[#0B1A28] transition-colors" value={data.product} onChange={(e) => setData({ ...data, product: e.target.value })} />
+
+                      </div>
+
+                    )}
+
+                    {step === 3 && (
+
+                      <div className="space-y-8">
+
+                        <h2 className="text-[34px] leading-tight sm:text-4xl font-semibold text-[#0B1A28]">The Timeline</h2>
+
+                        <div className="flex flex-wrap gap-3">
+
+                          {timelineOptions.map(o => (
+
+                            <motion.button key={o} onClick={() => setData({ ...data, timeline: o })} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className={`flex flex-auto sm:flex-initial justify-center items-center px-5 py-3.5 rounded-full border cursor-pointer transition-all text-sm font-medium ${data.timeline === o ? 'bg-[#D4F05A] text-[#0B1A28] border-[#D4F05A]' : 'border-black/10 text-slate-600 bg-transparent'}`}>
+
+                              {data.timeline === o && <CheckIcon />}
+
+                              <span className="whitespace-nowrap">{o}</span>
+
+                            </motion.button>
+
+                          ))}
+
+                        </div>
+
+                        <div className="space-y-2 pt-6">
+
+                          <input placeholder="Your Name" className="w-full border-b border-black/15 bg-transparent py-4 text-base placeholder:text-slate-400 focus:border-[#0B1A28] outline-none text-[#0B1A28] transition-colors" value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })} />
+
+                          <input placeholder="Email or @Instagram" className="w-full border-b border-black/15 bg-transparent py-4 text-base placeholder:text-slate-400 focus:border-[#0B1A28] outline-none text-[#0B1A28] transition-colors" value={data.contact} onChange={(e) => setData({ ...data, contact: e.target.value })} />
+
+                        </div>
+
+                      </div>
+
+                    )}
+
+                  </motion.div>
+
+                </AnimatePresence>
+
+              </div>
+
+              <div className="flex flex-col sm:flex-row-reverse gap-3 shrink-0">
+
+                <motion.button whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }} onClick={next} className="flex-1 bg-[#D4F05A] text-[#0B1A28] font-semibold py-4 rounded-full border border-[#B5CE4D] shadow-sm">
+
+                  {step === TOTAL_STEPS ? 'Initialize via WhatsApp' : 'Continue'}
+
+                </motion.button>
+
+                {step > 1 && (
+
+                  <button onClick={() => setStep((step - 1) as Step)} className="px-10 py-4 border border-black/10 text-[#0B1A28] rounded-full font-medium hover:bg-black/5 transition-colors bg-transparent">Back</button>
+
+                )}
+
+              </div>
+
+              {error && <p className="text-red-500 text-sm font-medium text-center pt-4">{error}</p>}
+
+            </div>
+
+          </div>
+
+        </motion.div>
+
+      )}
+
+    </AnimatePresence>
+
+  )
+
+} 
+
