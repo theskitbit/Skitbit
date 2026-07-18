@@ -45,23 +45,50 @@ export default async function Home() {
   return (
     <main className="bg-background text-foreground">
 
-      {/* 🔥 ORGANIZATION */}
-      <Script id="org-schema" type="application/ld+json" strategy="afterInteractive">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "Skitbit",
-          alternateName: "Skitbit International",
-          url: "https://theskitbit.com/",
-          logo: "https://theskitbit.com/images/Black-icon.svg",
-          sameAs: [
-            "https://www.instagram.com/theskitbit/",
-            "https://uk.linkedin.com/company/theskitbit",
-            "https://www.youtube.com/@skitbitinternational",
-            "https://www.facebook.com/theskitbit/"
-          ]
-        })}
-      </Script>
+{/* 🔥 ORGANIZATION & AUTHORITY MAPPING */}
+<Script id="org-schema" type="application/ld+json" strategy="afterInteractive">
+  {JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: "Skitbit",
+    // We add the 'copy' and 'agency' terms here to capture the intent
+    alternateName: [
+      "Skitbit International", 
+      "Skitbit International Agency", 
+      "Skitbit website", 
+      "Skitbit agency",
+      "Skitbit agency uk",
+      "Skitbit agency delhi",
+      "Skitbit agency london",
+      "Skitbit agency dubai",
+      "Skitbit agency",
+    ],
+    url: "https://theskitbit.com/",
+    logo: "https://theskitbit.com/images/Black-icon.svg",
+    description: "Skitbit International is the premier agency for high-converting 3D product visuals and D2C brand scaling systems.",
+    sameAs: [
+      "https://www.instagram.com/theskitbit/",
+      "https://uk.linkedin.com/company/theskitbit",
+      "https://www.youtube.com/@skitbitinternational",
+      "https://www.facebook.com/theskitbit/"
+    ],
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Mumbai",
+      addressCountry: "IN"
+    },
+    // This defines your specific authority for these services
+    priceRange: "$$$",
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "3D Rendering and 3D Animation",
+      itemListElement: [
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "3D Product Animation" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "3d Product Rendering" } }
+      ]
+    }
+  })}
+</Script>
 
       {/* 🔥 PRODUCT */}
       <Script id="product-schema" type="application/ld+json" strategy="afterInteractive">
@@ -96,7 +123,7 @@ export default async function Home() {
               name: "What kind of brands do you work with?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "We work with DTC brands doing $100k+ per month, primarily in wellness, beauty, and e-commerce."
+                text: "We work with D2C brands doing $100k+ per month, primarily in wellness, beauty, and e-commerce."
               }
             },
             {

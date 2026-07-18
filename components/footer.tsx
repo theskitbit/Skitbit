@@ -124,9 +124,20 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           <div>
-            <h3 className="font-semibold text-lg mb-3 text-foreground">
-              Skitbit<span className="text-xs">®</span>
-            </h3>
+            <div className="mb-3 flex items-center">
+  <Image
+    src="/Black icon - without symbol.svg"
+    alt="Skitbit Logo"
+    width={20}
+    height={20}
+    className="mr-2 h-5 w-auto shrink-0"
+  />
+
+<h3 className="text-[1.35rem] font-semibold tracking-[-0.025em] leading-none text-foreground">
+  Skitbit
+  <span className="ml-0.5 align-top text-[0.55rem] font-medium">®</span>
+</h3>
+</div>
             <p className="text-xs mt-2 leading-relaxed text-muted-foreground">
               Trusted by brands including Messika Paris, Myntra, BellaVita, Rimowa, and The Man Company.
             </p>
