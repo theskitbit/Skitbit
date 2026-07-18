@@ -6,7 +6,9 @@ import { LogoStrip } from '@/components/logo-strip'
 import { FireworkWidget } from '@/components/firework-widget'
 import { ProductShowcase } from '@/components/product-showcase'
 import { TestimonialsSanity } from '@/components/testimonials-sanity'
+import ContactOverlay from '@/components/contact-overlay' // FIXED: Removed curly braces to handle the default export
 import { CountryPageContent } from '@/data/country-pages'
+
 
 interface CountryPageTemplateProps {
   content: CountryPageContent
@@ -88,15 +90,14 @@ export function CountryPageTemplate({ content, canonical, testimonials = [] }: C
         <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto text-pretty font-medium leading-relaxed">
           {content.hero.subheadline}
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center z-20 relative">
+          <ContactOverlay>
+            <button className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-md bg-foreground px-8 text-sm font-medium text-background transition-colors hover:bg-foreground/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring shadow-lg cursor-pointer">
+              Start Project
+            </button>
+          </ContactOverlay>
           <Link 
-            href="#contact" 
-            className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-md bg-foreground px-8 text-sm font-medium text-background transition-colors hover:bg-foreground/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring shadow-lg"
-          >
-            Start Project
-          </Link>
-          <Link 
-            href="#work" 
+            href="/works" 
             className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-md border border-border bg-background px-8 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
             View Work
@@ -210,12 +211,11 @@ export function CountryPageTemplate({ content, canonical, testimonials = [] }: C
             {content.finalCta.description}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link 
-              href="#contact" 
-              className="inline-flex h-14 w-full sm:w-auto items-center justify-center rounded-md bg-foreground px-10 text-base font-medium text-background transition-all hover:scale-105 hover:bg-foreground/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring shadow-xl shadow-foreground/20"
-            >
-              Start Project
-            </Link>
+            <ContactOverlay>
+              <button className="inline-flex h-14 w-full sm:w-auto items-center justify-center rounded-md bg-foreground px-10 text-base font-medium text-background transition-all hover:scale-105 hover:bg-foreground/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring shadow-xl shadow-foreground/20 cursor-pointer">
+                Start Project
+              </button>
+            </ContactOverlay>
           </div>
         </div>
       </section>

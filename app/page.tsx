@@ -1,7 +1,6 @@
 import Script from "next/script";
 
 import { Header } from '@/components/header'
-import { Breadcrumbs } from '@/components/breadcrumbs'
 import { Hero } from '@/components/hero'
 import { LogoStrip } from '@/components/logo-strip'
 import { FireworkWidget } from '@/components/firework-widget'
