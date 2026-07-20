@@ -173,20 +173,21 @@ function ContactOverlay({ isOpen, onClose }: any) {
       try {
 
 const result = await saveFormToAirtable({
-
   name: data.name,
-
   contact: data.contact,
-
   product: data.product,
-
   category: data.category,
-
   needs: data.needs,
-
   timeline: data.timeline,
-
 })
+
+console.log('Airtable Result:', result)
+
+if (!result.success) {
+  console.error(result.error)
+  setError('Something went wrong while submitting your request. Please try again.')
+  return
+}
 
 
 

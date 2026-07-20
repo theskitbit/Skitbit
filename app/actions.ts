@@ -35,7 +35,10 @@ export async function saveFormToAirtable(data: LeadData) {
       'Contact Info': data.contact,
       Brand: data.product,
       Industry: data.category,
-      Needs: data.needs.join(', '),
+
+      // ✅ Multiple Select field
+      Needs: data.needs,
+
       Timeline: data.timeline,
       Status: 'New',
     },
@@ -58,23 +61,24 @@ export async function saveFormToAirtable(data: LeadData) {
       }
     )
 
-    const responseBody = await response.text()
+    const json = await response.json()
 
     console.log('Airtable Status:', response.status)
-    console.log('Airtable Response:', responseBody)
+    console.log(json)
 
     if (!response.ok) {
       return {
         success: false,
-        error: responseBody,
+        error: json,
       }
     }
 
     return {
       success: true,
+      record: json,
     }
   } catch (err) {
-    console.error('Airtable Fetch Error:', err)
+    console.error(err)
 
     return {
       success: false,
