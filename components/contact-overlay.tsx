@@ -57,7 +57,7 @@ function ContactOverlay({ isOpen, onClose }: any) {
     if (step === 1 && !data.category) return 'Please select a category'
     if (step === 2) {
       if (data.needs.length === 0) return 'Select at least one requirement'
-      if (!data.product.trim()) return 'Enter your brand name or link'
+      if (!data.product.trim()) return 'Enter your brand name or Website link'
     }
     if (step === 3) {
       if (!data.timeline || !data.name.trim() || !data.contact.trim()) return 'Please complete the details'
