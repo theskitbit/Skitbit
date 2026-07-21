@@ -50,16 +50,6 @@ function ContactOverlay({ isOpen, onClose }: any) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [data, setData] = useState({ category: '', needs: [] as string[], timeline: '', product: '', name: '', contact: '' })
 
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => { if (e.key === 'Escape' && isOpen) onClose() }
-    window.addEventListener('keydown', handleEsc)
-    return () => window.removeEventListener('keydown', handleEsc)
-  }, [isOpen, onClose])
-
-  useEffect(() => { setMounted(true); if (isOpen) setStep(1) }, [isOpen])
-
-  if (!mounted || !isOpen) return null
-
   const messageText = `Hi Adnan, brief for: ${data.product}\nCategory: ${data.category}\nNeeds: ${data.needs.join(', ')}\nTimeline: ${data.timeline}\n\nName: ${data.name}\nContact: ${data.contact}`
   const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(messageText)}`
 
@@ -87,10 +77,8 @@ function ContactOverlay({ isOpen, onClose }: any) {
     } else {
       setIsSubmitting(true)
       
-      // 1. Instantly open WhatsApp in a new tab (bypasses blockers because it's synchronous)
-      window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
+      const whatsappWindow = window.open('about:blank', '_blank')
 
-      // 2. Save to Airtable (we await this so the request isn't killed when the page changes)
       try {
         await saveFormToAirtable({
           name: data.name,
@@ -101,13 +89,53 @@ function ContactOverlay({ isOpen, onClose }: any) {
           timeline: data.timeline,
         })
       } catch (err) {
-        console.error('Airtable failed, but WhatsApp was opened.', err)
+        console.error('Airtable failed, but redirecting to WhatsApp anyway', err)
       }
 
-      // 3. Redirect the main window to the success page
+      if (whatsappWindow) {
+        whatsappWindow.location.href = whatsappUrl
+      } else {
+        window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
+      }
+      
       window.location.href = `/contact-success`
     }
   }
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isOpen || isSubmitting) return
+
+      if (e.key === 'Escape') {
+        onClose()
+      } else if (e.key === 'Enter') {
+        // If focused on a button natively (like a category option), let it click normally.
+        // Otherwise, use Enter as a global "Next / Submit" trigger.
+        const activeTag = document.activeElement?.tagName.toLowerCase()
+        if (activeTag === 'button') return
+        
+        e.preventDefault()
+        next()
+      } else if (e.key === 'Backspace') {
+        // Only allow Backspace to go back if the user IS NOT typing in a text field
+        const activeTag = document.activeElement?.tagName.toLowerCase()
+        const isTyping = activeTag === 'input' || activeTag === 'textarea'
+        
+        if (!isTyping && step > 1) {
+          e.preventDefault()
+          setStep((step - 1) as Step)
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, onClose, step, data, isSubmitting])
+
+  useEffect(() => { setMounted(true); if (isOpen) setStep(1) }, [isOpen])
+
+  if (!mounted || !isOpen) return null
 
   const categoryOptions = ['Health & Wellness', 'Beauty & Cosmetics', 'Fine Jewelry', 'Luxury Watches', 'Food & Beverage', 'Consumer Tech']
   const needsOptions = ['Web Images', 'Lifestyle Images', 'Ad Creatives', 'Product Videos']
