@@ -87,11 +87,12 @@ function ContactOverlay({ isOpen, onClose }: any) {
     } else {
       setIsSubmitting(true)
       
-      // Open window synchronously before the await to bypass popup blockers
+      // Open window synchronously to bypass popup blockers
       const whatsappWindow = window.open('about:blank', '_blank')
 
+      // Attempt Airtable save but do not block WhatsApp if it fails
       try {
-        const result = await saveFormToAirtable({
+        await saveFormToAirtable({
           name: data.name,
           contact: data.contact,
           product: data.product,
@@ -99,35 +100,18 @@ function ContactOverlay({ isOpen, onClose }: any) {
           needs: data.needs,
           timeline: data.timeline,
         })
-
-        console.log('Airtable Result:', result)
-
-        if (!result.success) {
-          console.error(result.error)
-          setError('Something went wrong while submitting your request. Please try again.')
-          setIsSubmitting(false)
-          if (whatsappWindow) whatsappWindow.close()
-          return
-        }
-
-        console.log(result)
-        console.log('Airtable Result:', result)
-
       } catch (err) {
-        console.error('Airtable pipeline recording error:', err)
-        setError('Something went wrong while submitting your request. Please try again.')
-        setIsSubmitting(false)
-        if (whatsappWindow) whatsappWindow.close()
-        return
+        console.error('Airtable failed, but redirecting to WhatsApp anyway', err)
       }
 
+      // ALWAYS open WhatsApp
       if (whatsappWindow) {
         whatsappWindow.location.href = whatsappUrl
       } else {
-        // Fallback incase the synchronous window.open was strictly blocked
         window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
       }
       
+      // Send user to success page
       window.location.href = `/contact-success`
     }
   }
