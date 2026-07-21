@@ -47,7 +47,6 @@ function ContactOverlay({ isOpen, onClose }: any) {
   const [step, setStep] = useState<Step>(1)
   const [direction, setDirection] = useState(1)
   const [error, setError] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [data, setData] = useState({ category: '', needs: [] as string[], timeline: '', product: '', name: '', contact: '' })
 
   const messageText = `Hi Adnan, brief for: ${data.product}\nCategory: ${data.category}\nNeeds: ${data.needs.join(', ')}\nTimeline: ${data.timeline}\n\nName: ${data.name}\nContact: ${data.contact}`
@@ -65,7 +64,7 @@ function ContactOverlay({ isOpen, onClose }: any) {
     return ''
   }
 
-  const next = async () => {
+  const next = () => {
     const validationError = validateStep()
     if (validationError) return setError(validationError)
     
@@ -75,49 +74,35 @@ function ContactOverlay({ isOpen, onClose }: any) {
       setDirection(1)
       setStep((step + 1) as Step)
     } else {
-      setIsSubmitting(true)
-      
-      const whatsappWindow = window.open('about:blank', '_blank')
+      saveFormToAirtable({
+        name: data.name,
+        contact: data.contact,
+        product: data.product,
+        category: data.category,
+        needs: data.needs,
+        timeline: data.timeline,
+      }).catch((err) => {
+        console.error('Airtable background save failed', err)
+      })
 
-      try {
-        await saveFormToAirtable({
-          name: data.name,
-          contact: data.contact,
-          product: data.product,
-          category: data.category,
-          needs: data.needs,
-          timeline: data.timeline,
-        })
-      } catch (err) {
-        console.error('Airtable failed, but redirecting to WhatsApp anyway', err)
-      }
-
-      if (whatsappWindow) {
-        whatsappWindow.location.href = whatsappUrl
-      } else {
-        window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
-      }
-      
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
       window.location.href = `/contact-success`
     }
   }
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpen || isSubmitting) return
+      if (!isOpen) return
 
       if (e.key === 'Escape') {
         onClose()
       } else if (e.key === 'Enter') {
-        // If focused on a button natively (like a category option), let it click normally.
-        // Otherwise, use Enter as a global "Next / Submit" trigger.
         const activeTag = document.activeElement?.tagName.toLowerCase()
         if (activeTag === 'button') return
         
         e.preventDefault()
         next()
       } else if (e.key === 'Backspace') {
-        // Only allow Backspace to go back if the user IS NOT typing in a text field
         const activeTag = document.activeElement?.tagName.toLowerCase()
         const isTyping = activeTag === 'input' || activeTag === 'textarea'
         
@@ -131,7 +116,7 @@ function ContactOverlay({ isOpen, onClose }: any) {
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, onClose, step, data, isSubmitting])
+  }, [isOpen, onClose, step, data])
 
   useEffect(() => { setMounted(true); if (isOpen) setStep(1) }, [isOpen])
 
@@ -215,11 +200,11 @@ function ContactOverlay({ isOpen, onClose }: any) {
                 </AnimatePresence>
               </div>
               <div className="flex flex-col sm:flex-row-reverse gap-3 shrink-0">
-                <motion.button type="button" disabled={isSubmitting} whileHover={isSubmitting ? {} : { scale: 1.01 }} whileTap={isSubmitting ? {} : { scale: 0.99 }} onClick={next} className={`flex-1 text-[#0B1A28] font-semibold py-4 rounded-full border shadow-sm transition-opacity ${isSubmitting ? 'bg-[#D4F05A]/70 border-[#B5CE4D]/70 cursor-not-allowed' : 'bg-[#D4F05A] border-[#B5CE4D]'}`}>
-                  {isSubmitting ? 'Submitting...' : step === TOTAL_STEPS ? 'Initialize via WhatsApp' : 'Continue'}
+                <motion.button type="button" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }} onClick={next} className="flex-1 text-[#0B1A28] font-semibold py-4 rounded-full border shadow-sm transition-opacity bg-[#D4F05A] border-[#B5CE4D]">
+                  {step === TOTAL_STEPS ? 'Initialize via WhatsApp' : 'Continue'}
                 </motion.button>
                 {step > 1 && (
-                  <button type="button" disabled={isSubmitting} onClick={() => setStep((step - 1) as Step)} className="px-10 py-4 border border-black/10 text-[#0B1A28] rounded-full font-medium hover:bg-black/5 transition-colors bg-transparent disabled:opacity-50 disabled:cursor-not-allowed">Back</button>
+                  <button type="button" onClick={() => setStep((step - 1) as Step)} className="px-10 py-4 border border-black/10 text-[#0B1A28] rounded-full font-medium hover:bg-black/5 transition-colors bg-transparent">Back</button>
                 )}
               </div>
               {error && <p className="text-red-500 text-sm font-medium text-center pt-4">{error}</p>}
