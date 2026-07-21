@@ -62,21 +62,11 @@ const testimonials: Testimonial[] = [
   },
 ]
 
-function Stars() {
+function RatingBadge() {
   return (
-    <div className="flex items-center gap-1.5 text-foreground" role="img" aria-label="5 star rating">
-      {Array.from({ length: 5 }).map((_, index) => (
-        <svg
-          key={index}
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-        </svg>
-      ))}
+    <div className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-xs font-semibold text-foreground" role="img" aria-label="5 star rating">
+      <span>5</span>
+      <span className="text-amber-500">★</span>
     </div>
   )
 }
@@ -100,9 +90,6 @@ export function Testimonials() {
           >
             Client Success & Performance
           </h2>
-          <p className="mt-4 text-lg font-medium text-muted-foreground max-w-2xl">
-            Hear from industry leaders who rely on our creative systems for high-converting asset pipelines.
-          </p>
         </div>
       </div>
 
@@ -112,38 +99,45 @@ export function Testimonials() {
           {[...testimonials, ...testimonials].map((item, index) => (
             <div
               key={index}
-              className="bg-card rounded-2xl p-6 sm:p-8 border border-border/60 flex flex-col w-[380px] sm:w-[420px] shrink-0 hover:border-foreground/20 transition-all duration-300 shadow-sm"
+              className="bg-card rounded-2xl p-6 sm:p-8 border border-border/60 flex flex-col justify-between w-[380px] sm:w-[420px] shrink-0 hover:border-foreground/20 transition-all duration-300 shadow-sm"
             >
-              <div className="flex justify-between items-start mb-6 gap-4">
-                <h3 className="text-xl font-bold tracking-tight text-foreground">
-                  “{item.headline}”
-                </h3>
-                <Stars />
+              <div>
+                <div className="flex justify-between items-start mb-6 gap-4">
+                  <h3 className="text-xl font-bold tracking-tight text-foreground">
+                    “{item.headline}”
+                  </h3>
+                  <RatingBadge />
+                </div>
+
+                <div className="mb-8">
+                  <p className="text-base text-muted-foreground leading-relaxed">
+                    "{item.text}"
+                  </p>
+                </div>
               </div>
 
-              <div className="flex-grow mb-8">
-                <p className="text-base text-muted-foreground leading-relaxed">
-                  "{item.text}"
-                </p>
-              </div>
-
-              <div className="flex items-center justify-between pt-6 border-t border-border/40 mt-auto">
-                <div className="flex items-center space-x-3.5">
-                  <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-muted border border-border/40">
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      fill
-                      sizes="48px"
-                      className="object-cover"
-                      unoptimized
-                    />
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-foreground">{item.name}</div>
-                    <div className="text-xs text-muted-foreground mt-0.5">
-                      {item.role} · {item.category}
+              <div className="pt-6 border-t border-border/40 mt-auto">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3.5">
+                    <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-muted border border-border/40">
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        fill
+                        sizes="44px"
+                        className="object-cover"
+                        unoptimized
+                      />
                     </div>
+                    <div>
+                      <div className="text-sm font-semibold text-foreground">{item.name}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5">
+                        {item.role}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-xs font-medium text-muted-foreground text-right">
+                    {item.category}
                   </div>
                 </div>
               </div>
@@ -163,9 +157,6 @@ export function Testimonials() {
         }
         .animate-marquee {
           animation: marquee 35s linear infinite;
-        }
-        .animate-marquee:hover {
-          animation-play-state: paused;
         }
       `}</style>
     </section>
