@@ -7,17 +7,16 @@ import { Footer } from '@/components/footer'
 import { LogoStrip } from '@/components/logo-strip'
 import { FireworkWidget } from '@/components/firework-widget'
 import { ProductShowcase } from '@/components/product-showcase'
-import { TestimonialsSanity } from '@/components/testimonials-sanity'
+import { Testimonials } from '@/components/testimonials'
 import { useContactOverlay } from '@/components/contact-overlay'
 import { CountryPageContent } from '@/data/country-pages'
 
 interface CountryPageTemplateProps {
   content: CountryPageContent
   canonical: string
-  testimonials?: any[]
 }
 
-export function CountryPageTemplate({ content, canonical, testimonials = [] }: CountryPageTemplateProps) {
+export function CountryPageTemplate({ content, canonical }: CountryPageTemplateProps) {
   // Initialize your custom hook
   const { open } = useContactOverlay()
 
@@ -178,7 +177,7 @@ export function CountryPageTemplate({ content, canonical, testimonials = [] }: C
       </section>
 
       <div className="py-12 border-t border-border">
-        <TestimonialsSanity testimonials={testimonials} />
+        <Testimonials />
       </div>
 
       {/* FAQ Section */}

@@ -1,34 +1,86 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import Image from 'next/image'
-import { urlFor } from '@/lib/sanity/image'
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
-interface Testimonial {
-  _id: string
-  name: string
-  role: string
-  category: string
-  headline: string
-  description: string
-  image: any
-  metric1Label?: string
-  metric1Value?: string
-  metric2Label?: string
-  metric2Value?: string
-  rating: number
-  order?: number
-  active?: boolean
-}
+type Testimonial = {
+  name: string;
+  image: string;
+  category: string;
+  role: string;
+  headline: string;
+  text: string;
+};
 
-interface TestimonialsProps {
-  testimonials: Testimonial[]
-}
+// 🔥 SEO & Copy Fix: Added punchy 'headline' for humans, kept 'text' for context
+const testimonials: Testimonial[] = [
+  {
+    name: 'SKYBORNE',
+    image:
+      'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Skyborne-p4ezaqFZ5OfdsvHpwahK8hQpOCamyf.png',
+    category: 'Travel & carry',
+    role: 'Premium D2C brand',
+    headline: 'Endless assets. Zero reshoots.',
+    text: 'We went from struggling with creatives to a full pipeline of high-performing assets for ads, PDPs, and social.',
+  },
+  {
+    name: 'MESSIKA Paris',
+    image:
+      'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Messika-qejIUYic4Yr2Ll5RU7os9DNNdgGIqJ.png',
+    category: 'Luxury jewellery',
+    role: 'Luxury brand',
+    headline: 'Perfect brand consistency.',
+    text: 'The biggest win was consistency. Every product and every campaign finally looks like one cohesive brand.',
+  },
+  {
+    name: 'Skinny.rx',
+    image:
+      'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Skinny.rx-8WN3MckWWMQPMDKhdXo8iASOv4vQKK.png',
+    category: 'Wellness',
+    role: 'Wellness brand',
+    headline: 'No more photoshoot delays.',
+    text: 'Faster launches, better creatives, and no dependency on shoots. This changed how we produce content.',
+  },
+  {
+    name: 'HerFantasyBox',
+    image:
+      'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/HerFantasyBox-B6XxTEH5jYtYcPFtMaxBWX2xIarg4t.png',
+    category: 'Womens Wellness',
+    role: 'D2C brand',
+    headline: 'One streamlined workflow.',
+    text: 'Our team saves so much time now. What used to take multiple vendors is handled in one streamlined process.',
+  },
+  {
+    name: 'PLAN B',
+    image:
+      'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Plan%20B-pZTphn7CFyGcxlfnSqeXbfzbouJQZI.png',
+    category: 'Cosmetics brand',
+    role: 'D2C brand',
+    headline: 'Flawless execution.',
+    text: 'They did everything according to my ideas, responded to every request, and I would book the service again.',
+  },
+  {
+    name: 'PALLADIO',
+    image:
+      'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Palladio-4gVgAm7yrCStetxUP88iEXM1CTtJkY.png',
+    category: 'Beauty',
+    role: 'Beauty brand',
+    headline: 'Precision and creativity.',
+    text: 'They took our idea and turned it into a wonderful project with great precision and creativity.',
+  },
+];
 
-function Stars({ count = 5 }: { count?: number }) {
+const proofPoints = [
+  'Beauty, wellness, luxury and D2C',
+  'Ads, PDPs and social assets',
+  'Strategy + visual production',
+];
+
+function Stars() {
   return (
-    <div className="flex items-center gap-1.5" aria-label={`${count} star rating`}>
-      {Array.from({ length: count }).map((_, index) => (
+    // ✅ Agentic Browsing Fix: Added role="img" to support aria-label on a div element
+    <div className="flex items-center gap-1.5" role="img" aria-label="5 star rating">
+      {Array.from({ length: 5 }).map((_, index) => (
         <svg
           key={index}
           width="16"
@@ -42,75 +94,32 @@ function Stars({ count = 5 }: { count?: number }) {
         </svg>
       ))}
     </div>
-  )
+  );
 }
 
-export function TestimonialsSanity({ testimonials }: TestimonialsProps) {
-  const [loaded, setLoaded] = useState(false)
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [isInView, setIsInView] = useState(false)
-  const [hasShuffledOnce, setHasShuffledOnce] = useState(false)
+export function Testimonials() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [loaded, setLoaded] = useState(false);
 
-  const sortedTestimonials = testimonials
-    .filter((t) => t.active !== false)
-    .sort((a, b) => (a.order || 0) - (b.order || 0))
-
-  const active = sortedTestimonials[activeIndex]
+  const active = testimonials[activeIndex];
 
   const prev = () => {
-    setActiveIndex((value) => (value - 1 + sortedTestimonials.length) % sortedTestimonials.length)
-  }
+    setActiveIndex(
+      (value) => (value - 1 + testimonials.length) % testimonials.length
+    );
+  };
 
   const next = () => {
-    setActiveIndex((value) => (value + 1) % sortedTestimonials.length)
-  }
+    setActiveIndex((value) => (value + 1) % testimonials.length);
+  };
 
-  // Initial load animation
   useEffect(() => {
     const timeout = window.setTimeout(() => {
-      setLoaded(true)
-    }, 80)
-    return () => window.clearTimeout(timeout)
-  }, [])
+      setLoaded(true);
+    }, 80);
 
-  // Auto-shuffle on view and every 2 seconds after
-  useEffect(() => {
-    const sectionRef = document.getElementById('testimonials')
-    if (!sectionRef) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true)
-          // Shuffle once when first entering view
-          if (!hasShuffledOnce) {
-            setHasShuffledOnce(true)
-            next()
-          }
-          observer.unobserve(sectionRef)
-        }
-      },
-      { threshold: 0.3 }
-    )
-
-    observer.observe(sectionRef)
-    return () => observer.unobserve(sectionRef)
-  }, [hasShuffledOnce, sortedTestimonials.length])
-
-  // Auto-shuffle every 2 seconds after being in view
-  useEffect(() => {
-    if (!isInView || !hasShuffledOnce) return
-
-    const interval = setInterval(() => {
-      next()
-    }, 2000)
-
-    return () => clearInterval(interval)
-  }, [isInView, hasShuffledOnce, sortedTestimonials.length])
-
-  if (!sortedTestimonials.length) {
-    return null
-  }
+    return () => window.clearTimeout(timeout);
+  }, []);
 
   return (
     <section
@@ -120,13 +129,14 @@ export function TestimonialsSanity({ testimonials }: TestimonialsProps) {
     >
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
         <div
-          className={`mx-auto mb-12 max-w-[1040px] transition-all duration-700 ease-out lg:mb-14 ${
-            loaded ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
-          }`}
+          className={`mx-auto mb-12 max-w-[1040px] transition-all duration-700 ease-out lg:mb-14 ${loaded ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
+            }`}
         >
           <span className="inline-flex rounded-full border border-border px-4 py-1.5 text-xs font-medium text-foreground">
             Client Proof
           </span>
+
+          {/* 🔥 SEO FIX: Updated H2 text */}
           <h2
             id="testimonials-heading"
             className="mt-6 max-w-[760px] text-[34px] font-bold leading-[1] tracking-[-0.055em] text-foreground sm:text-[44px] lg:text-[50px]"
@@ -135,11 +145,9 @@ export function TestimonialsSanity({ testimonials }: TestimonialsProps) {
           </h2>
         </div>
 
-        {/* Main testimonial */}
         <div
-          className={`mx-auto max-w-[1040px] rounded-[34px] bg-white/60 p-3 shadow-[0_20px_64px_rgba(0,0,0,0.04)] ring-1 ring-foreground/5 transition-all duration-700 ease-out sm:p-4 ${
-            loaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-          }`}
+          className={`mx-auto max-w-[1040px] rounded-[34px] bg-white/60 p-3 shadow-[0_20px_64px_rgba(0,0,0,0.04)] ring-1 ring-foreground/5 transition-all duration-700 ease-out sm:p-4 ${loaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+            }`}
         >
           <article className="relative overflow-hidden rounded-[28px] border border-foreground/10 bg-white p-6 shadow-[0_16px_48px_rgba(0,0,0,0.05)] sm:p-8 lg:p-10">
             <div
@@ -148,18 +156,21 @@ export function TestimonialsSanity({ testimonials }: TestimonialsProps) {
             />
 
             <div className="relative z-10">
-              <Stars count={active.rating} />
+              <div className="flex items-center gap-5">
+                <Stars />
+              </div>
 
+              {/* 🔥 SEO FIX: Split into short headline and context paragraph */}
               <div className="mt-7 transition-all duration-500">
                 <blockquote
-                  key={active._id}
+                  key={active.headline}
                   aria-live="polite"
                   className="max-w-[820px] text-[26px] font-bold leading-[1.12] tracking-[-0.055em] text-foreground sm:text-[34px] lg:text-[44px]"
                 >
-                  "{active.headline}"
+                  “{active.headline}”
                 </blockquote>
                 <p className="mt-4 max-w-[760px] text-lg font-medium text-muted-foreground leading-relaxed">
-                  "{active.description}"
+                  "{active.text}"
                 </p>
               </div>
 
@@ -167,18 +178,18 @@ export function TestimonialsSanity({ testimonials }: TestimonialsProps) {
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-4">
                     <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-muted ring-1 ring-foreground/10">
-                      {active.image && (
-                        <Image
-                          src={urlFor(active.image).width(48).height(48).url()}
-                          alt={active.name}
-                          fill
-                          sizes="48px"
-                          className="object-cover"
-                          unoptimized
-                        />
-                      )}
+                      <Image
+                        src={active.image}
+                        alt={active.name}
+                        fill
+                        sizes="48px"
+                        className="object-cover"
+                        unoptimized
+                      />
                     </div>
+
                     <div className="min-w-0 text-left">
+                      {/* 🔥 SEO FIX: Client name is now an H3 */}
                       <h3 className="m-0 truncate text-base font-semibold text-foreground">
                         {active.name}
                       </h3>
@@ -188,6 +199,7 @@ export function TestimonialsSanity({ testimonials }: TestimonialsProps) {
                     </div>
                   </div>
 
+                  {/* Desktop nav only */}
                   <div className="hidden items-center gap-2 sm:flex">
                     <button
                       type="button"
@@ -209,6 +221,7 @@ export function TestimonialsSanity({ testimonials }: TestimonialsProps) {
                         <path d="M19 12H5M12 5l-7 7 7 7" />
                       </svg>
                     </button>
+
                     <button
                       type="button"
                       onClick={next}
@@ -233,7 +246,21 @@ export function TestimonialsSanity({ testimonials }: TestimonialsProps) {
                 </div>
               </footer>
 
-              <div className="mt-8 grid grid-cols-2 gap-3 sm:hidden">
+              <div className="mt-5 grid gap-2 sm:grid-cols-3">
+                {proofPoints.map((point) => (
+                  <div
+                    key={point}
+                    className="rounded-full border border-foreground/10 bg-background px-3.5 py-2 text-center"
+                  >
+                    <p className="text-[11px] font-semibold leading-tight text-foreground/65">
+                      {point}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Mobile nav at bottom */}
+              <div className="mt-5 grid grid-cols-2 gap-3 sm:hidden">
                 <button
                   type="button"
                   onClick={prev}
@@ -255,6 +282,7 @@ export function TestimonialsSanity({ testimonials }: TestimonialsProps) {
                   </svg>
                   Previous
                 </button>
+
                 <button
                   type="button"
                   onClick={next}
@@ -282,5 +310,5 @@ export function TestimonialsSanity({ testimonials }: TestimonialsProps) {
         </div>
       </div>
     </section>
-  )
+  );
 }
