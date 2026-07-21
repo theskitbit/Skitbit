@@ -7,87 +7,58 @@ import { FireworkWidget } from '@/components/firework-widget'
 import { ProductShowcase } from '@/components/product-showcase'
 import { AboutEvent } from '@/components/about-event'
 import { WhatWeOffer } from '@/components/what-we-offer'
-import { TestimonialsSanity } from '@/components/testimonials-sanity'
+import { Testimonials } from '@/components/testimonials'
 import { CTA } from '@/components/cta'
 import { Footer } from '@/components/footer'
-import { client } from '@/lib/sanity/client'
-import { groq } from 'next-sanity'
 
-const TESTIMONIALS_QUERY = groq`
-  *[_type == "testimonial" && active == true] | order(order asc) {
-    _id,
-    name,
-    role,
-    category,
-    headline,
-    description,
-    image,
-    metric1Label,
-    metric1Value,
-    metric2Label,
-    metric2Value,
-    rating,
-    order,
-    active
-  }
-`
-
-export default async function Home() {
-  let testimonials = []
-  
-  try {
-    testimonials = await client.fetch(TESTIMONIALS_QUERY)
-  } catch (error) {
-    console.error('Failed to fetch testimonials:', error)
-  }
-
+export default function Home() {
   return (
     <main className="bg-background text-foreground">
 
-{/* 🔥 ORGANIZATION & AUTHORITY MAPPING */}
-<Script id="org-schema" type="application/ld+json" strategy="afterInteractive">
-  {JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    name: "Skitbit",
-    // We add the 'copy' and 'agency' terms here to capture the intent
-    alternateName: [
-      "Skitbit International", 
-      "Skitbit International Agency", 
-      "Skitbit website", 
-      "Skitbit agency",
-      "Skitbit agency uk",
-      "Skitbit agency delhi",
-      "Skitbit agency london",
-      "Skitbit agency dubai",
-      "Skitbit agency",
-    ],
-    url: "https://theskitbit.com/",
-    logo: "https://theskitbit.com/images/Black-icon.svg",
-    description: "Skitbit International is the premier agency for high-converting 3D product visuals and D2C brand scaling systems.",
-    sameAs: [
-      "https://www.instagram.com/theskitbit/",
-      "https://uk.linkedin.com/company/theskitbit",
-      "https://www.youtube.com/@skitbitinternational",
-      "https://www.facebook.com/theskitbit/"
-    ],
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Mumbai",
-      addressCountry: "IN"
-    },
-    // This defines your specific authority for these services
-    priceRange: "$$$",
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: "3D Rendering and 3D Animation",
-      itemListElement: [
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "3D Product Animation" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "3d Product Rendering" } }
-      ]
-    }
-  })}
-</Script>
+      {/* 🔥 ORGANIZATION & AUTHORITY MAPPING */}
+      <Script id="org-schema" type="application/ld+json" strategy="afterInteractive">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ProfessionalService",
+          name: "Skitbit",
+          alternateName: [
+            "Skitbit International", 
+            "Skitbit International Agency", 
+            "Skitbit website", 
+            "Skitbit agency",
+            "Skitbit agency uk",
+            "Skitbit agency delhi",
+            "Skitbit agency london",
+            "Skitbit agency dubai",
+            "Skitbit agency mumbai",
+            "Skitbit agency bangkok",
+            "Skitbit agency singapore",
+          ],
+          url: "https://theskitbit.com/",
+          logo: "https://theskitbit.com/images/Black-icon.svg",
+          description: "Skitbit International is the premier agency for high-converting 3D product visuals and D2C brand scaling systems.",
+          sameAs: [
+            "https://www.instagram.com/theskitbit/",
+            "https://uk.linkedin.com/company/theskitbit",
+            "https://www.youtube.com/@skitbitinternational",
+            "https://www.facebook.com/theskitbit/"
+          ],
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Mumbai",
+            addressCountry: "IN"
+          },
+          priceRange: "$$$",
+          hasOfferCatalog: {
+            "@type": "OfferCatalog",
+            name: "3D Rendering and 3D Animation",
+            itemListElement: [
+              { "@type": "Offer", itemOffered: { "@type": "Service", name: "3D Product Animation" } },
+              { "@type": "Offer", itemOffered: { "@type": "Service", name: "3d Product Rendering" } }
+            ]
+          }
+        })}
+      </Script>
 
       {/* 🔥 PRODUCT */}
       <Script id="product-schema" type="application/ld+json" strategy="afterInteractive">
@@ -160,7 +131,7 @@ export default async function Home() {
       <AboutEvent />
       <ProductShowcase />
       <WhatWeOffer />
-      <TestimonialsSanity testimonials={testimonials} />
+      <Testimonials />
       <CTA />
       <Footer />
     </main>
