@@ -87,10 +87,10 @@ function ContactOverlay({ isOpen, onClose }: any) {
     } else {
       setIsSubmitting(true)
       
-      // Open window synchronously to bypass popup blockers
-      const whatsappWindow = window.open('about:blank', '_blank')
+      // 1. Instantly open WhatsApp in a new tab (bypasses blockers because it's synchronous)
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
 
-      // Attempt Airtable save but do not block WhatsApp if it fails
+      // 2. Save to Airtable (we await this so the request isn't killed when the page changes)
       try {
         await saveFormToAirtable({
           name: data.name,
@@ -101,17 +101,10 @@ function ContactOverlay({ isOpen, onClose }: any) {
           timeline: data.timeline,
         })
       } catch (err) {
-        console.error('Airtable failed, but redirecting to WhatsApp anyway', err)
+        console.error('Airtable failed, but WhatsApp was opened.', err)
       }
 
-      // ALWAYS open WhatsApp
-      if (whatsappWindow) {
-        whatsappWindow.location.href = whatsappUrl
-      } else {
-        window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
-      }
-      
-      // Send user to success page
+      // 3. Redirect the main window to the success page
       window.location.href = `/contact-success`
     }
   }
