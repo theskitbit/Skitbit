@@ -78,7 +78,8 @@ const proofPoints = [
 
 function Stars() {
   return (
-    <div className="flex items-center gap-1.5" aria-label="5 star rating">
+    // ✅ Agentic Browsing Fix: Added role="img" to support aria-label on a div element
+    <div className="flex items-center gap-1.5" role="img" aria-label="5 star rating">
       {Array.from({ length: 5 }).map((_, index) => (
         <svg
           key={index}
