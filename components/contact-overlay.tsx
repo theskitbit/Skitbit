@@ -74,6 +74,14 @@ function ContactOverlay({ isOpen, onClose }: any) {
       setDirection(1)
       setStep((step + 1) as Step)
     } else {
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'conversion', {
+            'send_to': 'AW-10791428257/4CAoCKP-ucAcEKHB4Jko',
+            'value': 1.0,
+            'currency': 'INR'
+        });
+      }
+
       saveFormToAirtable({
         name: data.name,
         contact: data.contact,
