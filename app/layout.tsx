@@ -15,7 +15,7 @@ const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-NFLHXXGK'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://theskitbit.com'),
- title: '3D Product Animation Company | Photoreal CGI | Skitbit',
+  title: '3D Product Animation Company | Photoreal CGI | Skitbit',
   description:
   'Photoreal 3D product animation, CGI and product rendering for ecommerce brands. Create high-converting visuals that drive clicks, sales and product launches.',
   generator: 'Skitbit International',
@@ -114,6 +114,23 @@ export default function RootLayout({
             })(window,document,'script','dataLayer','${GTM_ID}');
           `}
         </Script>
+        
+        <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=AW-10791428257`}
+        />
+        <Script
+          id="google-ads-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'AW-10791428257');
+            `,
+          }}
+        />
       </head>
       <body className="font-sans antialiased">
         <noscript>
