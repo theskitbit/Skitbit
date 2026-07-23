@@ -105,6 +105,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* We keep the head clean. Next.js handles script injection automatically. */}
+      </head>
+      <body className="font-sans antialiased">
+        {/* GOOGLE TAG MANAGER */}
         <Script id="gtm-script" strategy="afterInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -114,25 +118,24 @@ export default function RootLayout({
             })(window,document,'script','dataLayer','${GTM_ID}');
           `}
         </Script>
-        
+
+        {/* GOOGLE ADS BASE TAG */}
         <Script
+          id="google-ads-base"
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=AW-10791428257`}
         />
-        <Script
-          id="google-ads-init"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'AW-10791428257');
-            `,
-          }}
-        />
-      </head>
-      <body className="font-sans antialiased">
+        
+        {/* GOOGLE ADS CONFIGURATION */}
+        <Script id="google-ads-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-10791428257');
+          `}
+        </Script>
+
         <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
@@ -141,6 +144,7 @@ export default function RootLayout({
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
+        
         <SEOSchema />
         <ThemeDetector />
         <ContactOverlayProvider>
