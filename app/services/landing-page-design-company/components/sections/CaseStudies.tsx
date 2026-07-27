@@ -22,11 +22,13 @@ export function CaseStudies() {
             <div className="flex w-full shrink-0 flex-col justify-between gap-8 lg:w-[280px]">
               {/* Stats Box */}
               <div className="border border-neutral-900 bg-white p-6 sm:p-8">
-                {/* Logo Placeholder */}
-                <div className="mb-10">
-                  <div className="inline-block border-[3px] border-red-600 px-2 py-1 text-3xl font-black italic tracking-tighter text-red-600">
-                    SUPERYOU
-                  </div>
+                {/* Logo Image */}
+                <div className="mb-10 flex items-center">
+                  <img 
+                    src="https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/gruns%20Logo.webp" 
+                    alt="Gruns Logo" 
+                    className="h-10 w-auto object-contain"
+                  />
                 </div>
                 
                 {/* Stat 1 */}
@@ -57,7 +59,7 @@ export function CaseStudies() {
               <div className="h-full w-full border border-neutral-900/20 bg-white">
                 <img
                   src="https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/Gruns_landingpage.webp"
-                  alt="Superyou Case Study Top"
+                  alt="Gruns Case Study Top"
                   className="h-full w-full object-cover object-top"
                 />
               </div>
@@ -65,7 +67,7 @@ export function CaseStudies() {
               <div className="hidden h-full w-full border border-neutral-900/20 bg-white md:block">
                 <img
                   src="https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/Gruns_2_landingpage.webp"
-                  alt="Superyou Case Study Middle"
+                  alt="Gruns Case Study Middle"
                   className="h-full w-full object-cover object-center"
                 />
               </div>
@@ -73,7 +75,7 @@ export function CaseStudies() {
               <div className="hidden h-full w-full border border-neutral-900/20 bg-white md:block">
                 <img
                   src="https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/Gruns_mobile_landingpage.webp"
-                  alt="Superyou Case Study Bottom"
+                  alt="Gruns Case Study Bottom"
                   className="h-full w-full object-cover object-bottom"
                 />
               </div>
