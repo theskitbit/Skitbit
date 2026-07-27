@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Container } from '../layout/Container'
-import { QualificationCard } from '@/components/ui/qualification-card'
+import { QualificationCard } from '../ui/qualification-card'
 
 interface QualificationItem {
   icon: string

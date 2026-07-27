@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Container } from '../layout/Container'
-import { ProcessStep } from '@/components/ui/process-step'
+import { ProcessStep } from '../ui/process-step'
 
 interface ProcessStepData {
   number: string
