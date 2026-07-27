@@ -59,7 +59,7 @@ export function AIBenefits() {
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '-100px' }}
             transition={{ delay: 0.4 }}
             className="mt-12 pt-8 border-t border-background/20 text-sm text-gray-500"
           >
