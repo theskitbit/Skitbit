@@ -9,7 +9,7 @@ import { HeroStats } from './HeroStats'
 
 export function Hero() {
   return (
-    <section className="relative w-full overflow-hidden pt-24 md:pt-36 lg:pt-44">
+    <section className="relative w-full overflow-hidden pt-16 md:pt-24 lg:pt-28">
       {/* Background */}
       <HeroBackground />
 
@@ -20,7 +20,7 @@ export function Hero() {
           <HeroHeading />
 
           {/* Flex Container for Description & Stats */}
-          <div className="mt-12 flex flex-col gap-12 border-t border-neutral-800 pt-8 lg:mt-16 lg:flex-row lg:justify-between lg:items-start lg:pt-10">
+          <div className="mt-8 flex flex-col gap-8 border-t border-neutral-800 pt-6 lg:mt-12 lg:flex-row lg:justify-between lg:items-start lg:pt-8">
             
             {/* Description */}
             <div className="w-full lg:max-w-[460px]">
@@ -30,7 +30,7 @@ export function Hero() {
               </p>
               
               {/* Buttons */}
-              <div className="mt-8 md:mt-10">
+              <div className="mt-6 md:mt-8">
                 <HeroButtons />
               </div>
             </div>
@@ -42,8 +42,8 @@ export function Hero() {
             
           </div>
 
-{/* Connecting Divider to Case Studies */}
-<div className="mt-8 border-t border-neutral-800/50 md:mt-12 lg:mt-16" />
+          {/* Connecting Divider to Case Studies */}
+          <div className="mt-8 border-t border-neutral-800/50 md:mt-10 lg:mt-12" />
 
         </div>
       </Container>
