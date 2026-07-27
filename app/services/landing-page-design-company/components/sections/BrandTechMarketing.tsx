@@ -76,135 +76,103 @@ export function BrandTechMarketing() {
           className="grid grid-cols-1 border border-neutral-900/20 lg:grid-cols-2"
         >
           {/* Venn Diagram Section */}
-          <div className="flex items-center justify-center border-b border-neutral-900/20 p-8 lg:border-b-0 lg:border-r">
+          <div className="flex items-center justify-center border-b border-neutral-900/20 p-5 sm:p-8 lg:border-b-0 lg:border-r lg:p-10">
             {/*
-              viewBox is 500 wide × 580 tall — extra 80px at bottom gives
-              the Marketing label room without clipping. All circle centres
-              are the same; only the wrapper loses aspect-square.
+              Single SVG — circles, labels, badges all live here so text
+              scales in lockstep with the diagram on every screen size.
+              ViewBox: 580 × 620, circles r=165, symmetric around x=290:
+                Brand  cx=175 cy=190
+                Tech   cx=405 cy=190
+                Mkt    cx=290 cy=365
+              Overlaps: Brand↔Tech = 100px, Brand↔Mkt = Tech↔Mkt ≈ 121px.
+              Font sizes bumped up (title 18 / badge 11 / descriptor 13)
+              vs. the previous pass so the message reads clearly even when
+              the SVG is scaled down on narrow mobile viewports.
             */}
-            <div className="relative w-full max-w-[420px]" style={{ aspectRatio: '500 / 580' }}>
-              {/* SVG Background Layer */}
-              <svg viewBox="0 0 500 580" className="h-full w-full">
-                <defs>
-                  {/* Diagonal Hatch Pattern for overlaps */}
-                  <pattern
-                    id="btm-hatch"
-                    width="8"
-                    height="8"
-                    patternTransform="rotate(45 0 0)"
-                    patternUnits="userSpaceOnUse"
-                  >
-                    <line x1="0" y1="0" x2="0" y2="8" stroke="#d4d4d8" strokeWidth="1.5" />
-                  </pattern>
+            <svg
+              viewBox="0 0 580 620"
+              className="w-full max-w-[520px]"
+              style={{ display: 'block' }}
+            >
+              <defs>
+                <pattern
+                  id="btm-hatch"
+                  width="8"
+                  height="8"
+                  patternTransform="rotate(45 0 0)"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <line x1="0" y1="0" x2="0" y2="8" stroke="#d4d4d8" strokeWidth="1.5" />
+                </pattern>
 
-                  {/* Circle Clip Paths */}
-                  <clipPath id="btm-brand-clip"><circle cx="175" cy="190" r="150" /></clipPath>
-                  <clipPath id="btm-tech-clip"><circle cx="325" cy="190" r="150" /></clipPath>
-                  <clipPath id="btm-mkt-clip"><circle cx="250" cy="320" r="150" /></clipPath>
+                <clipPath id="btm-brand-clip"><circle cx="175" cy="190" r="165" /></clipPath>
+                <clipPath id="btm-tech-clip"><circle cx="405" cy="190" r="165" /></clipPath>
+                <clipPath id="btm-mkt-clip"><circle cx="290" cy="365" r="165" /></clipPath>
 
-                  {/* Intersections */}
-                  <clipPath id="btm-brand-tech-clip">
-                    <circle cx="175" cy="190" r="150" clipPath="url(#btm-tech-clip)" />
-                  </clipPath>
-                  <clipPath id="btm-brand-mkt-clip">
-                    <circle cx="175" cy="190" r="150" clipPath="url(#btm-mkt-clip)" />
-                  </clipPath>
-                  <clipPath id="btm-tech-mkt-clip">
-                    <circle cx="325" cy="190" r="150" clipPath="url(#btm-mkt-clip)" />
-                  </clipPath>
-                  <clipPath id="btm-center-clip">
-                    <circle cx="250" cy="320" r="150" clipPath="url(#btm-brand-tech-clip)" />
-                  </clipPath>
-                </defs>
+                <clipPath id="btm-brand-tech-clip">
+                  <circle cx="175" cy="190" r="165" clipPath="url(#btm-tech-clip)" />
+                </clipPath>
+                <clipPath id="btm-center-clip">
+                  <circle cx="290" cy="365" r="165" clipPath="url(#btm-brand-tech-clip)" />
+                </clipPath>
+              </defs>
 
-                {/* Overlap Fills (Hatched) */}
-                <circle cx="175" cy="190" r="150" fill="url(#btm-hatch)" clipPath="url(#btm-tech-clip)" />
-                <circle cx="175" cy="190" r="150" fill="url(#btm-hatch)" clipPath="url(#btm-mkt-clip)" />
-                <circle cx="325" cy="190" r="150" fill="url(#btm-hatch)" clipPath="url(#btm-mkt-clip)" />
+              {/* Pairwise hatch overlaps */}
+              <circle cx="175" cy="190" r="165" fill="url(#btm-hatch)" clipPath="url(#btm-tech-clip)" />
+              <circle cx="175" cy="190" r="165" fill="url(#btm-hatch)" clipPath="url(#btm-mkt-clip)" />
+              <circle cx="405" cy="190" r="165" fill="url(#btm-hatch)" clipPath="url(#btm-mkt-clip)" />
 
-                {/* Center Solid Yellow Fill */}
-                <circle cx="250" cy="320" r="150" fill="#E5FF00" clipPath="url(#btm-center-clip)" />
+              {/* Center yellow fill */}
+              <circle cx="290" cy="365" r="165" fill="#E5FF00" clipPath="url(#btm-center-clip)" />
 
-                {/* Base Circle Strokes */}
-                <circle cx="175" cy="190" r="150" fill="none" stroke="#2563eb" strokeWidth="2" />
-                <circle cx="325" cy="190" r="150" fill="none" stroke="#10b981" strokeWidth="2" />
-                <circle cx="250" cy="320" r="150" fill="none" stroke="#a855f7" strokeWidth="2" />
+              {/* Circle strokes */}
+              <circle cx="175" cy="190" r="165" fill="none" stroke="#2563eb" strokeWidth="2" />
+              <circle cx="405" cy="190" r="165" fill="none" stroke="#10b981" strokeWidth="2" />
+              <circle cx="290" cy="365" r="165" fill="none" stroke="#a855f7" strokeWidth="2" />
 
-                {/* Center Black Border Trick */}
-                <circle cx="175" cy="190" r="150" fill="none" stroke="#171717" strokeWidth="3" clipPath="url(#btm-center-clip)" />
-                <circle cx="325" cy="190" r="150" fill="none" stroke="#171717" strokeWidth="3" clipPath="url(#btm-center-clip)" />
-                <circle cx="250" cy="320" r="150" fill="none" stroke="#171717" strokeWidth="3" clipPath="url(#btm-center-clip)" />
-              </svg>
+              {/* Center black border on yellow zone */}
+              <circle cx="175" cy="190" r="165" fill="none" stroke="#171717" strokeWidth="3" clipPath="url(#btm-center-clip)" />
+              <circle cx="405" cy="190" r="165" fill="none" stroke="#171717" strokeWidth="3" clipPath="url(#btm-center-clip)" />
+              <circle cx="290" cy="365" r="165" fill="none" stroke="#171717" strokeWidth="3" clipPath="url(#btm-center-clip)" />
 
-              {/*
-                Absolute labels — all positions are percentages of the
-                500×580 viewBox mapped to the wrapper's rendered size.
+              {/* ── BRAND label — upper-left exclusive zone, anchor x=140 ── */}
+              <circle cx="140" cy="105" r="17" fill="#eff6ff" />
+              <g transform="translate(132,97)" stroke="#2563eb" strokeWidth="1.7" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M10.8 2.6l1.1-1.1a1.2 1.2 0 011.7 1.7L4.4 12.4a3 3 0 01-1.3.75l-1.8.54.54-1.8a3 3 0 01.75-1.3L10.8 2.6z" />
+              </g>
+              <text x="140" y="139" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="18" fontWeight="700" fill="#171717">BRAND</text>
+              <rect x="90" y="147" width="100" height="22" rx="11" fill="#2563eb" />
+              <text x="140" y="162" textAnchor="middle" fontFamily="monospace" fontSize="11" fontWeight="700" fill="white" letterSpacing="0.5">NARRATIVE</text>
+              <text x="140" y="191" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="13" fill="#666663">Story. Positioning.</text>
+              <text x="140" y="207" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="13" fill="#666663">Identity.</text>
 
-                BRAND centre in SVG: (175, 190) → left=35%, top=32.8%
-                TECH centre in SVG:  (325, 190) → left=65%, top=32.8%
-                MKT centre in SVG:   (250, 470) → left=50%, top=81%
-                  (bottom of marketing circle = 320+150=470)
-                  label midpoint roughly 430/580 ≈ 74%
-                TLPC centroid of three-way intersection ≈ (250, 267)
-                  → left=50%, top=46%
-              */}
+              {/* ── TECH label — upper-right exclusive zone, anchor x=440 (mirror of 140) ── */}
+              <circle cx="440" cy="105" r="17" fill="#ecfdf5" />
+              <g transform="translate(432,97)" stroke="#10b981" strokeWidth="1.7" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M11 4.5L15 8l-4 3.5M5 4.5L1 8l4 3.5M9 2l-3 11" />
+              </g>
+              <text x="440" y="139" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="18" fontWeight="700" fill="#171717">TECH</text>
+              <rect x="390" y="147" width="100" height="22" rx="11" fill="#10b981" />
+              <text x="440" y="162" textAnchor="middle" fontFamily="monospace" fontSize="11" fontWeight="700" fill="white" letterSpacing="0.5">SPEED · UX</text>
+              <text x="440" y="191" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="13" fill="#666663">Code. Product.</text>
+              <text x="440" y="207" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="13" fill="#666663">Performance.</text>
 
-              {/* BRAND Content */}
-              <div className="absolute left-[35%] top-[28%] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
-                <div className="mb-2 flex h-7 w-7 items-center justify-center rounded-full bg-blue-50 text-blue-600">
-                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
-                  </svg>
-                </div>
-                <div className="mb-1 text-sm font-bold text-neutral-900">BRAND</div>
-                <div className="mb-2 rounded-full bg-blue-600 px-2 py-[2px] font-mono text-[8px] font-bold tracking-wider text-white uppercase">
-                  NARRATIVE
-                </div>
-                <div className="text-center text-[10px] leading-tight text-neutral-500">
-                  Story. Positioning.<br />Identity.
-                </div>
-              </div>
+              {/* ── TLPC center label — centroid of 3-circle overlap (290, 248) ── */}
+              <rect x="276" y="234" width="28" height="28" rx="0" fill="#F4F4F0" stroke="#171717" strokeWidth="1.6" />
+              <text x="290" y="253" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="14" fontWeight="700" fill="#171717">L</text>
+              <text x="290" y="290" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="20" fontWeight="700" fill="#171717">TLPC</text>
 
-              {/* TECH Content */}
-              <div className="absolute left-[65%] top-[28%] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
-                <div className="mb-2 flex h-7 w-7 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
-                  </svg>
-                </div>
-                <div className="mb-1 text-sm font-bold text-neutral-900">TECH</div>
-                <div className="mb-2 rounded-full bg-emerald-500 px-2 py-[2px] font-mono text-[8px] font-bold tracking-wider text-white uppercase">
-                  SPEED · UX
-                </div>
-                <div className="text-center text-[10px] leading-tight text-neutral-500">
-                  Code. Product.<br />Performance.
-                </div>
-              </div>
-
-              {/* TLPC Center Content — centroid of 3-circle intersection */}
-              <div className="absolute left-[50%] top-[46%] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
-                <div className="mb-1 flex h-5 w-5 items-center justify-center border border-neutral-900 text-[10px] font-bold text-neutral-900">
-                  L
-                </div>
-                <div className="text-[13px] font-bold text-neutral-900">TLPC</div>
-              </div>
-
-              {/* MARKETING Content — positioned at bottom of marketing circle */}
-              <div className="absolute left-[50%] top-[75%] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
-                <div className="mb-2 flex h-7 w-7 items-center justify-center rounded-full bg-purple-50 text-purple-600">
-                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
-                  </svg>
-                </div>
-                <div className="mb-1 text-sm font-bold text-neutral-900">MARKETING</div>
-                <div className="mb-2 rounded-full bg-purple-600 px-2 py-[2px] font-mono text-[8px] font-bold tracking-wider text-white uppercase">
-                  CAC · FUNNELS
-                </div>
-                <div className="text-center text-[10px] leading-tight text-neutral-500">
-                  Growth. Funnels.<br />Efficiency.
-                </div>
-              </div>
-            </div>
+              {/* ── MARKETING label — lower exclusive zone, anchor x=290 ── */}
+              <circle cx="290" cy="440" r="17" fill="#faf5ff" />
+              <g transform="translate(282,432)" stroke="#a855f7" strokeWidth="1.7" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 8.75h2.25v6.75H2zM6.5 5.5h2.25v10H6.5zM11 2.75H13.25v12.75H11z" />
+              </g>
+              <text x="290" y="474" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="18" fontWeight="700" fill="#171717">MARKETING</text>
+              <rect x="220" y="482" width="140" height="22" rx="11" fill="#9333ea" />
+              <text x="290" y="497" textAnchor="middle" fontFamily="monospace" fontSize="11" fontWeight="700" fill="white" letterSpacing="0.5">CAC · FUNNELS</text>
+              <text x="290" y="527" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="13" fill="#666663">Growth. Funnels.</text>
+              <text x="290" y="543" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="13" fill="#666663">Efficiency.</text>
+            </svg>
           </div>
 
           {/* Positions List + Overlap CTA */}
