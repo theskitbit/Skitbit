@@ -82,21 +82,24 @@ export function Navbar() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden p-2 -mr-2 text-neutral-900"
+          className="relative md:hidden flex items-center justify-center w-10 h-10 -mr-2 text-neutral-900"
           aria-label="Toggle mobile menu"
         >
-          <div className="space-y-1.5">
+          <div className="relative w-6 h-5 flex flex-col justify-between">
             <motion.span
-              className="block h-0.5 w-6 bg-current"
-              animate={isOpen ? { rotate: 45, y: 11 } : { rotate: 0, y: 0 }}
+              className="absolute top-0 left-0 block h-0.5 w-full bg-current origin-center"
+              animate={isOpen ? { rotate: 45, y: 9 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.2 }}
             />
             <motion.span
-              className="block h-0.5 w-5 bg-current"
+              className="absolute top-2 left-0 block h-0.5 w-full bg-current"
               animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
+              transition={{ duration: 0.2 }}
             />
             <motion.span
-              className="block h-0.5 w-6 bg-current"
-              animate={isOpen ? { rotate: -45, y: -11 } : { rotate: 0, y: 0 }}
+              className="absolute bottom-0 left-0 block h-0.5 w-full bg-current origin-center"
+              animate={isOpen ? { rotate: -45, y: -9 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.2 }}
             />
           </div>
         </button>
