@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useScroll } from '@/hooks/useScroll'
+import { useScroll } from '../../hooks/useScroll'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Container } from './Container'
 import { cn } from '@/lib/utils'
