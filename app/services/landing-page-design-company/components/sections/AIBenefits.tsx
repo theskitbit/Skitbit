@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion'
 import { Container } from '../layout/Container'
-import { Button } from '@/components/ui/button-premium'
 
 export function AIBenefits() {
   return (
@@ -12,7 +11,7 @@ export function AIBenefits() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, rootMargin: '-100px' }}
             className="mb-12"
           >
             <h2 className="text-5xl md:text-6xl font-black mb-8">
@@ -41,13 +40,16 @@ export function AIBenefits() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, rootMargin: '-100px' }}
             transition={{ delay: 0.2 }}
             className="flex flex-col sm:flex-row gap-6 items-start"
           >
-            <Button variant="default" className="bg-accent text-accent-foreground hover:bg-accent">
-              Let's form opinions together
-            </Button>
+            <a
+              href="#"
+              className="inline-flex items-center justify-center border border-transparent bg-yellow-400 px-6 py-3 font-semibold text-neutral-900 transition-colors hover:bg-yellow-500"
+            >
+              Let's form opinions together &rarr;
+            </a>
             <div className="text-sm text-gray-400 pt-2 sm:pt-3">
               OR READ IT AGAIN. WE'LL WAIT.
             </div>
@@ -57,7 +59,7 @@ export function AIBenefits() {
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, rootMargin: '-100px' }}
             transition={{ delay: 0.4 }}
             className="mt-12 pt-8 border-t border-background/20 text-sm text-gray-500"
           >
