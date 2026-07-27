@@ -11,7 +11,7 @@ export function AIBenefits() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, rootMargin: '-100px' }}
+            viewport={{ once: true, margin: '-100px' }}
             className="mb-12"
           >
             <h2 className="text-5xl md:text-6xl font-black mb-8">
@@ -40,7 +40,7 @@ export function AIBenefits() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, rootMargin: '-100px' }}
+            viewport={{ once: true, margin: '-100px' }}
             transition={{ delay: 0.2 }}
             className="flex flex-col sm:flex-row gap-6 items-start"
           >
