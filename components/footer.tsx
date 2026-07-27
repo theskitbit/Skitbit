@@ -19,6 +19,7 @@ const NAV_3D = [
 ]
 
 const NAV_GROWTH = [
+  { href: '/services/landing-page-design-company', label: 'Landing Page Design' },
   { href: '/services/performance-creative-management', label: 'Performance Management' },
   { href: '/services/social-ads-beauty', label: 'Social Ad Creatives' },
   { href: '/services/supplement-explainers', label: '3D Explainer Videos' },
@@ -125,19 +126,19 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           <div>
             <div className="mb-3 flex items-center">
-  <Image
-    src="/Black icon - without symbol.svg"
-    alt="Skitbit Logo"
-    width={20}
-    height={20}
-    className="mr-2 h-5 w-auto shrink-0"
-  />
+              <Image
+                src="/Black icon - without symbol.svg"
+                alt="Skitbit Logo"
+                width={20}
+                height={20}
+                className="mr-2 h-5 w-auto shrink-0"
+              />
 
-<h3 className="text-[1.35rem] font-semibold tracking-[-0.025em] leading-none text-foreground">
-  Skitbit
-  <span className="ml-0.5 align-top text-[0.55rem] font-medium">®</span>
-</h3>
-</div>
+              <h3 className="text-[1.35rem] font-semibold tracking-[-0.025em] leading-none text-foreground">
+                Skitbit
+                <span className="ml-0.5 align-top text-[0.55rem] font-medium">®</span>
+              </h3>
+            </div>
             <p className="text-xs mt-2 leading-relaxed text-muted-foreground">
               Trusted by brands including Messika Paris, Myntra, BellaVita, Rimowa, and The Man Company.
             </p>
