@@ -2,18 +2,6 @@ import { MetadataRoute } from 'next'
 import { getAllPublicRoutes } from "@/lib/public-routes"
 import { getAllCountryCodes } from "@/data/country-pages"
 
-/**
- * NEXT.JS 16 CACHING FIX:
- * - Removed `force-dynamic` (was preventing proper ISR)
- * - Changed `revalidate = 0` to `revalidate = 3600` (1 hour ISR)
- * - Added explicit revalidation tags for on-demand updates
- * - Updated fetch calls with proper cache strategy
- * * This ensures:
- * 1. Sitemap pre-generates at build time
- * 2. Revalidates automatically every 1 hour
- * 3. Can be manually revalidated via revalidateTag('sitemap')
- * 4. Respects updates to country pages, blog posts, and locations
- */
 export const revalidate = 3600 // Revalidate every 1 hour (ISR)
 
 const baseUrl = "https://theskitbit.com"
@@ -46,7 +34,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const sitemapEntries: MetadataRoute.Sitemap = [
     { url: baseUrl, lastModified: now, changeFrequency: "daily", priority: 1 },
     { url: `${baseUrl}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/works`, lastModified: now, changeFrequency: "weekly", priority: 0.9 }, // Added the works page
+    { url: `${baseUrl}/works`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/services/landing-page-design-company`, lastModified: now, changeFrequency: "weekly", priority: 0.85 }, // Added new landing page service route
   ]
 
   // 1. Static Routes
@@ -54,9 +43,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const routes = await getAllPublicRoutes()
     if (routes && Array.isArray(routes)) {
       routes.forEach((route) => {
-        // Prevent duplicates if /works or /blog are somehow also returned by getAllPublicRoutes
+        // Prevent duplicates if hardcoded routes are also returned by getAllPublicRoutes
         const cleanPath = route.path.startsWith('/') ? route.path : '/' + route.path
-        if (cleanPath !== '/blog' && cleanPath !== '/works' && cleanPath !== '/') {
+        if (
+          cleanPath !== '/blog' && 
+          cleanPath !== '/works' && 
+          cleanPath !== '/services/landing-page-design-company' && 
+          cleanPath !== '/'
+        ) {
           sitemapEntries.push({
             url: `${baseUrl}${cleanPath}`,
             lastModified: route.lastModified ? new Date(route.lastModified) : now,
