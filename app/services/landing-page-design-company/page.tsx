@@ -4,15 +4,15 @@ import { LandingContactProvider } from './landing-contact'
 
 // Ensure you move these v0 components into a local folder within this route
 // e.g., app/services/landing-page-design-company/components/
-import { Navbar } from './components/Navbar'
-import { Footer } from './components/Footer'
-import { Hero } from './components/Hero'
-import { CaseStudies } from './components/CaseStudies'
-import { GuestList } from './components/GuestList'
-import { BrandTechMarketing } from './components/BrandTechMarketing'
-import { Services } from './components/Services'
-import { Process } from './components/Process'
-import { Qualifications } from './components/Qualifications'
+import { Navbar } from './components/layout/Navbar'
+import { Footer } from './components/layout/Footer'
+import { Hero } from './components/hero/Hero'
+import { CaseStudies } from './components/sections/CaseStudies'
+import { GuestList } from './components/sections/GuestList'
+import { BrandTechMarketing } from './components/sections/BrandTechMarketing'
+import { Services } from './components/sections/Services'
+import { Process } from './components/sections/Process'
+import { Qualifications } from './components/sections/Qualifications'
 
 function LandingPageContent() {
   return (
