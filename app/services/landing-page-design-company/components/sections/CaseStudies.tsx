@@ -5,7 +5,7 @@ import { Container } from '../layout/Container'
 
 export function CaseStudies() {
   return (
-    <section className="bg-[#F4F4F0] py-12 md:py-16">
+    <section className="bg-[#F4F4F0] pt-0 pb-12 md:pb-16">
       <Container>
         <div className="mx-auto max-w-6xl">
           {/* Blue Tab */}
