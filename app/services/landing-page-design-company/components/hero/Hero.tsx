@@ -9,7 +9,7 @@ import { HeroStats } from './HeroStats'
 
 export function Hero() {
   return (
-    <section className="relative w-full overflow-hidden bg-[#F4F4F0] pt-24 text-neutral-900 md:pt-36 lg:pt-44">
+    <section className="relative w-full overflow-hidden pt-24 md:pt-36 lg:pt-44">
       {/* Background */}
       <HeroBackground />
 
@@ -20,13 +20,13 @@ export function Hero() {
           <HeroHeading />
 
           {/* Flex Container for Description & Stats */}
-          <div className="mt-12 flex flex-col justify-between gap-12 border-t border-neutral-900/20 pt-8 lg:mt-16 lg:flex-row lg:items-start lg:pt-10">
+          <div className="mt-12 flex flex-col justify-between gap-12 border-t border-neutral-800 pt-8 lg:mt-16 lg:flex-row lg:items-start lg:pt-10">
             
             {/* Description */}
             <div className="max-w-[460px]">
-              <p className="text-base leading-relaxed text-neutral-800 md:text-lg md:leading-relaxed">
+              <p className="text-base leading-relaxed md:text-lg md:leading-relaxed">
                 We're India's biggest CRO-led landing page company.
-                We ship pages that convert <strong className="font-semibold text-neutral-900">at least 20% better</strong> than what's running today — or we keep working until they do.
+                We ship pages that convert <strong className="font-semibold">at least 20% better</strong> than what's running today or we keep working until they do.
               </p>
               
               {/* Buttons */}
@@ -43,7 +43,7 @@ export function Hero() {
           </div>
 
           {/* Connecting Divider to Case Studies */}
-          <div className="mt-16 border-t border-neutral-900/30 md:mt-24 lg:mt-28" />
+          <div className="mt-16 border-t border-neutral-800/50 md:mt-24 lg:mt-28" />
 
         </div>
       </Container>
