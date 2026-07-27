@@ -1,14 +1,12 @@
 'use client'
 
 import { LandingContactProvider } from './landing-contact'
-
-// Ensure you move these v0 components into a local folder within this route
-// e.g., app/services/landing-page-design-company/components/
 import { Navbar } from './components/layout/Navbar'
 import { Footer } from './components/layout/Footer'
 import { Hero } from './components/hero/Hero'
 import { CaseStudies } from './components/sections/CaseStudies'
 import { GuestList } from './components/sections/GuestList'
+import { Testimonials } from './components/sections/Testimonials'
 import { BrandTechMarketing } from './components/sections/BrandTechMarketing'
 import { Services } from './components/sections/Services'
 import { Process } from './components/sections/Process'
@@ -23,6 +21,7 @@ function LandingPageContent() {
         <CaseStudies />
       </div>
       <GuestList />
+      <Testimonials />
       <div id="brand">
         <BrandTechMarketing />
       </div>
