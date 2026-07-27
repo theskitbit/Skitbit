@@ -55,7 +55,7 @@ export function Counter({
           requestAnimationFrame(animate)
         }
       },
-      { margin: '-100px' }
+      { rootMargin: '-100px' }
     )
 
     if (ref.current) {
