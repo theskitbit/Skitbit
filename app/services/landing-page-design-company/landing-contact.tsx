@@ -2,8 +2,6 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode, Suspense } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-// Ensure this path matches where your actual Airtable action lives, or remove if not using it here
-import { saveFormToAirtable } from '@/app/actions' 
 
 const LandingContactContext = createContext<any>(null)
 
@@ -60,7 +58,6 @@ function LandingContactOverlay({ isOpen, onClose }: any) {
         });
       }
 
-      saveFormToAirtable(data).catch(console.error)
       window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
       window.location.href = `/contact-success`
     }
