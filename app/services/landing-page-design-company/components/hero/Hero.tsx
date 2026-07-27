@@ -42,8 +42,8 @@ export function Hero() {
             
           </div>
 
-          {/* Connecting Divider to Case Studies */}
-          <div className="mt-16 border-t border-neutral-800/50 md:mt-24 lg:mt-28" />
+{/* Connecting Divider to Case Studies */}
+<div className="mt-8 border-t border-neutral-800/50 md:mt-12 lg:mt-16" />
 
         </div>
       </Container>
