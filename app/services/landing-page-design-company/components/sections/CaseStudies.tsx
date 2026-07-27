@@ -1,12 +1,11 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Container } from '../layout/Container'
 
 export function CaseStudies() {
   return (
     <section className="bg-[#F4F4F0] pt-0 pb-12 md:pb-16">
-      <Container>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl">
           {/* Blue Tab */}
           <div className="flex">
@@ -83,7 +82,7 @@ export function CaseStudies() {
 
           </div>
         </div>
-      </Container>
+      </div>
     </section>
   )
 }
