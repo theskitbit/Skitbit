@@ -53,26 +53,26 @@ export function CaseStudies() {
 
             {/* Right Area - Images */}
             <div className="grid h-[400px] w-full grid-cols-1 gap-4 overflow-hidden sm:h-[500px] md:grid-cols-3 lg:h-[640px] lg:gap-6">
-              {/* Strip 1 */}
+              {/* Strip 1 - Top */}
               <div className="h-full w-full border border-neutral-900/20 bg-white">
                 <img
-                  src="/superyou-case.png"
+                  src="https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/Gruns_landingpage.webp"
                   alt="Superyou Case Study Top"
                   className="h-full w-full object-cover object-top"
                 />
               </div>
-              {/* Strip 2 */}
+              {/* Strip 2 - Middle */}
               <div className="hidden h-full w-full border border-neutral-900/20 bg-white md:block">
                 <img
-                  src="/superyou-case.png"
+                  src="https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/Gruns_2_landingpage.webp"
                   alt="Superyou Case Study Middle"
                   className="h-full w-full object-cover object-center"
                 />
               </div>
-              {/* Strip 3 */}
+              {/* Strip 3 - Bottom */}
               <div className="hidden h-full w-full border border-neutral-900/20 bg-white md:block">
                 <img
-                  src="/superyou-case.png"
+                  src="https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/Gruns_mobile_landingpage.webp"
                   alt="Superyou Case Study Bottom"
                   className="h-full w-full object-cover object-bottom"
                 />
