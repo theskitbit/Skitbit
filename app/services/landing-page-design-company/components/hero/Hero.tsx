@@ -20,10 +20,10 @@ export function Hero() {
           <HeroHeading />
 
           {/* Flex Container for Description & Stats */}
-          <div className="mt-12 flex flex-col justify-between gap-12 border-t border-neutral-800 pt-8 lg:mt-16 lg:flex-row lg:items-start lg:pt-10">
+          <div className="mt-12 flex flex-col gap-12 border-t border-neutral-800 pt-8 lg:mt-16 lg:flex-row lg:justify-between lg:items-start lg:pt-10">
             
             {/* Description */}
-            <div className="max-w-[460px]">
+            <div className="w-full lg:max-w-[460px]">
               <p className="text-base leading-relaxed md:text-lg md:leading-relaxed">
                 We're India's biggest CRO-led landing page company.
                 We ship pages that convert <strong className="font-semibold">at least 20% better</strong> than what's running today or we keep working until they do.
@@ -36,7 +36,7 @@ export function Hero() {
             </div>
 
             {/* Stats */}
-            <div className="flex-1 lg:max-w-[600px]">
+            <div className="w-full lg:flex-1 lg:max-w-[600px]">
               <HeroStats />
             </div>
             
