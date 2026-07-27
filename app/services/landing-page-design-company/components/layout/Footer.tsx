@@ -1,7 +1,7 @@
 'use client'
 
-import { Container } from '@/components/layout/Container'
-import { FooterColumn } from '@/components/ui/footer-column'
+import { Container } from './Container'
+import { FooterColumn } from '../ui/footer-column'
 import { motion } from 'framer-motion'
 
 const footerSections = [
