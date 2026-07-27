@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Container } from '@/components/layout/Container'
+import { Container } from '../layout/Container'
 import { Button } from '@/components/ui/button-premium'
 
 export function AIBenefits() {

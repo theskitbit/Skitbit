@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Container } from '@/components/layout/Container'
+import { Container } from '../layout/Container'
 import { ProcessStep } from '@/components/ui/process-step'
 
 interface ProcessStepData {

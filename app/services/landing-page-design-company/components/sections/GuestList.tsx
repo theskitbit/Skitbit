@@ -1,6 +1,6 @@
 'use client'
 
-import { Container } from '@/components/layout/Container'
+import { Container } from '../layout/Container'
 import { motion } from 'framer-motion'
 
 interface LogoGridData {
