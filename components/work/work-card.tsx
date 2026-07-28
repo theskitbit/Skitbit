@@ -1,4 +1,3 @@
-// components/work/work-card.tsx
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
@@ -11,17 +10,19 @@ export function WorkCard({ item }: { item: WorkItem }) {
   const videoRef = useRef<HTMLVideoElement>(null)
 
   const [isLoaded, setIsLoaded] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
   const [isFinePointer, setIsFinePointer] = useState(false)
 
   const isVideo = item.type === 'animation'
 
+  // Detect desktop (fine pointer) vs mobile (touch)
   useEffect(() => {
     setIsFinePointer(
       window.matchMedia('(hover: hover) and (pointer: fine)').matches
     )
   }, [])
 
-  // Preload observer
+  // Observer 1: Preload zone — load src 600px before viewport
   useEffect(() => {
     if (!isVideo) return
     const el = containerRef.current
@@ -29,36 +30,37 @@ export function WorkCard({ item }: { item: WorkItem }) {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) setIsLoaded(true)
+        if (entry.isIntersecting && !isLoaded) {
+          setIsLoaded(true)
+        }
       },
       { rootMargin: PRELOAD_ROOT_MARGIN, threshold: 0 }
     )
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [isVideo])
+  }, [isVideo, isLoaded])
 
-  // Viewport observer — play/pause/unload
+  // Observer 2: Viewport visibility — auto-play on mobile, play/pause on desktop
   useEffect(() => {
     if (!isVideo) return
     const el = containerRef.current
-    if (!el) return
+    const video = videoRef.current
+    if (!el || !video) return
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const video = videoRef.current
-
         if (entry.isIntersecting) {
-          if (!isFinePointer && video) {
+          // Mobile: autoplay when in view
+          if (!isFinePointer) {
             video.play().catch(() => {})
+            setIsPlaying(true)
           }
         } else {
-          if (video) {
-            video.pause()
-            video.removeAttribute('src')
-            video.load()
-          }
-          setIsLoaded(false)
+          // Out of view: pause and reset for memory efficiency
+          video.pause()
+          video.currentTime = 0
+          setIsPlaying(false)
         }
       },
       { rootMargin: '0px', threshold: 0.15 }
@@ -68,16 +70,43 @@ export function WorkCard({ item }: { item: WorkItem }) {
     return () => observer.disconnect()
   }, [isVideo, isFinePointer])
 
+  // Desktop: hover triggers play, shows video (poster hides automatically)
   const handleMouseEnter = () => {
-    if (isFinePointer) videoRef.current?.play().catch(() => {})
+    if (!isFinePointer || !videoRef.current) return
+    videoRef.current.play().catch(() => {})
+    setIsPlaying(true)
   }
 
+  // Desktop: mouse leave pauses and resets
   const handleMouseLeave = () => {
-    if (isFinePointer && videoRef.current) {
-      videoRef.current.pause()
-      videoRef.current.currentTime = 0
-    }
+    if (!isFinePointer || !videoRef.current) return
+    videoRef.current.pause()
+    videoRef.current.currentTime = 0
+    setIsPlaying(false)
   }
+
+  // Metadata component
+  const Metadata = () => (
+    <div className="mt-3 space-y-2">
+      <h2 className="text-sm font-semibold text-foreground">{item.title}</h2>
+      <p className="text-xs text-foreground/60 line-clamp-2">
+        {item.description}
+      </p>
+      <div className="flex flex-wrap gap-2">
+        <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-1 text-[10px] font-medium text-foreground/70 uppercase">
+          {item.fidelityTag}
+        </span>
+        {item.industries.map((industry) => (
+          <span
+            key={industry}
+            className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-medium text-blue-700 uppercase"
+          >
+            {industry}
+          </span>
+        ))}
+      </div>
+    </div>
+  )
 
   // Renders (still images)
   if (!isVideo) {
@@ -98,27 +127,7 @@ export function WorkCard({ item }: { item: WorkItem }) {
           </div>
         </div>
 
-        {/* Mobile metadata */}
-        <div className="mt-3 space-y-2">
-          {/* CHANGED FROM h3 TO h2 FOR SEO */}
-          <h2 className="text-sm font-semibold text-foreground">{item.title}</h2>
-          <p className="text-xs text-foreground/60 line-clamp-2">
-            {item.description}
-          </p>
-          <div className="flex flex-wrap gap-2">
-            <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-1 text-[10px] font-medium text-foreground/70 uppercase">
-              {item.fidelityTag}
-            </span>
-            {item.industries.map((industry) => (
-              <span
-                key={industry}
-                className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-medium text-blue-700 uppercase"
-              >
-                {industry}
-              </span>
-            ))}
-          </div>
-        </div>
+        <Metadata />
       </div>
     )
   }
@@ -134,17 +143,21 @@ export function WorkCard({ item }: { item: WorkItem }) {
         style={{ aspectRatio: '9 / 16' }}
       >
         {isLoaded ? (
-          <video
-            ref={videoRef}
-            src={item.mediaUrl}
-            poster={item.posterUrl}
-            muted
-            loop
-            playsInline
-            preload="auto"
-            className="h-full w-full object-cover"
-          />
+          <>
+            {/* Video always muted and looping */}
+            <video
+              ref={videoRef}
+              src={item.mediaUrl}
+              poster={item.posterUrl}
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="h-full w-full object-cover"
+            />
+          </>
         ) : (
+          // Show poster while video is loading (preload zone)
           item.posterUrl && (
             <img
               src={item.posterUrl}
@@ -155,32 +168,13 @@ export function WorkCard({ item }: { item: WorkItem }) {
           )
         )}
 
+        {/* Format tag overlay */}
         <div className="absolute bottom-3 left-3 inline-flex items-center rounded-full bg-foreground/90 px-3 py-1.5 text-[10px] font-semibold text-background uppercase">
           {item.formatTag}
         </div>
       </div>
 
-      {/* Mobile metadata */}
-      <div className="mt-3 space-y-2">
-        {/* CHANGED FROM h3 TO h2 FOR SEO */}
-        <h2 className="text-sm font-semibold text-foreground">{item.title}</h2>
-        <p className="text-xs text-foreground/60 line-clamp-2">
-          {item.description}
-        </p>
-        <div className="flex flex-wrap gap-2">
-          <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-1 text-[10px] font-medium text-foreground/70 uppercase">
-            {item.fidelityTag}
-          </span>
-          {item.industries.map((industry) => (
-            <span
-              key={industry}
-              className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-medium text-blue-700 uppercase"
-            >
-              {industry}
-            </span>
-          ))}
-        </div>
-      </div>
+      <Metadata />
     </div>
   )
 }
