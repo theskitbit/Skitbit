@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { Play } from 'lucide-react'
 import type { WorkItem } from '@/lib/sanity/client'
 
 const PRELOAD_ROOT_MARGIN = '600px 0px'
@@ -9,11 +10,11 @@ export function WorkCard({ item }: { item: WorkItem }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
 
-  const [isLoaded, setIsLoaded] = useState(false) // src has been assigned
-  const [isReady, setIsReady] = useState(false)   // video can actually play (buffered)
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [isReady, setIsReady] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [isFinePointer, setIsFinePointer] = useState(false)
-  const [wantsToPlay, setWantsToPlay] = useState(false) // hover intent, even before ready
+  const [wantsToPlay, setWantsToPlay] = useState(false)
 
   const isVideo = item.type === 'animation'
 
@@ -23,7 +24,7 @@ export function WorkCard({ item }: { item: WorkItem }) {
     )
   }, [])
 
-  // Observer 1: Preload zone — load src 600px before viewport (scroll-based, passive)
+  // Observer 1: Preload zone — load src 600px before viewport
   useEffect(() => {
     if (!isVideo) return
     const el = containerRef.current
@@ -42,7 +43,7 @@ export function WorkCard({ item }: { item: WorkItem }) {
     return () => observer.disconnect()
   }, [isVideo, isLoaded])
 
-  // Observer 2: Viewport visibility — mobile autoplay, desktop pause-on-exit
+  // Observer 2: Viewport visibility — ONLY for mobile autoplay
   useEffect(() => {
     if (!isVideo) return
     const el = containerRef.current
@@ -53,12 +54,13 @@ export function WorkCard({ item }: { item: WorkItem }) {
         const video = videoRef.current
 
         if (entry.isIntersecting) {
+          // ONLY mobile gets autoplay on scroll
           if (!isFinePointer) {
-            // Mobile: force-load immediately if not already loading, then play
             if (!isLoaded) setIsLoaded(true)
             setWantsToPlay(true)
           }
         } else {
+          // Out of view: stop everything
           if (video) {
             video.pause()
             video.currentTime = 0
@@ -74,7 +76,7 @@ export function WorkCard({ item }: { item: WorkItem }) {
     return () => observer.disconnect()
   }, [isVideo, isFinePointer, isLoaded])
 
-  // Actually play once the video reports it's ready AND we still want it to play
+  // Play when ready + user wants it
   useEffect(() => {
     const video = videoRef.current
     if (!video || !wantsToPlay || !isReady) return
@@ -82,15 +84,16 @@ export function WorkCard({ item }: { item: WorkItem }) {
     video.play().then(() => setIsPlaying(true)).catch(() => {})
   }, [wantsToPlay, isReady])
 
-  // Desktop hover: instant load trigger + intent to play
+  // DESKTOP ONLY: Hover triggers play (early return on mobile)
   const handleMouseEnter = () => {
-    if (!isFinePointer) return
-    if (!isLoaded) setIsLoaded(true) // skip the 600px wait, load NOW
+    if (!isFinePointer) return // Mobile: ignore hover completely
+    if (!isLoaded) setIsLoaded(true)
     setWantsToPlay(true)
   }
 
+  // DESKTOP ONLY: Hover ends = stop video
   const handleMouseLeave = () => {
-    if (!isFinePointer) return
+    if (!isFinePointer) return // Mobile: ignore hover completely
     const video = videoRef.current
     if (video) {
       video.pause()
@@ -100,7 +103,6 @@ export function WorkCard({ item }: { item: WorkItem }) {
     setWantsToPlay(false)
   }
 
-  // Fires when enough data is buffered to play smoothly
   const handleCanPlay = () => {
     setIsReady(true)
   }
@@ -128,7 +130,7 @@ export function WorkCard({ item }: { item: WorkItem }) {
     </div>
   )
 
-  // Renders (still images) — unchanged
+  // Renders (still images)
   if (!isVideo) {
     return (
       <div className="break-inside-avoid mb-4">
@@ -158,13 +160,13 @@ export function WorkCard({ item }: { item: WorkItem }) {
     <div className="break-inside-avoid mb-4">
       <div
         ref={containerRef}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        // ONLY attach hover on desktop — mobile has no handlers
+        onMouseEnter={isFinePointer ? handleMouseEnter : undefined}
+        onMouseLeave={isFinePointer ? handleMouseLeave : undefined}
         className="relative w-full overflow-hidden rounded-lg bg-foreground/5"
         style={{ aspectRatio: '9 / 16' }}
       >
-        {/* Poster stays mounted underneath until video is actually playing —
-            this prevents any black/empty flash between states */}
+        {/* Poster background */}
         {item.posterUrl && (
           <img
             src={item.posterUrl}
@@ -176,6 +178,7 @@ export function WorkCard({ item }: { item: WorkItem }) {
           />
         )}
 
+        {/* Video */}
         {isLoaded && (
           <video
             ref={videoRef}
@@ -191,12 +194,17 @@ export function WorkCard({ item }: { item: WorkItem }) {
           />
         )}
 
-        {/* Loading feedback — only shows when user is actively waiting (hovered/in-view but not ready) */}
+        {/* Loading spinner */}
         {showSpinner && (
           <div className="absolute inset-0 flex items-center justify-center bg-foreground/10 backdrop-blur-[1px]">
             <div className="h-6 w-6 rounded-full border-2 border-background/40 border-t-background animate-spin" />
           </div>
         )}
+
+        {/* Play icon badge — ALWAYS visible on videos to signal they're interactive */}
+        <div className="absolute top-3 right-3 inline-flex items-center justify-center h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm z-10">
+          <Play className="h-4 w-4 text-foreground fill-foreground" />
+        </div>
 
         {/* Format tag overlay */}
         <div className="absolute bottom-3 left-3 inline-flex items-center rounded-full bg-foreground/90 px-3 py-1.5 text-[10px] font-semibold text-background uppercase z-10">
