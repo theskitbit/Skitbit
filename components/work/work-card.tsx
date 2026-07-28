@@ -24,7 +24,7 @@ export function WorkCard({ item }: { item: WorkItem }) {
     )
   }, [])
 
-  // Observer 1: Preload zone — load src 600px before viewport
+  // Observer 1: Preload zone — mount video 600px before viewport
   useEffect(() => {
     if (!isVideo) return
     const el = containerRef.current
@@ -51,21 +51,13 @@ export function WorkCard({ item }: { item: WorkItem }) {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const video = videoRef.current
-
         if (entry.isIntersecting) {
-          // ONLY mobile gets autoplay on scroll
           if (!isFinePointer) {
             if (!isLoaded) setIsLoaded(true)
             setWantsToPlay(true)
           }
         } else {
-          // Out of view: stop everything
-          if (video) {
-            video.pause()
-            video.currentTime = 0
-          }
-          setIsPlaying(false)
+          // Out of view: release intent to play
           setWantsToPlay(false)
         }
       },
@@ -76,30 +68,51 @@ export function WorkCard({ item }: { item: WorkItem }) {
     return () => observer.disconnect()
   }, [isVideo, isFinePointer, isLoaded])
 
-  // Play when ready + user wants it
+  // Centralized Play/Pause Manager (Prevents DOMException play/pause race conditions)
   useEffect(() => {
     const video = videoRef.current
-    if (!video || !wantsToPlay || !isReady) return
+    if (!video || !isReady) return
 
-    video.play().then(() => setIsPlaying(true)).catch(() => {})
+    let isCancelled = false
+
+    if (wantsToPlay) {
+      const playPromise = video.play()
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            // If the user scrubbed away before the promise resolved, pause it immediately
+            if (isCancelled) {
+              video.pause()
+              video.currentTime = 0
+            } else {
+              setIsPlaying(true)
+            }
+          })
+          .catch(() => {
+            setIsPlaying(false)
+          })
+      }
+    } else {
+      video.pause()
+      video.currentTime = 0
+      setIsPlaying(false)
+    }
+
+    return () => {
+      isCancelled = true
+    }
   }, [wantsToPlay, isReady])
 
-  // DESKTOP ONLY: Hover triggers play (early return on mobile)
+  // DESKTOP ONLY: Hover triggers play
   const handleMouseEnter = () => {
-    if (!isFinePointer) return // Mobile: ignore hover completely
+    if (!isFinePointer) return
     if (!isLoaded) setIsLoaded(true)
     setWantsToPlay(true)
   }
 
   // DESKTOP ONLY: Hover ends = stop video
   const handleMouseLeave = () => {
-    if (!isFinePointer) return // Mobile: ignore hover completely
-    const video = videoRef.current
-    if (video) {
-      video.pause()
-      video.currentTime = 0
-    }
-    setIsPlaying(false)
+    if (!isFinePointer) return
     setWantsToPlay(false)
   }
 
@@ -107,7 +120,6 @@ export function WorkCard({ item }: { item: WorkItem }) {
     setIsReady(true)
   }
 
-  // Metadata component
   const Metadata = () => (
     <div className="mt-3 space-y-2">
       <h2 className="text-sm font-semibold text-foreground">{item.title}</h2>
@@ -130,7 +142,6 @@ export function WorkCard({ item }: { item: WorkItem }) {
     </div>
   )
 
-  // Renders (still images)
   if (!isVideo) {
     return (
       <div className="break-inside-avoid mb-4">
@@ -153,20 +164,17 @@ export function WorkCard({ item }: { item: WorkItem }) {
     )
   }
 
-  // Animations (videos)
   const showSpinner = isVideo && wantsToPlay && !isReady
 
   return (
     <div className="break-inside-avoid mb-4">
       <div
         ref={containerRef}
-        // ONLY attach hover on desktop — mobile has no handlers
         onMouseEnter={isFinePointer ? handleMouseEnter : undefined}
         onMouseLeave={isFinePointer ? handleMouseLeave : undefined}
         className="relative w-full overflow-hidden rounded-lg bg-foreground/5"
         style={{ aspectRatio: '9 / 16' }}
       >
-        {/* Poster background */}
         {item.posterUrl && (
           <img
             src={item.posterUrl}
@@ -178,7 +186,6 @@ export function WorkCard({ item }: { item: WorkItem }) {
           />
         )}
 
-        {/* Video */}
         {isLoaded && (
           <video
             ref={videoRef}
@@ -186,7 +193,7 @@ export function WorkCard({ item }: { item: WorkItem }) {
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="auto" /* Critical change: Downloads buffer when 600px away so hover is instant */
             onCanPlay={handleCanPlay}
             className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-200 ${
               isPlaying ? 'opacity-100' : 'opacity-0'
@@ -194,19 +201,16 @@ export function WorkCard({ item }: { item: WorkItem }) {
           />
         )}
 
-        {/* Loading spinner */}
         {showSpinner && (
           <div className="absolute inset-0 flex items-center justify-center bg-foreground/10 backdrop-blur-[1px]">
             <div className="h-6 w-6 rounded-full border-2 border-background/40 border-t-background animate-spin" />
           </div>
         )}
 
-        {/* Play icon badge — ALWAYS visible on videos to signal they're interactive */}
         <div className="absolute top-3 right-3 inline-flex items-center justify-center h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm z-10">
           <Play className="h-4 w-4 text-foreground fill-foreground" />
         </div>
 
-        {/* Format tag overlay */}
         <div className="absolute bottom-3 left-3 inline-flex items-center rounded-full bg-foreground/90 px-3 py-1.5 text-[10px] font-semibold text-background uppercase z-10">
           {item.formatTag}
         </div>
