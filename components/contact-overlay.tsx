@@ -184,7 +184,7 @@ function ContactOverlay({ isOpen, onClose }: any) {
                             })}
                           </div>
                         </div>
-                        <input placeholder="Brand Name or Link *" className="w-full border-b border-black/15 bg-transparent py-4 text-lg sm:text-xl placeholder:text-slate-400 focus:border-[#0B1A28] outline-none text-[#0B1A28] transition-colors" value={data.product} onChange={(e) => setData({ ...data, product: e.target.value })} />
+                        <input placeholder="Website or Product Link *" className="w-full border-b border-black/15 bg-transparent py-4 text-lg sm:text-xl placeholder:text-slate-400 focus:border-[#0B1A28] outline-none text-[#0B1A28] transition-colors" value={data.product} onChange={(e) => setData({ ...data, product: e.target.value })} />
                       </div>
                     )}
                     {step === 3 && (
