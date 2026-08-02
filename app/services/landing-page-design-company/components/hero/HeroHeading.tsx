@@ -16,7 +16,7 @@ export function HeroHeading() {
           }}
           className="block"
         >
-          Landing pages<br className="hidden sm:inline" /> that pays itself.
+          Landing pages built<br className="hidden sm:inline" /> for paid traffic.
         </motion.span>
 
         <motion.span
@@ -29,7 +29,7 @@ export function HeroHeading() {
           }}
           className="block"
         >
-          Make more money<br className="hidden sm:inline" /> from same ad spend
+          Convert more visitors<br className="hidden sm:inline" /> without spending more.
         </motion.span>
       </h1>
     </div>
