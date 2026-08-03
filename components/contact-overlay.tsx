@@ -71,6 +71,8 @@ ${data.name}
 Contact:
 ${data.contact}`
 
+const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(messageText)}`
+
   const validateStep = () => {
     if (step === 1 && !data.category) return 'Please select a category'
     if (step === 2) {
