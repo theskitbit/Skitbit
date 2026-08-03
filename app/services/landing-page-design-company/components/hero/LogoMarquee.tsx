@@ -3,14 +3,21 @@
 import { motion } from 'framer-motion'
 
 const logos = [
-  'Acme',
-  'Tech Co',
-  'StartUp',
-  'Enterprise',
-  'Digital',
-  'Cloud',
-  'Acme',
-  'Tech Co',
+  {
+    name: 'Gruns',
+    type: 'image' as const,
+    src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/gruns%20Logo.webp',
+  },
+  {
+    name: 'Hexagon',
+    type: 'image' as const,
+    src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/hexagon_logo_new_115x.avif',
+  },
+  // TODO: replace with real logo URLs as you get them — swap type to 'image' and add src
+  { name: 'Palladio', type: 'text' as const, src: '' },
+  { name: 'Messika', type: 'text' as const, src: '' },
+  { name: 'Victorinox', type: 'text' as const, src: '' },
+  { name: 'Rimowa', type: 'text' as const, src: '' },
 ]
 
 export function LogoMarquee() {
@@ -33,53 +40,39 @@ export function LogoMarquee() {
         {/* Gradient fade on right */}
         <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
-        {/* Scrolling logos */}
+        {/* Seamless scrolling track: duplicated content, animates 0% -> -50% */}
         <motion.div
-          className="flex gap-8"
-          animate={{ x: [-500, 0] }}
+          className="flex w-max gap-8"
+          animate={{ x: ['0%', '-50%'] }}
           transition={{
             duration: 20,
             repeat: Infinity,
             ease: 'linear',
           }}
         >
-          {logos.map((logo, index) => (
+          {[...logos, ...logos].map((logo, index) => (
             <motion.div
-              key={`${logo}-${index}`}
+              key={`${logo.name}-${index}`}
               className="flex items-center gap-4 whitespace-nowrap px-4 py-2"
               whileHover={{ scale: 1.05 }}
             >
-              <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-foreground/10 text-xs font-bold text-foreground/70">
-                {logo.substring(0, 2)}
-              </div>
+              {logo.type === 'image' ? (
+                <div className="flex items-center justify-center h-12 w-auto">
+                  <img
+                    src={logo.src}
+                    alt={`${logo.name} logo`}
+                    className="h-8 w-auto object-contain"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              ) : (
+                <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-foreground/10 text-xs font-bold text-foreground/70">
+                  {logo.name.substring(0, 2)}
+                </div>
+              )}
               <span className="text-sm font-medium text-foreground/70 opacity-0 hover:opacity-100 transition-opacity">
-                {logo}
-              </span>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Duplicate for seamless loop */}
-        <motion.div
-          className="flex gap-8"
-          animate={{ x: [-500, 0] }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
-        >
-          {logos.map((logo, index) => (
-            <motion.div
-              key={`${logo}-${index}-2`}
-              className="flex items-center gap-4 whitespace-nowrap px-4 py-2"
-              whileHover={{ scale: 1.05 }}
-            >
-              <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-foreground/10 text-xs font-bold text-foreground/70">
-                {logo.substring(0, 2)}
-              </div>
-              <span className="text-sm font-medium text-foreground/70 opacity-0 hover:opacity-100 transition-opacity">
-                {logo}
+                {logo.name}
               </span>
             </motion.div>
           ))}

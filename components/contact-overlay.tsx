@@ -49,14 +49,35 @@ function ContactOverlay({ isOpen, onClose }: any) {
   const [error, setError] = useState('')
   const [data, setData] = useState({ category: '', needs: [] as string[], timeline: '', product: '', name: '', contact: '' })
 
-  const messageText = `Hi Adnan, brief for: ${data.product}\nCategory: ${data.category}\nNeeds: ${data.needs.join(', ')}\nTimeline: ${data.timeline}\n\nName: ${data.name}\nContact: ${data.contact}`
-  const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(messageText)}`
+  const messageText = `Hi Adnan,
+
+I'm interested in a Shopify landing page.
+
+Brand:
+${data.product}
+
+Industry:
+${data.category}
+
+Requirements:
+${data.needs.join(', ')}
+
+Timeline:
+${data.timeline}
+
+Name:
+${data.name}
+
+Contact:
+${data.contact}`
+
+const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(messageText)}`
 
   const validateStep = () => {
     if (step === 1 && !data.category) return 'Please select a category'
     if (step === 2) {
       if (data.needs.length === 0) return 'Select at least one requirement'
-      if (!data.product.trim()) return 'Enter your brand name or Website link'
+      if (!data.product.trim()) return 'Enter your brand name or website'
     }
     if (step === 3) {
       if (!data.timeline || !data.name.trim() || !data.contact.trim()) return 'Please complete the details'
@@ -132,7 +153,12 @@ function ContactOverlay({ isOpen, onClose }: any) {
 
   const categoryOptions = ['Health & Wellness', 'Beauty & Cosmetics', 'Fine Jewelry', 'Luxury Watches', 'Food & Beverage', 'Consumer Tech']
   const needsOptions = ['Web Images', 'Lifestyle Images', 'Ad Creatives', 'Product Videos']
-  const timelineOptions = ['ASAP', 'Within 2 weeks', 'Next month']
+  const timelineOptions = [
+'ASAP',
+'Within 2 Weeks',
+'Next Month',
+'Just Exploring'
+]
 
   return (
     <AnimatePresence>
@@ -184,7 +210,7 @@ function ContactOverlay({ isOpen, onClose }: any) {
                             })}
                           </div>
                         </div>
-                        <input placeholder="Brand Name or Link *" className="w-full border-b border-black/15 bg-transparent py-4 text-lg sm:text-xl placeholder:text-slate-400 focus:border-[#0B1A28] outline-none text-[#0B1A28] transition-colors" value={data.product} onChange={(e) => setData({ ...data, product: e.target.value })} />
+                        <input placeholder="Website or Product Link *" className="w-full border-b border-black/15 bg-transparent py-4 text-lg sm:text-xl placeholder:text-slate-400 focus:border-[#0B1A28] outline-none text-[#0B1A28] transition-colors" value={data.product} onChange={(e) => setData({ ...data, product: e.target.value })} />
                       </div>
                     )}
                     {step === 3 && (
@@ -199,8 +225,8 @@ function ContactOverlay({ isOpen, onClose }: any) {
                           ))}
                         </div>
                         <div className="space-y-2 pt-6">
-                          <input placeholder="Your Name" className="w-full border-b border-black/15 bg-transparent py-4 text-base placeholder:text-slate-400 focus:border-[#0B1A28] outline-none text-[#0B1A28] transition-colors" value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })} />
-                          <input placeholder="Email or @Instagram" className="w-full border-b border-black/15 bg-transparent py-4 text-base placeholder:text-slate-400 focus:border-[#0B1A28] outline-none text-[#0B1A28] transition-colors" value={data.contact} onChange={(e) => setData({ ...data, contact: e.target.value })} />
+                          <input placeholder="Full Name" className="w-full border-b border-black/15 bg-transparent py-4 text-base placeholder:text-slate-400 focus:border-[#0B1A28] outline-none text-[#0B1A28] transition-colors" value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })} />
+                          <input placeholder="Work Email or Brand's Instagram" className="w-full border-b border-black/15 bg-transparent py-4 text-base placeholder:text-slate-400 focus:border-[#0B1A28] outline-none text-[#0B1A28] transition-colors" value={data.contact} onChange={(e) => setData({ ...data, contact: e.target.value })} />
                         </div>
                       </div>
                     )}
@@ -209,7 +235,7 @@ function ContactOverlay({ isOpen, onClose }: any) {
               </div>
               <div className="flex flex-col sm:flex-row-reverse gap-3 shrink-0">
                 <motion.button type="button" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }} onClick={next} className="flex-1 text-[#0B1A28] font-semibold py-4 rounded-full border shadow-sm transition-opacity bg-[#D4F05A] border-[#B5CE4D]">
-                  {step === TOTAL_STEPS ? 'Initialize via WhatsApp' : 'Continue'}
+                  {step === TOTAL_STEPS ? 'Start My Project' : 'Continue'}
                 </motion.button>
                 {step > 1 && (
                   <button type="button" onClick={() => setStep((step - 1) as Step)} className="px-10 py-4 border border-black/10 text-[#0B1A28] rounded-full font-medium hover:bg-black/5 transition-colors bg-transparent">Back</button>

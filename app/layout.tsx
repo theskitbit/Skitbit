@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next' // Added import here
 import { ContactOverlayProvider } from '@/components/contact-overlay'
 import { SEOSchema } from '@/components/seo-schema'
 import { ThemeDetector } from '@/components/theme-detector'
@@ -152,6 +153,7 @@ export default function RootLayout({
         </ContactOverlayProvider>
 
         <Analytics />
+        <SpeedInsights /> {/* Added Speed Insights component here */}
         <CookieConsent />
       </body>
     </html>
