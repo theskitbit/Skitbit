@@ -132,7 +132,13 @@ function ContactOverlay({ isOpen, onClose }: any) {
 
   const categoryOptions = ['Health & Wellness', 'Beauty & Cosmetics', 'Fine Jewelry', 'Luxury Watches', 'Food & Beverage', 'Consumer Tech']
   const needsOptions = ['Web Images', 'Lifestyle Images', 'Ad Creatives', 'Product Videos']
-  const timelineOptions = ['ASAP', 'Within 2 weeks', 'Next month', 'Just Exploring']
+  const timelineOptions = [
+  'ASAP',
+  'Within 2 weeks',
+  'Next month',
+  'Just Exploring',
+]
+console.log(timelineOptions)
 
   return (
     <AnimatePresence>
