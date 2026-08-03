@@ -51,7 +51,7 @@ function ContactOverlay({ isOpen, onClose }: any) {
 
   const messageText = `Hi Adnan,
 
-We're looking for 3D creative for an upcoming campaign.
+I'm interested in a Shopify landing page.
 
 Brand:
 ${data.product}
@@ -59,7 +59,7 @@ ${data.product}
 Industry:
 ${data.category}
 
-Deliverables:
+Requirements:
 ${data.needs.join(', ')}
 
 Timeline:
