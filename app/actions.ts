@@ -31,17 +31,14 @@ export async function saveFormToAirtable(data: LeadData) {
 
   const body = {
     fields: {
-      Name: data.name,
-      'Contact Info': data.contact,
-      Brand: data.product,
-      Industry: data.category,
-
-      // ✅ Multiple Select field
-      Needs: data.needs,
-
-      Timeline: data.timeline,
-      Status: 'New',
-    },
+  Name: data.name,
+  Contact: data.contact,
+  Product: data.product,
+  Category: data.category,
+  Needs: data.needs,
+  Timeline: data.timeline,
+  Status: 'New',
+},
   }
 
   console.log('📤 Sending record to Airtable...')
