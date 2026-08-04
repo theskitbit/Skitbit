@@ -65,8 +65,8 @@ export default function Home() {
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Product",
-          name: "3D Product Animation Company | Photoreal CGI | Skitbit",
-          description: "High-end 3D product rendering and ad creatives for DTC brands to improve CTR, ROAS, and conversions.",
+          name: "3D Product Animation Agency for D2C Brands | Skitbit",
+          description: "For Brand Managers & Creative Leads: High-converting 3D CGI product videos & photorealistic renders. Zero shipping required. View showreel & get a quote!",
           brand: {
             "@type": "Brand",
             name: "Skitbit"
