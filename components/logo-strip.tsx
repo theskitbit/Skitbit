@@ -47,9 +47,10 @@ const logos = [
   },
 ];
 
+
 function LogoMark({ label, src }: { label: string; src: string }) {
   return (
-    <div className="group flex shrink-0 items-center px-7 py-5 grayscale opacity-45 transition-all duration-300 hover:grayscale-0 hover:opacity-90">
+    <div className="group flex shrink-0 items-center px-7 py-5 opacity-100 transition-all duration-300 sm:grayscale sm:opacity-45 sm:hover:grayscale-0 sm:hover:opacity-90">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={src}
@@ -74,6 +75,10 @@ export function LogoStrip() {
           to { transform: translateX(-50%); }
         }
         .skitbit-logo-marquee { animation: skitbit-logo-marquee 40s linear infinite; }
+        /* Mobile: 25% faster than desktop (40s / 1.25 = 32s) */
+        @media (max-width: 639px) {
+          .skitbit-logo-marquee { animation-duration: 32s; }
+        }
         @media (prefers-reduced-motion: reduce) {
           .skitbit-logo-marquee { animation: none !important; }
         }
