@@ -23,7 +23,7 @@ const logos = [
   },
   {
     label: 'Supliful',
-    src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/supliful-logo.png',
+    src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/supliful-logo',
   },
   {
     label: 'SKINNY.rx',
