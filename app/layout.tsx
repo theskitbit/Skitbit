@@ -1,66 +1,44 @@
 import type { Metadata, Viewport } from 'next'
-import Script from 'next/script'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
-import { SpeedInsights } from '@vercel/speed-insights/next' // Added import here
 import { ContactOverlayProvider } from '@/components/contact-overlay'
 import { SEOSchema } from '@/components/seo-schema'
 import { ThemeDetector } from '@/components/theme-detector'
-import { CookieConsent } from '@/components/cookie-consent'
+import Script from 'next/script'
 import './globals.css'
 
-const geist = Geist({ subsets: ["latin"] });
-const geistMono = Geist_Mono({ subsets: ["latin"] });
+const _geist = Geist({ subsets: ["latin"] });
+const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
-const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-NFLHXXGK'
-
+// 1. Metadata Object
 export const metadata: Metadata = {
   metadataBase: new URL('https://theskitbit.com'),
-  title: '3D Product Animation Company | Photoreal CGI | Skitbit',
-  description:
-  'Photoreal 3D product animation, CGI and product rendering for ecommerce brands. Create high-converting visuals that drive clicks, sales and product launches.',
+  title: '3D Product Rendering for E-commerce Brands | No Photoshoots Needed',
+  description: 'High-end 3D product visuals designed for performance. Create consistent creatives across ads, PDPs, and social—without production delays.',
   generator: 'Skitbit International',
-  keywords: [
-  '3D Product Animation',
-  '3D Product Animation Company',
-  '3D Product Animation Studio',
-  '3D Product Rendering',
-  '3D Product Video Agency',
-  'CGI Product Animation',
-  'CGI Product Rendering',
-  'Photoreal CGI',
-  'Product Visualization',
-  'Ecommerce Product Animation',
-  'Beauty Product Animation',
-  'Cosmetic Product Rendering',
-  'Luxury Product Rendering',
-  'Product Launch Animation',
-  '3D Rendering Company',
-],
+  keywords: ['3D product rendering', 'e-commerce product visuals', 'product photography alternative', 'CGI product images', 'digital product rendering', 'ad creatives', 'product visualization'],
   authors: [{ name: 'Skitbit International' }],
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://theskitbit.com',
-    title: '3D Product Animation Company | Photoreal CGI | Skitbit',
-    description:
-  'Photoreal 3D product animation, CGI and product rendering for ecommerce brands. Create high-converting visuals that drive clicks, sales and product launches.',
+    title: '3D Product Rendering for E-commerce Brands | No Photoshoots Needed',
+    description: 'High-end 3D product visuals designed for performance. Create consistent creatives across ads, PDPs, and social—without production delays.',
     images: [
       {
         url: '/skien.jpg',
         width: 1200,
         height: 630,
-        alt: 'Skitbit 3D Product Rendering',
+        alt: 'SKITBIT 3D Product Rendering',
       },
     ],
-    siteName: 'Skitbit',
+    siteName: 'SKITBIT',
   },
   twitter: {
     card: 'summary_large_image',
-    title: '3D Product Animation Company | Photoreal CGI | Skitbit',
-    description:
-  'Photoreal 3D product animation, CGI and product rendering for ecommerce brands. Create high-converting visuals that drive clicks, sales and product launches.',
-    creator: '@theskitbit',
+    title: '3D Product Rendering for E-commerce Brands | No Photoshoots Needed',
+    description: 'High-end 3D product visuals designed for performance.',
+    creator: '@skitbit',
     images: ['/skien.jpg'],
   },
   robots: {
@@ -83,10 +61,11 @@ export const metadata: Metadata = {
     apple: '/apple-icon.png',
   },
   alternates: {
-    canonical: '/',
+    canonical: 'https://theskitbit.com',
   },
 }
 
+// 2. Separate Viewport Export (Required in Next.js 15+)
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
@@ -106,55 +85,66 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* We keep the head clean. Next.js handles script injection automatically. */}
+        {/* Unified Tracking Script: Meta Pixel + Google Ads */}
+        <Script
+          id="tracking-scripts"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                // --- Meta Pixel ---
+                !function(f,b,e,v,n,t,s)
+                {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                n.queue=[];t=b.createElement(e);t.async=!0;
+                t.src=v;
+                b.head.appendChild(t);
+                }(window, document,'script',
+                'https://connect.facebook.net/en_US/fbevents.js');
+                
+                fbq('set', 'autoConfig', false, '936091006015773'); 
+                fbq('init', '936091006015773');
+                fbq('track', 'PageView');
+
+                // --- Google Tag (gtag.js) ---
+                const script = document.createElement('script');
+                script.async = true;
+                script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-10791428257';
+                document.head.appendChild(script);
+
+                window.dataLayer = window.dataLayer || [];
+                window.gtag = function(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'AW-10791428257');
+
+              } catch(e) {
+                console.warn('Tracking initialization warning:', e.message);
+              }
+            `,
+          }}
+        />
       </head>
       <body className="font-sans antialiased">
-        {/* GOOGLE TAG MANAGER */}
-        <Script id="gtm-script" strategy="afterInteractive">
-          {`
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','${GTM_ID}');
-          `}
-        </Script>
-
-        {/* GOOGLE ADS BASE TAG */}
-        <Script
-          id="google-ads-base"
-          strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtag/js?id=AW-10791428257`}
-        />
-        
-        {/* GOOGLE ADS CONFIGURATION */}
-        <Script id="google-ads-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'AW-10791428257');
-          `}
-        </Script>
-
-        <noscript>
-          <iframe
-            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
-            height="0"
-            width="0"
-            style={{ display: 'none', visibility: 'hidden' }}
-          />
-        </noscript>
-        
+        {/* Render Schema at the top of the body for best crawlability */}
         <SEOSchema />
+
         <ThemeDetector />
         <ContactOverlayProvider>
           {children}
         </ContactOverlayProvider>
 
         <Analytics />
-        <SpeedInsights /> {/* Added Speed Insights component here */}
-        <CookieConsent />
+
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: 'none' }}
+            src="https://www.facebook.com/tr?id=936091006015773&ev=PageView&noscript=1"
+            alt="fb-pixel"
+          />
+        </noscript>
       </body>
     </html>
   )

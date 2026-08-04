@@ -38,18 +38,18 @@ export function AboutEvent() {
     <section id="about" className="py-0 bg-background" ref={ref}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8 space-y-4">
 
-        {/* ── Row 1: Yellow banner (HIDDEN ON MOBILE) ── */}
-        <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch rounded-3xl overflow-hidden">
+        {/* ── Row 1: Yellow banner ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch rounded-3xl overflow-hidden">
 
           {/* Left – text */}
           <div className="bg-primary p-10 lg:p-14 flex flex-col justify-between min-h-[320px]">
             <div>
-              <h2 className="inline-block text-xs font-medium text-primary-foreground border border-primary-foreground/40 rounded-full px-3 py-1 mb-6 m-0">
-                High-Performing Ad Creatives
-              </h2>
-              <p className="text-4xl lg:text-[2.55rem] font-bold tracking-tight leading-[1.15] text-primary-foreground m-0">
+              <span className="inline-block text-xs font-medium text-primary-foreground border border-primary-foreground/40 rounded-full px-3 py-1 mb-6">
+                From Ignored Creatives to Scroll-Stopping Ads
+              </span>
+              <h2 className="text-4xl lg:text-[2.55rem] font-bold tracking-tight leading-[1.15] text-primary-foreground">
                 Turn underperforming product visuals into high-converting creatives that drive clicks and sales.
-              </p>
+              </h2>
             </div>
             <div className="mt-8">
               <button onClick={open} className="bg-primary-foreground text-primary font-semibold text-sm px-6 py-3 rounded-full hover:opacity-90 hover:-translate-y-0.5 hover:shadow-md active:scale-95 transition-all duration-200">
@@ -65,8 +65,7 @@ export function AboutEvent() {
                 }`}
             >
               <Image
-                // FIX 1: Changed to lowercase 'b'. Make sure your actual file is named 'before.webp'
-                src="/images/before.webp" 
+                src="/images/Before.webp" // FIXED
                 alt="3D PRODUCT RENDER"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -86,7 +85,6 @@ export function AboutEvent() {
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
-                unoptimized // FIX 2: Bypasses the optimizer error for Blob storage
               />
             </div>
           </div>
@@ -95,9 +93,9 @@ export function AboutEvent() {
         {/* ── Row 2 ── */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
-          {/* Dark card (HIDDEN ON MOBILE) */}
-          <div className="hidden md:flex bg-foreground rounded-3xl p-8 flex-col justify-between overflow-hidden">
-            <p className="text-white text-xl font-bold leading-snug max-w-sm m-0">
+          {/* Dark card */}
+          <div className="bg-foreground rounded-3xl p-8 flex flex-col justify-between overflow-hidden">
+            <p className="text-white text-xl font-bold leading-snug max-w-sm">
               Designed to increase engagement, improve click-through rates, and drive conversions across paid ads and PDPs.
             </p>
 
@@ -108,7 +106,6 @@ export function AboutEvent() {
                 fill
                 sizes="100vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
-                unoptimized // FIX 2: Bypasses the optimizer error for the file with a space in the name
               />
 
               <span className="absolute bottom-16 left-4 bg-foreground text-white text-sm font-semibold px-4 py-2 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-default">
@@ -123,23 +120,23 @@ export function AboutEvent() {
             </div>
           </div>
 
-          {/* CTA card (STAYS VISIBLE ON MOBILE) */}
+          {/* CTA card */}
           <div className="bg-primary rounded-3xl p-8 lg:p-10 flex flex-col justify-between min-h-[360px]">
             <div>
-              <h3 className="text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-primary-foreground mb-4 m-0">
+              <h2 className="text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-primary-foreground mb-4">
                 Start Fast –<br />Sell faster.
-              </h3>
-              <p className="text-primary-foreground/80 text-sm leading-relaxed max-w-xs m-0 mt-4">
+              </h2>
+              <p className="text-primary-foreground/80 text-sm leading-relaxed max-w-xs">
                 Go from product to conversion-ready creatives in days, not weeks.
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-8 gap-6 sm:gap-0">
-              <button onClick={open} className="bg-foreground text-white font-semibold text-sm px-6 py-3 rounded-full hover:opacity-90 hover:shadow-lg hover:scale-105 transition-all duration-200 active:scale-95">
+            <div className="flex items-center justify-between mt-8">
+              <button onClick={open} className="bg-foreground text-white font-semibold text-sm px-5 py-3 rounded-full hover:opacity-90 hover:shadow-lg hover:scale-105 transition-all duration-200 active:scale-95">
                 Start now!
               </button>
 
-              <div className="flex items-center -space-x-3 pl-2 sm:pl-0">
+              <div className="flex items-center -space-x-3">
                 {[
                   'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/avatar-1-aiD8IySOPrg7hJ0AIVftIYR5lTbyAK.png',
                   'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/avatar-2-nRbzEiUGuaM0mZixvKVBgF1kGgC4Bo.png',
@@ -164,6 +161,7 @@ export function AboutEvent() {
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>

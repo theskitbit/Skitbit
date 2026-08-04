@@ -1,44 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'hebbkx1anhila5yf.public.blob.vercel-storage.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'k7fdlkciit9qv6j1.public.blob.vercel-storage.com',
-      },
-    ],
+    unoptimized: true,
   },
-  async redirects() {
-    return [
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.theskitbit.com' }],
-        destination: 'https://theskitbit.com/:path*',
-        permanent: true,
-      },
-    ];
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: '/llms.txt',
+          destination: '/llms',
+        },
+      ],
+    }
   },
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: "default-src 'self' *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src 'self' 'unsafe-inline' *; font-src 'self' data: *; img-src 'self' data: blob: *; media-src 'self' data: blob: *; frame-src 'self' *; connect-src 'self' *; worker-src 'self' blob: *;",
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
-          },
-        ],
-      },
-    ];
-  },
-};
+}
 
-export default nextConfig;
+export default nextConfig

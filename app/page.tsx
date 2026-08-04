@@ -1,11 +1,13 @@
+'use client'
+
 import Script from "next/script";
 
 import { Header } from '@/components/header'
+import { Breadcrumbs } from '@/components/breadcrumbs'
 import { Hero } from '@/components/hero'
 import { LogoStrip } from '@/components/logo-strip'
-import { FireworkWidget } from '@/components/firework-widget'
-import { ProductShowcase } from '@/components/product-showcase'
 import { AboutEvent } from '@/components/about-event'
+import { Advantages } from '@/components/advantages'
 import { WhatWeOffer } from '@/components/what-we-offer'
 import { Testimonials } from '@/components/testimonials'
 import { CTA } from '@/components/cta'
@@ -15,57 +17,30 @@ export default function Home() {
   return (
     <main className="bg-background text-foreground">
 
-      {/* 🔥 ORGANIZATION & AUTHORITY MAPPING */}
+      {/* 🔥 ORGANIZATION */}
       <Script id="org-schema" type="application/ld+json" strategy="afterInteractive">
         {JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "ProfessionalService",
+          "@type": "Organization",
           name: "Skitbit",
-          alternateName: [
-            "Skitbit International", 
-            "Skitbit International Agency", 
-            "Skitbit website", 
-            "Skitbit agency",
-            "Skitbit agency uk",
-            "Skitbit agency delhi",
-            "Skitbit agency london",
-            "Skitbit agency dubai",
-            "Skitbit agency mumbai",
-            "Skitbit agency bangkok",
-            "Skitbit agency singapore",
-          ],
+          alternateName: "Skitbit International",
           url: "https://theskitbit.com/",
           logo: "https://theskitbit.com/images/Black-icon.svg",
-          description: "Skitbit International is the premier agency for high-converting 3D product visuals and D2C brand scaling systems.",
           sameAs: [
             "https://www.instagram.com/theskitbit/",
             "https://uk.linkedin.com/company/theskitbit",
             "https://www.youtube.com/@skitbitinternational",
             "https://www.facebook.com/theskitbit/"
-          ],
-          address: {
-            "@type": "PostalAddress",
-            addressLocality: "Mumbai",
-            addressCountry: "IN"
-          },
-          priceRange: "$$$",
-          hasOfferCatalog: {
-            "@type": "OfferCatalog",
-            name: "3D Rendering and 3D Animation",
-            itemListElement: [
-              { "@type": "Offer", itemOffered: { "@type": "Service", name: "3D Product Animation" } },
-              { "@type": "Offer", itemOffered: { "@type": "Service", name: "3d Product Rendering" } }
-            ]
-          }
+          ]
         })}
       </Script>
 
-      {/* 🔥 PRODUCT */}
+      {/* 🔥 PRODUCT (FIXED — NO ERRORS) */}
       <Script id="product-schema" type="application/ld+json" strategy="afterInteractive">
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Product",
-          name: "3D Product Animation Company | Photoreal CGI | Skitbit",
+          name: "3D Product Rendering for E-commerce",
           description: "High-end 3D product rendering and ad creatives for DTC brands to improve CTR, ROAS, and conversions.",
           brand: {
             "@type": "Brand",
@@ -93,7 +68,7 @@ export default function Home() {
               name: "What kind of brands do you work with?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "We work with D2C brands doing $100k+ per month, primarily in wellness, beauty, and e-commerce."
+                text: "We work with DTC brands doing $100k+ per month, primarily in wellness, beauty, and e-commerce."
               }
             },
             {
@@ -125,11 +100,18 @@ export default function Home() {
       </Script>
 
       <Header />
+      <Breadcrumbs />
       <Hero />
+
+      <section className="px-6 py-4 text-center max-w-3xl mx-auto">
+        <p className="text-sm md:text-base text-muted-foreground">
+          Skitbit International provides 3D product rendering, ad creatives, and e-commerce visual solutions for D2C brands globally, helping improve CTR, ROAS, and conversions.
+        </p>
+      </section>
+
       <LogoStrip />
-      <FireworkWidget />
       <AboutEvent />
-      <ProductShowcase />
+      <Advantages />
       <WhatWeOffer />
       <Testimonials />
       <CTA />
