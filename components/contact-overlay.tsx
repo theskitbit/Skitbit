@@ -154,10 +154,10 @@ const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(messag
   const categoryOptions = ['Health & Wellness', 'Beauty & Cosmetics', 'Fine Jewelry', 'Luxury Watches', 'Food & Beverage', 'Consumer Tech']
   const needsOptions = ['Web Images', 'Lifestyle Images', 'Ad Creatives', 'Product Videos']
   const timelineOptions = [
-'ASAP',
-'Within 2 Weeks',
-'Next Month',
-'Just Exploring'
+  'ASAP',
+  'Within 2 weeks',
+  'Next month',
+  'Just Exploring'
 ]
 
   return (
