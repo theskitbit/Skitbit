@@ -16,9 +16,9 @@ const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-NFLHXXGK'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://theskitbit.com'),
-  title: '3D Product Animation Company | Photoreal CGI | Skitbit',
+  title: '3D Product Animation Agency for D2C Brands | Skitbit',
   description:
-  'Photoreal 3D product animation, CGI and product rendering for ecommerce brands. Create high-converting visuals that drive clicks, sales and product launches.',
+  'For Brand Managers & Creative Leads: High-converting 3D CGI product videos & photorealistic renders. Zero shipping required. View showreel & get a quote!',
   generator: 'Skitbit International',
   keywords: [
   '3D Product Animation',
