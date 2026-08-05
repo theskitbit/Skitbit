@@ -15,28 +15,21 @@ export default function Home() {
   return (
     <main className="bg-background text-foreground">
 
-      {/* 🔥 ORGANIZATION & AUTHORITY MAPPING */}
+      {/* 🔥 ORGANIZATION, AUTHORITY & LEADERSHIP MAPPING */}
       <Script id="org-schema" type="application/ld+json" strategy="afterInteractive">
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "ProfessionalService",
           name: "Skitbit",
-          alternateName: [
-            "Skitbit International", 
-            "Skitbit International Agency", 
-            "Skitbit website", 
-            "Skitbit agency",
-            "Skitbit agency uk",
-            "Skitbit agency delhi",
-            "Skitbit agency london",
-            "Skitbit agency dubai",
-            "Skitbit agency mumbai",
-            "Skitbit agency bangkok",
-            "Skitbit agency singapore",
-          ],
+          alternateName: ["Skitbit International"],
           url: "https://theskitbit.com/",
           logo: "https://theskitbit.com/images/Black-icon.svg",
-          description: "Skitbit International is the premier agency for high-converting 3D product visuals and D2C brand scaling systems.",
+          description: "Skitbit International is the premier agency for high-converting 3D product visuals, CGI rendering, and D2C brand scaling systems.",
+          founder: {
+            "@type": "Person",
+            name: "Adnan Akhtar",
+            jobTitle: "Head of Brand & Creative"
+          },
           sameAs: [
             "https://www.instagram.com/theskitbit/",
             "https://uk.linkedin.com/company/theskitbit",
@@ -48,25 +41,36 @@ export default function Home() {
             addressLocality: "Mumbai",
             addressCountry: "IN"
           },
+          areaServed: [
+            { "@type": "Country", name: "United States" },
+            { "@type": "Country", name: "United Kingdom" },
+            { "@type": "Country", name: "United Arab Emirates" },
+            { "@type": "City", name: "London" },
+            { "@type": "City", name: "Dubai" },
+            { "@type": "City", name: "Mumbai" },
+            { "@type": "City", name: "Delhi" },
+            { "@type": "City", name: "Bangkok" },
+            { "@type": "City", name: "Singapore" }
+          ],
           priceRange: "$$$",
           hasOfferCatalog: {
             "@type": "OfferCatalog",
             name: "3D Rendering and 3D Animation",
             itemListElement: [
               { "@type": "Offer", itemOffered: { "@type": "Service", name: "3D Product Animation" } },
-              { "@type": "Offer", itemOffered: { "@type": "Service", name: "3d Product Rendering" } }
+              { "@type": "Offer", itemOffered: { "@type": "Service", name: "3D Product Rendering" } }
             ]
           }
         })}
       </Script>
 
-      {/* 🔥 PRODUCT */}
+      {/* 🔥 PRODUCT & PRICING */}
       <Script id="product-schema" type="application/ld+json" strategy="afterInteractive">
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Product",
           name: "3D Product Animation Agency for D2C Brands | Skitbit",
-          description: "For Brand Managers & Creative Leads: High-converting 3D CGI product videos & photorealistic renders. Zero shipping required. View showreel & get a quote!",
+          description: "High-converting 3D CGI product videos & photorealistic renders for cosmetics, skincare, wellness, watches & luxury brands.",
           brand: {
             "@type": "Brand",
             name: "Skitbit"
@@ -74,15 +78,15 @@ export default function Home() {
           offers: {
             "@type": "AggregateOffer",
             priceCurrency: "USD",
-            lowPrice: 120,
-            highPrice: 950,
-            offerCount: 4,
+            lowPrice: 299,
+            highPrice: 2049,
+            offerCount: 3,
             availability: "https://schema.org/InStock"
           }
         })}
       </Script>
 
-      {/* 🔥 FAQ */}
+      {/* 🔥 FAQ STRATEGY ALIGNMENT */}
       <Script id="faq-schema" type="application/ld+json" strategy="afterInteractive">
         {JSON.stringify({
           "@context": "https://schema.org",
@@ -93,7 +97,7 @@ export default function Home() {
               name: "What kind of brands do you work with?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "We work with D2C brands doing $100k+ per month, primarily in wellness, beauty, and e-commerce."
+                text: "We strictly partner with premium D2C brands, primarily in the cosmetics, skincare, wellness, supplements, watches, and jewelry sectors."
               }
             },
             {
@@ -101,15 +105,15 @@ export default function Home() {
               name: "What do you actually do?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "We handle 3D rendering, ad creatives, UGC coordination, and Meta ads scaling systems."
+                text: "We provide end-to-end 3D product animation, CGI rendering, and visual strategy, eliminating the friction and cost of traditional physical photoshoots."
               }
             },
             {
               "@type": "Question",
-              name: "How are you different from other agencies?",
+              name: "How are you different from other 3D studios?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "We focus on creative systems and high-volume testing instead of just media buying."
+                text: "We do not just execute technical renders. Our work is directed by a Head of Brand & Creative, ensuring all assets are structurally engineered for higher click-through rates and Shopify conversions."
               }
             },
             {
@@ -117,7 +121,7 @@ export default function Home() {
               name: "What does success look like in 90 days?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "A repeatable Meta system with consistent creatives, structured testing, and predictable scaling."
+                text: "A complete, high-fidelity visual system containing Hyper-realistic launch videos and photorealistic renders that elevate brand perception and lower customer acquisition costs."
               }
             }
           ]
