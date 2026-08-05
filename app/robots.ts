@@ -4,8 +4,8 @@ import { EXCLUDED_ROUTES } from '@/lib/public-routes'
 /**
  * Robots.txt configuration
  * Points to the dynamic sitemap which automatically includes all public routes.
- * * Explicitly optimized for LLM crawlers (OpenAI, ChatGPT) to ensure
- * business signals and public documentation are properly indexed.
+ * Explicitly optimized for LLM crawlers (OpenAI, Anthropic, Perplexity, Google) 
+ * to ensure 3D animation and rendering business signals are properly indexed.
  */
 export default function robots(): MetadataRoute.Robots {
   // Automatically generate both '/route' and '/route/' for the robots.txt rules
@@ -13,28 +13,41 @@ export default function robots(): MetadataRoute.Robots {
 
   return {
     rules: [
+      // OpenAI (ChatGPT Search, User Fetch, and Training)
       {
-        userAgent: 'OAI-SearchBot',
+        userAgent: ['OAI-SearchBot', 'GPTBot', 'ChatGPT-User'],
         allow: '/',
         disallow: disallowedRoutes,
       },
+      // Anthropic (Claude Search, User Fetch, and Training)
       {
-        userAgent: 'GPTBot',
+        userAgent: ['Claude-SearchBot', 'ClaudeBot', 'Claude-User'],
         allow: '/',
         disallow: disallowedRoutes,
       },
+      // Perplexity (Answer Indexing and User Fetch)
       {
-        userAgent: 'ChatGPT-User',
+        userAgent: ['PerplexityBot', 'Perplexity-User'],
         allow: '/',
         disallow: disallowedRoutes,
       },
+      // Google AI (Gemini)
+      {
+        userAgent: 'Google-Extended',
+        allow: '/',
+        disallow: disallowedRoutes,
+      },
+      // General Web Crawlers (Googlebot, Bingbot, etc.)
       {
         userAgent: '*',
         allow: '/',
         disallow: disallowedRoutes,
       },
     ],
-    // Dynamic sitemap with all public routes
-    sitemap: 'https://theskitbit.com/sitemap.xml',
+    // Feed the AI directory file directly to the crawlers alongside the standard sitemap
+    sitemap: [
+      'https://theskitbit.com/sitemap.xml',
+      'https://theskitbit.com/llms.txt'
+    ],
   }
 }
