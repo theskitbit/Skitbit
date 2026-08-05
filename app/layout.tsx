@@ -2,64 +2,71 @@ import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
-import { SpeedInsights } from '@vercel/speed-insights/next' // Added import here
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { ContactOverlayProvider } from '@/components/contact-overlay'
 import { SEOSchema } from '@/components/seo-schema'
 import { ThemeDetector } from '@/components/theme-detector'
 import { CookieConsent } from '@/components/cookie-consent'
 import './globals.css'
 
-const geist = Geist({ subsets: ["latin"] });
-const geistMono = Geist_Mono({ subsets: ["latin"] });
+// Configure fonts with CSS variable names for seamless global CSS integration
+const geist = Geist({ 
+  subsets: ["latin"],
+  variable: "--font-geist-sans",
+});
+
+const geistMono = Geist_Mono({ 
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+});
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-NFLHXXGK'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://theskitbit.com'),
-  title: '3D Product Animation Agency for D2C Brands | Skitbit',
+  title: '3D Product Animation & CGI Rendering Agency | Skitbit',
   description:
-  'For Brand Managers & Creative Leads: High-converting 3D CGI product videos & photorealistic renders. Zero shipping required. View showreel & get a quote!',
+    'High-converting 3D CGI product videos & photorealistic renders for cosmetics, skincare, wellness, watches & luxury brands. Trusted by 200+ global brands. Get a quote!',
   generator: 'Skitbit International',
   keywords: [
-  '3D Product Animation',
-  '3D Product Animation Company',
-  '3D Product Animation Studio',
-  '3D Product Rendering',
-  '3D Product Video Agency',
-  'CGI Product Animation',
-  'CGI Product Rendering',
-  'Photoreal CGI',
-  'Product Visualization',
-  'Ecommerce Product Animation',
-  'Beauty Product Animation',
-  'Cosmetic Product Rendering',
-  'Luxury Product Rendering',
-  'Product Launch Animation',
-  '3D Rendering Company',
-],
+    '3D Product Animation',
+    '3D Product Animation Company',
+    '3D Product Animation Studio',
+    '3D Product Rendering Agency',
+    '3D Product Video Agency',
+    'CGI Product Animation',
+    'CGI Product Rendering',
+    'Photoreal CGI Studio',
+    'Ecommerce Product Visuals',
+    'Beauty Product Animation',
+    'Cosmetic Product Rendering',
+    'Luxury Watch Rendering',
+    '3D Product Animation Agency Mumbai',
+    '3D Product Animation Agency US',
+  ],
   authors: [{ name: 'Skitbit International' }],
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://theskitbit.com',
-    title: '3D Product Animation Agency for D2C Brands | Skitbit',
+    title: '3D Product Animation & CGI Rendering Agency | Skitbit',
     description:
-  'For Brand Managers & Creative Leads: High-converting 3D CGI product videos & photorealistic renders. Zero shipping required. View showreel & get a quote!',
+      'High-converting 3D CGI product videos & photorealistic renders for cosmetics, skincare, wellness, watches & luxury brands. Zero shipping required.',
     images: [
       {
         url: '/skien.jpg',
         width: 1200,
         height: 630,
-        alt: 'Skitbit 3D Product Rendering',
+        alt: 'Skitbit 3D Product Rendering Studio',
       },
     ],
-    siteName: 'Skitbit',
+    siteName: 'Skitbit International',
   },
   twitter: {
     card: 'summary_large_image',
-    title: '3D Product Animation Company | Photoreal CGI | Skitbit',
+    title: '3D Product Animation & CGI Studio | Skitbit',
     description:
-  'Photoreal 3D product animation, CGI and product rendering for ecommerce brands. Create high-converting visuals that drive clicks, sales and product launches.',
+      'Photoreal 3D product animation, CGI and rendering for e-commerce, beauty, and luxury brands worldwide.',
     creator: '@theskitbit',
     images: ['/skien.jpg'],
   },
@@ -84,6 +91,16 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: '/',
+    languages: {
+      'en-IN': '/in',
+      'en-US': '/us',
+      'en-GB': '/uk',
+      'en-AE': '/ae',
+      'en-CA': '/ca',
+      'en-AU': '/au',
+      'en-DE': '/de',
+      'en-FR': '/fr',
+    },
   },
 }
 
@@ -104,11 +121,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
       <head>
-        {/* We keep the head clean. Next.js handles script injection automatically. */}
+        {/* Next.js automatically injects metadata and font preload links here */}
       </head>
-      <body className="font-sans antialiased">
+      <body className={`${geist.className} font-sans antialiased`}>
         {/* GOOGLE TAG MANAGER */}
         <Script id="gtm-script" strategy="afterInteractive">
           {`
@@ -124,7 +141,7 @@ export default function RootLayout({
         <Script
           id="google-ads-base"
           strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtag/js?id=AW-10791428257`}
+          src="https://www.googletagmanager.com/gtag/js?id=AW-10791428257"
         />
         
         {/* GOOGLE ADS CONFIGURATION */}
@@ -153,7 +170,7 @@ export default function RootLayout({
         </ContactOverlayProvider>
 
         <Analytics />
-        <SpeedInsights /> {/* Added Speed Insights component here */}
+        <SpeedInsights />
         <CookieConsent />
       </body>
     </html>
