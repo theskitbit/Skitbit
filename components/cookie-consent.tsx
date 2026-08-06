@@ -61,20 +61,34 @@ export function CookieConsent() {
       */}
       {hasConsent && (
         <>
+          {/* Base Google Tag Library */}
           <Script
             id="google-tag-manager"
             strategy="afterInteractive"
-            src="https://www.googletagmanager.com/gtag/js?id=AW-10791428257"
+            src="https://www.googletagmanager.com/gtag/js?id=G-3K1XLE2F7M"
           />
           <Script
             id="tracking-scripts"
             strategy="afterInteractive"
             dangerouslySetInnerHTML={{
               __html: `
-                // Initialize Google Ads
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
+                
+                // Explicitly tell Google that consent WAS granted to clear dashboard warnings
+                gtag('consent', 'default', {
+                  'ad_storage': 'granted',
+                  'ad_user_data': 'granted',
+                  'ad_personalization': 'granted',
+                  'analytics_storage': 'granted'
+                });
+
                 gtag('js', new Date());
+                
+                // Initialize GA4
+                gtag('config', 'G-3K1XLE2F7M');
+                
+                // Initialize Google Ads
                 gtag('config', 'AW-10791428257');
 
                 // Initialize Meta Pixel
