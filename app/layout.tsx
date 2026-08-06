@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://theskitbit.com'),
   title: '3D Product Animation & CGI Rendering Agency | Skitbit',
   description:
-    'High-converting 3D CGI product videos & photorealistic renders for cosmetics, skincare, wellness, watches & luxury brands. Trusted by 200+ global brands. Get a quote!',
+    'High-converting 3D CGI product videos & renders for cosmetics, skincare, wellness & luxury brands. Trusted by 200+ global brands. Get a quote!',
   generator: 'Skitbit International',
   keywords: [
     '3D Product Animation',
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     url: 'https://theskitbit.com',
     title: '3D Product Animation & CGI Rendering Agency | Skitbit',
     description:
-      'High-converting 3D CGI product videos & photorealistic renders for cosmetics, skincare, wellness, watches & luxury brands. Zero shipping required.',
+      'High-converting 3D CGI product videos & renders for cosmetics, skincare, wellness & luxury brands. Trusted by 200+ global brands. Get a quote!',
     images: [
       {
         url: '/skien.jpg',
@@ -90,7 +90,7 @@ export const metadata: Metadata = {
     apple: '/apple-icon.png',
   },
   alternates: {
-    canonical: '/',
+    canonical: 'https://theskitbit.com',
     languages: {
       'en-IN': '/in',
       'en-US': '/us',
