@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://theskitbit.com'),
   title: '3D Product Animation & CGI Rendering Agency | Skitbit',
   description:
-    'High-converting 3D CGI product videos & photorealistic renders for cosmetics, skincare, wellness, watches & luxury brands. Trusted by 200+ global brands. Get a quote!',
+    'High-converting 3D CGI product videos & renders for cosmetics, skincare, wellness & luxury brands. Trusted by 200+ global brands. Get a quote!',
   generator: 'Skitbit International',
   keywords: [
     '3D Product Animation',
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     url: 'https://theskitbit.com',
     title: '3D Product Animation & CGI Rendering Agency | Skitbit',
     description:
-      'High-converting 3D CGI product videos & photorealistic renders for cosmetics, skincare, wellness, watches & luxury brands. Zero shipping required.',
+      'High-converting 3D CGI product videos & renders for cosmetics, skincare, wellness & luxury brands. Trusted by 200+ global brands. Get a quote!',
     images: [
       {
         url: '/skien.jpg',
@@ -90,7 +90,7 @@ export const metadata: Metadata = {
     apple: '/apple-icon.png',
   },
   alternates: {
-    canonical: '/',
+    canonical: 'https://theskitbit.com',
     languages: {
       'en-IN': '/in',
       'en-US': '/us',
@@ -137,19 +137,24 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* GOOGLE ADS BASE TAG */}
+        {/* UNIFIED GOOGLE BASE SCRIPT (Loads library for both GA4 & Ads) */}
         <Script
-          id="google-ads-base"
+          id="google-gtag-base"
           strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=AW-10791428257"
+          src="https://www.googletagmanager.com/gtag/js?id=G-3K1XLE2F7M"
         />
         
-        {/* GOOGLE ADS CONFIGURATION */}
-        <Script id="google-ads-init" strategy="afterInteractive">
+        {/* UNIFIED GOOGLE CONFIGURATION */}
+        <Script id="google-gtag-init" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
+            
+            // Google Analytics 4
+            gtag('config', 'G-3K1XLE2F7M');
+            
+            // Google Ads
             gtag('config', 'AW-10791428257');
           `}
         </Script>
