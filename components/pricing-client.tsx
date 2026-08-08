@@ -46,17 +46,12 @@ type PricingPlan = {
   intent: string
   featured?: boolean
   bestFor: string
-  // TODO: swap in a real still from Adnan's portfolio for each tier.
-  // Suggested files (4:3, min 1200px wide): /images/pricing/<id>.webp
-  // Falls back to the existing hero visual until those exist.
   imageSrc: string
   imageAlt: string
   quickFacts: QuickFact[]
   included: IncludedItem[]
   notIncluded?: string[]
 }
-
-const FALLBACK_IMAGE = '/images/After.webp'
 
 const plans: PricingPlan[] = [
   // ---------- IMAGES ----------
@@ -72,7 +67,7 @@ const plans: PricingPlan[] = [
     intent: 'We need white background Amazon listing renders.',
     bestFor:
       'For brands that need a compliant, complete Amazon listing image set — clean white background, marketplace-ready.',
-    imageSrc: FALLBACK_IMAGE,
+    imageSrc: 'https://images.unsplash.com/photo-1607746882042-f3eed3584e94?w=400&h=500&fit=crop',
     imageAlt: 'Example Amazon-ready white background product render',
     quickFacts: [
       { icon: Cube, label: '3D model included' },
@@ -115,7 +110,7 @@ const plans: PricingPlan[] = [
     featured: true,
     bestFor:
       'For D2C brands that need a stronger, more consistent brand look than Amazon requires — hero and hover pairs included.',
-    imageSrc: FALLBACK_IMAGE,
+    imageSrc: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=500&fit=crop',
     imageAlt: 'Example branded grey background render with hero and hover pairing',
     quickFacts: [
       { icon: Cube, label: '3D model included' },
@@ -163,7 +158,7 @@ const plans: PricingPlan[] = [
     intent: 'We need a full Shopify PDP listing image set.',
     bestFor:
       'For brands that want their entire product page — not just a few renders — to look like one cohesive shoot.',
-    imageSrc: FALLBACK_IMAGE,
+    imageSrc: 'https://images.unsplash.com/photo-1570194676174-79f2a8d3aa40?w=400&h=500&fit=crop',
     imageAlt: 'Example of a complete brand-consistent Shopify PDP render set',
     quickFacts: [
       { icon: Cube, label: 'Reusable 3D model' },
@@ -209,7 +204,7 @@ const plans: PricingPlan[] = [
     intent: 'We need high-end campaign visuals with environments and creative direction.',
     bestFor:
       'For launches, ad campaigns, and hero content that needs full environments, not just product-on-background.',
-    imageSrc: FALLBACK_IMAGE,
+    imageSrc: 'https://images.unsplash.com/photo-1596462502278-af3c37dba338?w=400&h=500&fit=crop',
     imageAlt: 'Example high-end campaign render with full environment',
     quickFacts: [
       { icon: PaintBrush, label: 'Creative direction' },
@@ -253,7 +248,7 @@ const plans: PricingPlan[] = [
     intent: 'We need a simple turntable video for Amazon.',
     bestFor:
       'For sellers who need the Amazon video slot filled with a clean, simple rotating product shot.',
-    imageSrc: FALLBACK_IMAGE,
+    imageSrc: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400&h=500&fit=crop',
     imageAlt: 'Example 360 degree turntable product video frame',
     quickFacts: [
       { icon: FilmStrip, label: '360° turntable' },
@@ -290,7 +285,7 @@ const plans: PricingPlan[] = [
     intent: 'We need a social media product promo animation.',
     bestFor:
       'For brands running paid social or organic content that needs a short, scroll-stopping product animation.',
-    imageSrc: FALLBACK_IMAGE,
+    imageSrc: 'https://images.unsplash.com/photo-1506685408688-c7fb62413e61?w=400&h=500&fit=crop',
     imageAlt: 'Example still from a social product promo animation',
     quickFacts: [
       { icon: FilmStrip, label: 'Up to 15 sec' },
@@ -332,7 +327,7 @@ const plans: PricingPlan[] = [
     featured: true,
     bestFor:
       'For brands that want one strong hero video reusable across the website, ads, and launch posts.',
-    imageSrc: FALLBACK_IMAGE,
+    imageSrc: 'https://images.unsplash.com/photo-1607746882042-f3eed3584e94?w=400&h=500&fit=crop',
     imageAlt: 'Example still from a full 25 to 30 second product animation',
     quickFacts: [
       { icon: FilmStrip, label: '25–30 sec' },
@@ -375,7 +370,7 @@ const plans: PricingPlan[] = [
     intent: 'We need a full product launch video.',
     bestFor:
       'For a real product launch moment — multiple scenes, full creative direction, campaign-level polish.',
-    imageSrc: FALLBACK_IMAGE,
+    imageSrc: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=500&fit=crop',
     imageAlt: 'Example still from a multi-scene product launch film',
     quickFacts: [
       { icon: FilmStrip, label: 'Multi-scene film' },
