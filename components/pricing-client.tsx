@@ -3,7 +3,7 @@
 // Uses @phosphor-icons/react for icons (never hand-roll icon SVGs).
 //   npm install @phosphor-icons/react
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
 import Script from 'next/script'
 
@@ -377,6 +377,24 @@ export function PricingContent() {
   const [currency, setCurrency] = useState<Currency>('INR')
   const [category, setCategory] = useState<Category>('images')
 
+  // Measure the actual rendered Header height so the switcher sticks exactly
+  // below it — no guessed offset, no fighting Header's own stacking, and no
+  // breakage if Header's height ever changes (responsive nav, banner, etc.).
+  const headerRef = useRef<HTMLDivElement>(null)
+  const [headerHeight, setHeaderHeight] = useState(0)
+
+  useEffect(() => {
+    const el = headerRef.current
+    if (!el) return
+
+    const measure = () => setHeaderHeight(el.offsetHeight)
+    measure()
+
+    const observer = new ResizeObserver(measure)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   useEffect(() => {
     let isMounted = true
 
@@ -415,7 +433,9 @@ export function PricingContent() {
     // container that breaks position:sticky for descendants on mobile
     // Safari; `clip` prevents the horizontal bleed without that side effect.
     <main className="min-h-screen overflow-x-clip bg-background text-foreground">
-      <Header />
+      <div ref={headerRef}>
+        <Header />
+      </div>
 
       {/* Minimal top — a small H1 for a11y/SEO, real content starts fast */}
       <section className="relative overflow-hidden">
@@ -439,30 +459,33 @@ export function PricingContent() {
         </div>
       </section>
 
-      {/* Category switcher — fixed to the bottom of the viewport, off the
-          document flow entirely. Doesn't fight the Header's own sticky
-          top-0 for stacking, costs zero vertical space in the content
-          column, and needs no horizontal room next to anything else. Same
-          behaviour on mobile and desktop. Safe-area padding for iOS. */}
+      {/* Category switcher — the pattern people already know from Stripe,
+          Linear, and Notion's own pricing pages: a segmented toggle sitting
+          right under the nav, sticking with it on scroll. Offset is the
+          real measured header height, not a guess, so it can't overlap the
+          nav regardless of how tall Header renders on any given page. */}
       <div
-        className="pointer-events-none fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 flex justify-center px-4 sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]"
+        className="sticky z-40 border-y border-border bg-background/95 backdrop-blur"
+        style={{ top: headerHeight }}
       >
-        <div className="pointer-events-auto inline-flex rounded-full border border-border bg-card/95 p-1 shadow-[0_12px_36px_rgba(0,31,63,0.18)] backdrop-blur">
-          {(['images', 'video'] as Category[]).map((cat) => (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => setCategory(cat)}
-              aria-pressed={category === cat}
-              className={`rounded-full px-6 py-2.5 text-sm font-semibold capitalize transition ${
-                category === cat
-                  ? 'bg-foreground text-background'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              {cat === 'images' ? 'Images' : 'Video'}
-            </button>
-          ))}
+        <div className="mx-auto flex max-w-7xl justify-center px-4 py-3 sm:px-6 lg:px-8">
+          <div className="inline-flex rounded-full border border-border bg-card p-1">
+            {(['images', 'video'] as Category[]).map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setCategory(cat)}
+                aria-pressed={category === cat}
+                className={`rounded-full px-6 py-2.5 text-sm font-semibold capitalize transition ${
+                  category === cat
+                    ? 'bg-foreground text-background'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {cat === 'images' ? 'Images' : 'Video'}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
