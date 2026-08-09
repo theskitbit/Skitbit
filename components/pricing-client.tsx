@@ -540,10 +540,10 @@ export function PricingContent() {
                 {plan.category === 'images' ? (
                   <ImageSlider images={plan.sliderImages ?? fallbackSlider} alt={plan.name} />
                 ) : plan.id === 'social-promo' ? (
-                  // Live interactive widget instead of a passive clip — contained
-                  // and clipped to this box via `relative overflow-hidden` +
-                  // the widget's `absolute inset-0`, so it can't bleed outside it.
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-[1.4rem] bg-secondary">
+                  // Live interactive widget instead of a passive clip
+                  // OVERRIDE WRAPPER: Removes the desktop-only aspect ratio and forces 
+                  // the internal Firework component (and its iframes) to relative/auto-height on mobile
+                  <div className="relative overflow-hidden rounded-[1.4rem] bg-secondary sm:aspect-[4/3] [&_.firework-embed]:!relative [&_.firework-embed]:!h-auto [&_fw-widget]:!h-auto [&_iframe]:!h-auto sm:[&_.firework-embed]:!absolute sm:[&_.firework-embed]:!h-full sm:[&_fw-widget]:!h-full sm:[&_iframe]:!h-full">
                     <FireworkEmbed />
                     <span className="absolute bottom-3 left-3 z-10 rounded-full bg-background/90 px-3 py-1 text-xs font-semibold text-foreground">
                       Interactive preview
