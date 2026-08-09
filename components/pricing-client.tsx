@@ -396,9 +396,6 @@ export function PricingContent() {
   return (
     <main className="min-h-screen overflow-x-clip bg-background text-foreground">
       <Header />
-      
-      {/* Screen-reader only H1 for SEO/accessibility */}
-      <h1 className="sr-only">Pricing</h1>
 
       {/* Category switcher — Excluded from indexing bots via data-nosnippet */}
       <div
@@ -424,13 +421,14 @@ export function PricingContent() {
         </div>
       </div>
 
-      {/* Section intro line */}
-      <header className="mx-auto max-w-4xl px-4 pb-2 pt-8 sm:px-6 lg:px-8">
+      {/* Section intro line (Adjusted pt-28 sm:pt-32 to clear fixed header) */}
+      <header className="mx-auto max-w-4xl px-4 pb-2 pt-28 sm:pt-32 sm:px-6 lg:px-8">
         <div className="border-b border-border pb-8">
           <p className="mb-2 text-sm font-semibold text-muted-foreground">{copy.eyebrow}</p>
-          <h2 className="text-[1.6rem] font-semibold leading-[1.1] tracking-[-0.05em] text-foreground sm:text-3xl">
+          {/* Main page heading (H1) for SEO */}
+          <h1 className="text-[1.6rem] font-semibold leading-[1.1] tracking-[-0.05em] text-foreground sm:text-3xl">
             {copy.heading}
-          </h2>
+          </h1>
           <p className="mt-3 text-base leading-7 text-foreground/85">{copy.sub}</p>
         </div>
       </header>
