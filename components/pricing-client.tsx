@@ -1,24 +1,14 @@
 'use client'
 
-// NOTE: uses @phosphor-icons/react for the quick-fact glyphs (per design-system
-// convention — never hand-roll icon SVGs). If not already a dependency:
+// Uses @phosphor-icons/react for icons (never hand-roll icon SVGs).
 //   npm install @phosphor-icons/react
 
-import { useEffect, useMemo, useState, type ElementType } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import {
-  Cube,
-  ImagesSquare,
-  ArrowsClockwise,
-  SealCheck,
-  FilmStrip,
-  PaintBrush,
-  MusicNotes,
-  Tag,
-} from '@phosphor-icons/react'
+import { Check, CaretLeft, CaretRight } from '@phosphor-icons/react'
 
 type Currency = 'INR' | 'USD'
 type Category = 'images' | 'video'
@@ -26,11 +16,6 @@ type Category = 'images' | 'video'
 type IncludedItem = {
   title: string
   description: string
-}
-
-type QuickFact = {
-  icon: ElementType
-  label: string
 }
 
 type PricingPlan = {
@@ -46,12 +31,18 @@ type PricingPlan = {
   intent: string
   featured?: boolean
   bestFor: string
-  imageSrc: string
-  imageAlt: string
-  quickFacts: QuickFact[]
+  // Images tiers: 5–6 real example stills. TODO: replace with actual
+  // portfolio shots per tier at /images/pricing/<id>/1.webp ... 6.webp
+  sliderImages?: string[]
+  // Video tiers: one looping example clip. TODO: replace with a real
+  // export at /videos/pricing/<id>.mp4 (poster falls back automatically).
+  previewVideoSrc?: string
   included: IncludedItem[]
   notIncluded?: string[]
 }
+
+const FALLBACK_IMAGE = '/images/After.webp'
+const fallbackSlider = Array(6).fill(FALLBACK_IMAGE)
 
 const plans: PricingPlan[] = [
   // ---------- IMAGES ----------
@@ -67,33 +58,12 @@ const plans: PricingPlan[] = [
     intent: 'We need white background Amazon listing renders.',
     bestFor:
       'For brands that need a compliant, complete Amazon listing image set — clean white background, marketplace-ready.',
-    imageSrc: 'https://images.unsplash.com/photo-1607746882042-f3eed3584e94?w=400&h=500&fit=crop',
-    imageAlt: 'Example Amazon-ready white background product render',
-    quickFacts: [
-      { icon: Cube, label: '3D model included' },
-      { icon: ImagesSquare, label: '5–6 renders' },
-      { icon: ArrowsClockwise, label: '1 revision round' },
-      { icon: SealCheck, label: 'Fixed price' },
-    ],
+    sliderImages: fallbackSlider,
     included: [
-      {
-        title: '3D model setup',
-        description:
-          'Your product is built or prepared in 3D so every angle stays consistent across the listing.',
-      },
-      {
-        title: '5–6 white background renders',
-        description:
-          'A complete listing set — front, angle, top, detail, and back views, all Amazon-compliant.',
-      },
-      {
-        title: 'Marketplace-ready export',
-        description: 'Sized and formatted for direct upload to Amazon Seller Central.',
-      },
-      {
-        title: '1 minor revision round',
-        description: 'Small corrections to angle, framing, label placement, or lighting.',
-      },
+      { title: '3D model setup', description: 'Built or prepared in 3D for consistent angles.' },
+      { title: '5–6 white bg renders', description: 'Full listing set, Amazon-compliant.' },
+      { title: 'Marketplace-ready export', description: 'Sized for direct Seller Central upload.' },
+      { title: '1 revision round', description: 'Angle, framing, or lighting corrections.' },
     ],
     notIncluded: ['Branded grey background', 'Hero/hover pairing', 'Lifestyle scene', 'Video'],
   },
@@ -110,39 +80,13 @@ const plans: PricingPlan[] = [
     featured: true,
     bestFor:
       'For D2C brands that need a stronger, more consistent brand look than Amazon requires — hero and hover pairs included.',
-    imageSrc: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=500&fit=crop',
-    imageAlt: 'Example branded grey background render with hero and hover pairing',
-    quickFacts: [
-      { icon: Cube, label: '3D model included' },
-      { icon: ImagesSquare, label: '4–5 renders' },
-      { icon: Tag, label: 'Hero + hover pairing' },
-      { icon: ArrowsClockwise, label: '1 revision round' },
-    ],
+    sliderImages: fallbackSlider,
     included: [
-      {
-        title: '3D model setup',
-        description:
-          'Your product is built to a higher finish standard, since Shopify visuals carry more brand weight than marketplace listings.',
-      },
-      {
-        title: '4–5 grey background renders',
-        description:
-          'A brand-consistent set — not just clean, but styled to match your product page aesthetic.',
-      },
-      {
-        title: 'Hero + hover image pairing',
-        description:
-          'Each product gets a matched hero and hover render, so your PDP grid looks consistent across the whole catalog.',
-      },
-      {
-        title: 'Brand-consistent lighting & material pass',
-        description:
-          'Reflections, shadows, and finish are tuned to match your existing brand visuals, not generic studio lighting.',
-      },
-      {
-        title: '1 minor revision round',
-        description: 'Corrections to framing, lighting, or material tweaks.',
-      },
+      { title: '3D model setup', description: 'Built to a higher finish standard.' },
+      { title: '4–5 grey bg renders', description: 'Styled to match your PDP aesthetic.' },
+      { title: 'Hero + hover pairing', description: 'Matched pair for every product.' },
+      { title: 'Brand-matched lighting', description: 'Tuned to your existing brand visuals.' },
+      { title: '1 revision round', description: 'Framing, lighting, or material tweaks.' },
     ],
     notIncluded: ['Full PDP set', 'Lifestyle/environment scene', 'Video'],
   },
@@ -158,36 +102,13 @@ const plans: PricingPlan[] = [
     intent: 'We need a full Shopify PDP listing image set.',
     bestFor:
       'For brands that want their entire product page — not just a few renders — to look like one cohesive shoot.',
-    imageSrc: 'https://images.unsplash.com/photo-1570194676174-79f2a8d3aa40?w=400&h=500&fit=crop',
-    imageAlt: 'Example of a complete brand-consistent Shopify PDP render set',
-    quickFacts: [
-      { icon: Cube, label: 'Reusable 3D model' },
-      { icon: ImagesSquare, label: 'Full render set' },
-      { icon: Tag, label: 'Hero + hover across set' },
-      { icon: ArrowsClockwise, label: '2 revision rounds' },
-    ],
+    sliderImages: fallbackSlider,
     included: [
-      {
-        title: 'Reusable 3D model setup',
-        description: 'Built once, reused across every image and future asset for this product.',
-      },
-      {
-        title: 'Full listing render set',
-        description:
-          'Every angle your PDP needs — hero, hover, detail, in-use, and scale shots — all matching in lighting and finish.',
-      },
-      {
-        title: 'Hero + hover pairing across the set',
-        description: 'Consistent pairing for every product image slot on the page.',
-      },
-      {
-        title: 'Brand-consistent art direction',
-        description: 'One creative direction applied across the full set so nothing feels stitched together.',
-      },
-      {
-        title: '2 minor revision rounds',
-        description: 'Room to refine framing, lighting, and finish across the full set.',
-      },
+      { title: 'Reusable 3D model', description: 'Built once, reused for future assets.' },
+      { title: 'Full render set', description: 'Hero, hover, detail, in-use, scale shots.' },
+      { title: 'Hero + hover across set', description: 'Consistent pairing, every slot.' },
+      { title: 'One art direction', description: 'Applied across the full set.' },
+      { title: '2 revision rounds', description: 'Room to refine the full set.' },
     ],
     notIncluded: ['Lifestyle/environment scene', 'Video'],
   },
@@ -204,33 +125,12 @@ const plans: PricingPlan[] = [
     intent: 'We need high-end campaign visuals with environments and creative direction.',
     bestFor:
       'For launches, ad campaigns, and hero content that needs full environments, not just product-on-background.',
-    imageSrc: 'https://images.unsplash.com/photo-1596462502278-af3c37dba338?w=400&h=500&fit=crop',
-    imageAlt: 'Example high-end campaign render with full environment',
-    quickFacts: [
-      { icon: PaintBrush, label: 'Creative direction' },
-      { icon: Cube, label: 'Custom environment' },
-      { icon: Tag, label: 'Priced per image' },
-      { icon: ArrowsClockwise, label: 'Scoped revisions' },
-    ],
+    sliderImages: fallbackSlider,
     included: [
-      {
-        title: 'Creative direction per image',
-        description:
-          'Each render is planned as a scene — environment, mood, and story, not just an angle change.',
-      },
-      {
-        title: 'Full environment builds',
-        description: 'Custom scenes designed around your brand, not template backdrops.',
-      },
-      {
-        title: 'Priced per image',
-        description:
-          'Scope varies by complexity, so campaign work is quoted per render rather than as a fixed bundle.',
-      },
-      {
-        title: 'Revision rounds scoped per project',
-        description: 'Agreed upfront based on scene complexity.',
-      },
+      { title: 'Creative direction', description: 'Planned as a scene, not just an angle.' },
+      { title: 'Full environment build', description: 'Custom scenes, not template backdrops.' },
+      { title: 'Priced per image', description: 'Scoped to complexity.' },
+      { title: 'Scoped revisions', description: 'Agreed upfront per project.' },
     ],
   },
 
@@ -248,27 +148,11 @@ const plans: PricingPlan[] = [
     intent: 'We need a simple turntable video for Amazon.',
     bestFor:
       'For sellers who need the Amazon video slot filled with a clean, simple rotating product shot.',
-    imageSrc: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400&h=500&fit=crop',
-    imageAlt: 'Example 360 degree turntable product video frame',
-    quickFacts: [
-      { icon: FilmStrip, label: '360° turntable' },
-      { icon: Cube, label: 'Model incl. (or reused)' },
-      { icon: SealCheck, label: 'Marketplace-ready export' },
-    ],
+    previewVideoSrc: '/videos/pricing/turntable.mp4',
     included: [
-      {
-        title: '3D modelling (if needed)',
-        description:
-          'If you already have a model from a prior render order, this step is skipped and priced lower.',
-      },
-      {
-        title: '360° turntable animation',
-        description: 'A smooth, continuous product rotation.',
-      },
-      {
-        title: 'Marketplace-ready export',
-        description: 'Sized and formatted for direct Amazon upload.',
-      },
+      { title: '3D modelling', description: 'Skipped (and cheaper) if a model exists.' },
+      { title: '360° rotation', description: 'A smooth, continuous turntable.' },
+      { title: 'Marketplace export', description: 'Sized for direct Amazon upload.' },
     ],
     notIncluded: ['Scene/environment', 'Camera movement', 'Sound design'],
   },
@@ -285,31 +169,14 @@ const plans: PricingPlan[] = [
     intent: 'We need a social media product promo animation.',
     bestFor:
       'For brands running paid social or organic content that needs a short, scroll-stopping product animation.',
-    imageSrc: 'https://images.unsplash.com/photo-1506685408688-c7fb62413e61?w=400&h=500&fit=crop',
-    imageAlt: 'Example still from a social product promo animation',
-    quickFacts: [
-      { icon: FilmStrip, label: 'Up to 15 sec' },
-      { icon: Cube, label: '3D model included' },
-      { icon: PaintBrush, label: 'Simple environment' },
-      { icon: ArrowsClockwise, label: '1 revision round' },
-    ],
+    // TODO(Adnan): swap this tier's preview block for <FireworkWidget /> once
+    // you share the component — see the commented slot in the render below.
+    previewVideoSrc: '/videos/pricing/social-promo.mp4',
     included: [
-      {
-        title: '3D model setup',
-        description: 'Prepared for animation, not just static renders.',
-      },
-      {
-        title: 'Up to 15 sec product animation',
-        description: 'Camera movement and product highlights suited to a social feed.',
-      },
-      {
-        title: 'Simple environment',
-        description: 'A clean, brand-relevant setting — not a full campaign scene.',
-      },
-      {
-        title: '1 minor revision round',
-        description: 'Adjustments to timing, framing, or pacing.',
-      },
+      { title: '3D model setup', description: 'Prepared for animation.' },
+      { title: 'Up to 15 sec', description: 'Camera movement, product highlights.' },
+      { title: 'Simple environment', description: 'Clean, brand-relevant setting.' },
+      { title: '1 revision round', description: 'Timing, framing, or pacing.' },
     ],
     notIncluded: ['Full campaign scene design', 'Sound-ready final mix'],
   },
@@ -327,35 +194,13 @@ const plans: PricingPlan[] = [
     featured: true,
     bestFor:
       'For brands that want one strong hero video reusable across the website, ads, and launch posts.',
-    imageSrc: 'https://images.unsplash.com/photo-1607746882042-f3eed3584e94?w=400&h=500&fit=crop',
-    imageAlt: 'Example still from a full 25 to 30 second product animation',
-    quickFacts: [
-      { icon: FilmStrip, label: '25–30 sec' },
-      { icon: Cube, label: 'Reusable 3D model' },
-      { icon: MusicNotes, label: 'Sound-ready edit' },
-      { icon: ArrowsClockwise, label: '2 revision rounds' },
-    ],
+    previewVideoSrc: '/videos/pricing/full-animation.mp4',
     included: [
-      {
-        title: 'Reusable 3D model setup',
-        description: 'Built to support both this video and future renders from the same asset.',
-      },
-      {
-        title: '25–30 sec animation',
-        description: 'Full scene direction, camera movement, and product highlights.',
-      },
-      {
-        title: 'Scene design and animation direction',
-        description: 'Planned like a proper brand asset, not a rotating product clip.',
-      },
-      {
-        title: 'Music/sound-ready final edit',
-        description: 'Delivered ready for website hero sections, ads, and social.',
-      },
-      {
-        title: '2 minor revision rounds',
-        description: 'Refinement after preview and final direction lock.',
-      },
+      { title: 'Reusable 3D model', description: 'Supports future renders too.' },
+      { title: '25–30 sec animation', description: 'Full scene direction, camera movement.' },
+      { title: 'Scene direction', description: 'Planned like a brand asset.' },
+      { title: 'Sound-ready edit', description: 'Ready for hero sections, ads, social.' },
+      { title: '2 revision rounds', description: 'After preview and direction lock.' },
     ],
   },
   {
@@ -370,31 +215,12 @@ const plans: PricingPlan[] = [
     intent: 'We need a full product launch video.',
     bestFor:
       'For a real product launch moment — multiple scenes, full creative direction, campaign-level polish.',
-    imageSrc: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=500&fit=crop',
-    imageAlt: 'Example still from a multi-scene product launch film',
-    quickFacts: [
-      { icon: FilmStrip, label: 'Multi-scene film' },
-      { icon: PaintBrush, label: 'Full creative direction' },
-      { icon: MusicNotes, label: 'Sound design & mix' },
-      { icon: ArrowsClockwise, label: 'Scoped revisions' },
-    ],
+    previewVideoSrc: '/videos/pricing/launch-video.mp4',
     included: [
-      {
-        title: 'Full creative direction',
-        description: 'Concept, scene breakdown, and shot list built around your launch story.',
-      },
-      {
-        title: 'Multi-scene animation',
-        description: 'More than one environment or setup, edited into a single launch film.',
-      },
-      {
-        title: 'Sound design & final mix',
-        description: 'Fully finished, launch-ready edit.',
-      },
-      {
-        title: 'Revision rounds scoped per project',
-        description: 'Agreed upfront based on the launch brief.',
-      },
+      { title: 'Full creative direction', description: 'Concept, scenes, shot list.' },
+      { title: 'Multi-scene animation', description: 'More than one environment, one film.' },
+      { title: 'Sound design & mix', description: 'Fully finished, launch-ready.' },
+      { title: 'Scoped revisions', description: 'Agreed upfront per brief.' },
     ],
   },
 ]
@@ -408,38 +234,102 @@ const customScopeItems = [
   'Full launch creative direction',
 ]
 
-// Real, currently-live partner/certification badges (same assets used
-// sitewide) — reused here as a pre-purchase trust strip, PDP-style.
+// Real, currently-live partner/certification badges. Wrapped in a dark chip
+// below since the Shopify badge asset is a white/transparent PNG that's
+// invisible on a light background otherwise.
 const trustBadges = [
-  {
-    src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/top%20rated%20agency.png',
-    alt: 'Top Rated Agency',
-  },
-  {
-    src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/meta.png',
-    alt: 'Meta Partner',
-  },
-  {
-    src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/69a92c79726adfa89004b8bf_Badge%20Premier%20wht%20transpSmall%20%281%29.png',
-    alt: 'Shopify Premier Partner',
-  },
-  {
-    src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/google.png',
-    alt: 'Google Partner',
-  },
+  { src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/top%20rated%20agency.png', alt: 'Top Rated Agency' },
+  { src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/meta.png', alt: 'Meta Partner' },
+  { src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/69a92c79726adfa89004b8bf_Badge%20Premier%20wht%20transpSmall%20%281%29.png', alt: 'Shopify Premier Partner' },
+  { src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/google.png', alt: 'Google Partner' },
 ]
 
 const categoryCopy: Record<Category, { eyebrow: string; heading: string; sub: string }> = {
   images: {
     eyebrow: 'Renders',
     heading: 'Every render tier, fully laid out.',
-    sub: 'Amazon needs compliant white-background listings. Shopify needs a consistent brand look. Campaigns need full environments. Scroll through and pick by where the image will live.',
+    sub: 'Pick by where the image will live — Amazon, Shopify, or a campaign.',
   },
   video: {
     eyebrow: 'Video',
     heading: 'Every video tier, fully laid out.',
-    sub: 'A turntable fills the Amazon slot. A promo cut works for social. A full animation or launch film carries the brand.',
+    sub: 'Pick by where it will run — a marketplace slot, a feed, or a launch.',
   },
+}
+
+function ImageSlider({ images, alt }: { images: string[]; alt: string }) {
+  const [index, setIndex] = useState(0)
+  const go = (dir: number) => setIndex((i) => (i + dir + images.length) % images.length)
+
+  return (
+    <div>
+      <div className="relative aspect-[4/3] overflow-hidden rounded-[1.4rem] bg-secondary">
+        <Image
+          src={images[index]}
+          alt={`${alt} — example ${index + 1} of ${images.length}`}
+          fill
+          className="object-cover object-center"
+          sizes="(max-width: 1024px) 100vw, 560px"
+        />
+
+        {images.length > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={() => go(-1)}
+              aria-label="Previous example"
+              className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm transition hover:bg-background"
+            >
+              <CaretLeft size={16} weight="bold" />
+            </button>
+            <button
+              type="button"
+              onClick={() => go(1)}
+              aria-label="Next example"
+              className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm transition hover:bg-background"
+            >
+              <CaretRight size={16} weight="bold" />
+            </button>
+          </>
+        )}
+      </div>
+
+      {images.length > 1 && (
+        <div className="mt-3 flex justify-center gap-1.5">
+          {images.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setIndex(i)}
+              aria-label={`Show example ${i + 1}`}
+              className={`h-1.5 rounded-full transition-all ${
+                i === index ? 'w-6 bg-foreground' : 'w-1.5 bg-border'
+              }`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function VideoPreview({ src, label }: { src: string; label: string }) {
+  return (
+    <div className="relative aspect-[4/3] overflow-hidden rounded-[1.4rem] bg-secondary">
+      <video
+        src={src}
+        poster={FALLBACK_IMAGE}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="h-full w-full object-cover"
+      />
+      <span className="absolute bottom-3 left-3 rounded-full bg-background/90 px-3 py-1 text-xs font-semibold text-foreground">
+        Example — {label}
+      </span>
+    </div>
+  )
 }
 
 export function PricingContent() {
@@ -480,99 +370,83 @@ export function PricingContent() {
   const copy = categoryCopy[category]
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-background text-foreground">
+    // overflow-x-clip, not overflow-x-hidden — `hidden` creates a scroll
+    // container that breaks position:sticky for descendants on mobile
+    // Safari; `clip` prevents the horizontal bleed without that side effect.
+    <main className="min-h-screen overflow-x-clip bg-background text-foreground">
       <Header />
 
-      {/* Hero — text only, no interactive controls trapped in here */}
+      {/* Minimal top — a small H1 for a11y/SEO, real content starts fast */}
       <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(circle_at_50%_0%,rgba(219,230,76,0.3),transparent_46%)]" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[220px] bg-[radial-gradient(circle_at_50%_0%,rgba(219,230,76,0.25),transparent_46%)]" />
 
-        <div className="relative mx-auto max-w-5xl px-4 pb-10 pt-24 text-center sm:px-6 sm:pb-14 sm:pt-32 lg:px-8">
-          <h1 className="text-balance text-[2.75rem] font-semibold leading-[0.98] tracking-[-0.09em] text-foreground sm:text-[4.6rem] lg:text-[5.6rem]">
-            Simple pricing. No guesswork.
+        <div className="relative mx-auto max-w-4xl px-4 pb-4 pt-12 text-center sm:px-6 sm:pt-16 lg:px-8">
+          <h1 className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+            Pricing
           </h1>
-
-          <p className="mx-auto mt-6 max-w-2xl text-balance text-base leading-8 text-muted-foreground sm:text-lg">
-            Renders for Amazon and Shopify, campaign visuals, and product
-            animation — every tier, fully broken down below.
-          </p>
         </div>
 
-        {/* Trust strip — real certification badges, functions as a
-            pre-purchase credibility check before the buyer reads a single tier. */}
-        <div className="relative mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-x-8 gap-y-3 px-4 pb-10 sm:px-6">
+        <div className="relative mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-3 px-4 pb-8 sm:px-6">
           {trustBadges.map((badge) => (
-            <img
+            <div
               key={badge.alt}
-              src={badge.src}
-              alt={badge.alt}
-              loading="lazy"
-              className="h-7 w-auto object-contain opacity-80 sm:h-8"
-            />
+              className="flex h-9 items-center rounded-lg bg-foreground px-3.5"
+            >
+              <img src={badge.src} alt={badge.alt} loading="lazy" className="h-5 w-auto object-contain" />
+            </div>
           ))}
         </div>
       </section>
 
-      {/* Sticky category switcher — its own full-width bar, outside any
-          overflow-hidden ancestor, so it stays pinned for the entire scroll
-          instead of disappearing once you leave the hero. If <Header /> is
-          itself position:sticky/fixed, bump `top-0` below to match its
-          height so the two bars don't overlap. */}
-      <div className="sticky top-0 z-40 border-y border-border bg-background/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl justify-center px-4 py-3 sm:px-6 lg:px-8">
-          <div className="inline-flex rounded-full border border-border bg-card p-1">
-            {(['images', 'video'] as Category[]).map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => setCategory(cat)}
-                aria-pressed={category === cat}
-                className={`rounded-full px-6 py-2.5 text-sm font-semibold capitalize transition ${
-                  category === cat
-                    ? 'bg-foreground text-background'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                {cat === 'images' ? 'Images' : 'Video'}
-              </button>
-            ))}
-          </div>
+      {/* Category switcher — fixed to the bottom of the viewport, off the
+          document flow entirely. Doesn't fight the Header's own sticky
+          top-0 for stacking, costs zero vertical space in the content
+          column, and needs no horizontal room next to anything else. Same
+          behaviour on mobile and desktop. Safe-area padding for iOS. */}
+      <div
+        className="pointer-events-none fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 flex justify-center px-4 sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]"
+      >
+        <div className="pointer-events-auto inline-flex rounded-full border border-border bg-card/95 p-1 shadow-[0_12px_36px_rgba(0,31,63,0.18)] backdrop-blur">
+          {(['images', 'video'] as Category[]).map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setCategory(cat)}
+              aria-pressed={category === cat}
+              className={`rounded-full px-6 py-2.5 text-sm font-semibold capitalize transition ${
+                category === cat
+                  ? 'bg-foreground text-background'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {cat === 'images' ? 'Images' : 'Video'}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Section intro line */}
-      <section className="mx-auto max-w-7xl px-4 pb-2 pt-10 sm:px-6 lg:px-8">
-        <div className="max-w-2xl border-b border-border pb-10">
-          <p className="mb-3 text-sm font-semibold text-muted-foreground">{copy.eyebrow}</p>
-          <h2 className="text-[1.85rem] font-semibold leading-[1.1] tracking-[-0.06em] text-foreground sm:text-4xl">
+      <section className="mx-auto max-w-7xl px-4 pb-2 pt-8 sm:px-6 lg:px-8">
+        <div className="max-w-2xl border-b border-border pb-8">
+          <p className="mb-2 text-sm font-semibold text-muted-foreground">{copy.eyebrow}</p>
+          <h2 className="text-[1.6rem] font-semibold leading-[1.1] tracking-[-0.05em] text-foreground sm:text-3xl">
             {copy.heading}
           </h2>
-          <p className="mt-5 text-base leading-8 text-foreground/85">{copy.sub}</p>
+          <p className="mt-3 text-base leading-7 text-foreground/85">{copy.sub}</p>
         </div>
       </section>
 
-      {/* One full section per tier — image + buy box up top (PDP pattern),
-          full breakdown below. Nothing behind a click. */}
+      {/* One full section per tier */}
       {activePlans.map((plan, idx) => (
         <section
           key={plan.id}
           className={`border-b border-border ${idx % 2 === 1 ? 'bg-secondary/40' : ''}`}
         >
-          <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
-            {/* Image + buy box */}
+          <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+            {/* Buy box + proof, side by side */}
             <div className="grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-16">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-[1.4rem] bg-secondary lg:order-1">
-                <Image
-                  src={plan.imageSrc}
-                  alt={plan.imageAlt}
-                  fill
-                  className="object-cover object-center"
-                  sizes="(max-width: 1024px) 100vw, 560px"
-                />
-              </div>
-
               <div className="lg:order-2">
-                <div className="mb-4 flex flex-wrap items-center gap-2.5">
+                <div className="mb-3 flex flex-wrap items-center gap-2.5">
                   <span className="text-xs font-semibold tabular-nums text-muted-foreground">
                     {String(idx + 1).padStart(2, '0')} / {String(activePlans.length).padStart(2, '0')}
                   </span>
@@ -585,45 +459,26 @@ export function PricingContent() {
                   )}
                 </div>
 
-                <h3 className="text-[1.9rem] font-semibold leading-[1.06] tracking-[-0.06em] text-foreground sm:text-[2.5rem]">
+                <h3 className="text-[1.7rem] font-semibold leading-[1.08] tracking-[-0.05em] text-foreground sm:text-[2.2rem]">
                   {plan.name}
                 </h3>
 
-                <p className="mt-4 max-w-md text-[0.95rem] leading-7 text-muted-foreground">
+                <p className="mt-3 max-w-md text-[0.95rem] leading-7 text-muted-foreground">
                   {plan.description}
                 </p>
 
-                <div className="mt-7 flex items-end gap-3">
-                  <span className="text-[2.6rem] font-semibold leading-none tracking-[-0.07em] text-foreground sm:text-[3rem]">
+                <div className="mt-6 flex items-end gap-3">
+                  <span className="text-[2.4rem] font-semibold leading-none tracking-[-0.06em] text-foreground sm:text-[2.7rem]">
                     {getPrice(plan)}
                   </span>
                   <span className="pb-1.5 text-sm font-semibold text-muted-foreground">starts at</span>
                 </div>
 
-                {plan.priceNote && (
-                  <p className="mt-2 text-sm text-muted-foreground">{plan.priceNote}</p>
-                )}
+                {plan.priceNote && <p className="mt-2 text-sm text-muted-foreground">{plan.priceNote}</p>}
 
-                {/* Quick facts — icon row, scan the whole tier in one glance,
-                    same job as "free shipping / secure checkout" badges on a PDP. */}
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {plan.quickFacts.map((fact) => {
-                    const Icon = fact.icon
-                    return (
-                      <span
-                        key={fact.label}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-xs font-semibold text-foreground/80"
-                      >
-                        <Icon size={14} weight="bold" />
-                        {fact.label}
-                      </span>
-                    )
-                  })}
-                </div>
+                <p className="mt-4 max-w-md text-sm leading-7 text-foreground/80">{plan.bestFor}</p>
 
-                <p className="mt-6 max-w-md text-sm leading-7 text-foreground/80">{plan.bestFor}</p>
-
-                <div className="mt-7">
+                <div className="mt-6">
                   <a
                     href={getWhatsAppLink(plan)}
                     target="_blank"
@@ -634,38 +489,54 @@ export function PricingContent() {
                   </a>
                 </div>
               </div>
+
+              {/* "Here's what you'll get" — real proof, not a description */}
+              <div className="lg:order-1">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  Here's what you'll get
+                </p>
+
+                {plan.category === 'images' ? (
+                  <ImageSlider images={plan.sliderImages ?? fallbackSlider} alt={plan.name} />
+                ) : plan.id === 'social-promo' ? (
+                  // TODO(Adnan): drop <FireworkWidget /> in here once you
+                  // share the component — falls back to a video preview
+                  // in the meantime so the section still works.
+                  <VideoPreview src={plan.previewVideoSrc ?? ''} label={plan.name} />
+                ) : (
+                  <VideoPreview src={plan.previewVideoSrc ?? ''} label={plan.name} />
+                )}
+              </div>
             </div>
 
-            {/* Full breakdown — kept inline, no accordion */}
-            <div className="mt-12 border-t border-border pt-10">
+            {/* Checkmark cards — scannable, not paragraphs */}
+            <div className="mt-10">
               <p className="mb-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 What's included
               </p>
 
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {plan.included.map((item) => (
-                  <div key={item.title} className="rounded-[1.1rem] border border-border bg-card p-5">
-                    <p className="text-sm font-semibold leading-6 text-foreground">{item.title}</p>
-                    <p className="mt-2 text-sm leading-6 text-muted-foreground">{item.description}</p>
+                  <div key={item.title} className="rounded-2xl bg-secondary/60 p-5 text-center">
+                    <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg bg-foreground text-background">
+                      <Check size={18} weight="bold" />
+                    </div>
+                    <p className="mt-3 text-sm font-medium leading-5 text-foreground">{item.title}</p>
                   </div>
                 ))}
               </div>
 
               {plan.notIncluded && plan.notIncluded.length > 0 && (
-                <div className="mt-6 border-t border-border pt-6">
-                  <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Not included
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {plan.notIncluded.map((item) => (
-                      <span
-                        key={item}
-                        className="rounded-full bg-secondary px-3.5 py-1.5 text-xs font-medium text-muted-foreground line-through decoration-muted-foreground/50"
-                      >
-                        {item}
-                      </span>
-                    ))}
-                  </div>
+                <div className="mt-6 flex flex-wrap gap-2 border-t border-border pt-6">
+                  <span className="text-xs font-semibold text-muted-foreground">Not included:</span>
+                  {plan.notIncluded.map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-muted-foreground line-through decoration-muted-foreground/50"
+                    >
+                      {item}
+                    </span>
+                  ))}
                 </div>
               )}
             </div>
