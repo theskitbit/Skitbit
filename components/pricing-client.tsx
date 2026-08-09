@@ -5,10 +5,54 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
+import Script from 'next/script'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Check, CaretLeft, CaretRight } from '@phosphor-icons/react'
+
+// Trimmed down from the full FireworkWidget homepage section — just the
+// embed itself, no heading/CTA chrome, scoped so the forced-height override
+// only applies inside .firework-embed (won't affect other instances of the
+// widget elsewhere on the site).
+function FireworkEmbed() {
+  const [isReady, setIsReady] = useState(false)
+
+  return (
+    <>
+      <Script
+        src="https://asset.fwcdn3.com/js/fwn.js"
+        strategy="afterInteractive"
+        onReady={() => setIsReady(true)}
+      />
+
+      <style jsx global>{`
+        .firework-embed fw-widget {
+          display: block !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+        .firework-embed fw-widget > div,
+        .firework-embed fw-widget iframe {
+          width: 100% !important;
+          height: 100% !important;
+        }
+      `}</style>
+
+      <div className="firework-embed absolute inset-0">
+        {isReady && (
+          <div
+            className="h-full w-full"
+            dangerouslySetInnerHTML={{
+              __html:
+                '<fw-widget widget_config_id="95D10o_efc" class="w-full h-full" autoplay="true" loop="true" muted="true"></fw-widget>',
+            }}
+          />
+        )}
+      </div>
+    </>
+  )
+}
 
 type Currency = 'INR' | 'USD'
 type Category = 'images' | 'video'
@@ -169,9 +213,6 @@ const plans: PricingPlan[] = [
     intent: 'We need a social media product promo animation.',
     bestFor:
       'For brands running paid social or organic content that needs a short, scroll-stopping product animation.',
-    // TODO(Adnan): swap this tier's preview block for <FireworkWidget /> once
-    // you share the component — see the commented slot in the render below.
-    previewVideoSrc: '/videos/pricing/social-promo.mp4',
     included: [
       { title: '3D model setup', description: 'Prepared for animation.' },
       { title: 'Up to 15 sec', description: 'Camera movement, product highlights.' },
@@ -499,10 +540,15 @@ export function PricingContent() {
                 {plan.category === 'images' ? (
                   <ImageSlider images={plan.sliderImages ?? fallbackSlider} alt={plan.name} />
                 ) : plan.id === 'social-promo' ? (
-                  // TODO(Adnan): drop <FireworkWidget /> in here once you
-                  // share the component — falls back to a video preview
-                  // in the meantime so the section still works.
-                  <VideoPreview src={plan.previewVideoSrc ?? ''} label={plan.name} />
+                  // Live interactive widget instead of a passive clip — contained
+                  // and clipped to this box via `relative overflow-hidden` +
+                  // the widget's `absolute inset-0`, so it can't bleed outside it.
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-[1.4rem] bg-secondary">
+                    <FireworkEmbed />
+                    <span className="absolute bottom-3 left-3 z-10 rounded-full bg-background/90 px-3 py-1 text-xs font-semibold text-foreground">
+                      Interactive preview
+                    </span>
+                  </div>
                 ) : (
                   <VideoPreview src={plan.previewVideoSrc ?? ''} label={plan.name} />
                 )}
