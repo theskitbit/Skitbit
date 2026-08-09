@@ -11,10 +11,6 @@ import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Check, CaretLeft, CaretRight } from '@phosphor-icons/react'
 
-// Trimmed down from the full FireworkWidget homepage section — just the
-// embed itself, no heading/CTA chrome, scoped so the forced-height override
-// only applies inside .firework-embed (won't affect other instances of the
-// widget elsewhere on the site).
 function FireworkEmbed() {
   const [isReady, setIsReady] = useState(false)
 
@@ -75,11 +71,7 @@ type PricingPlan = {
   intent: string
   featured?: boolean
   bestFor: string
-  // Images tiers: 5–6 real example stills. TODO: replace with actual
-  // portfolio shots per tier at /images/pricing/<id>/1.webp ... 6.webp
   sliderImages?: string[]
-  // Video tiers: one looping example clip. TODO: replace with a real
-  // export at /videos/pricing/<id>.mp4 (poster falls back automatically).
   previewVideoSrc?: string
   included: IncludedItem[]
   notIncluded?: string[]
@@ -275,16 +267,6 @@ const customScopeItems = [
   'Full launch creative direction',
 ]
 
-// Real, currently-live partner/certification badges. Wrapped in a dark chip
-// below since the Shopify badge asset is a white/transparent PNG that's
-// invisible on a light background otherwise.
-const trustBadges = [
-  { src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/top%20rated%20agency.png', alt: 'Top Rated Agency' },
-  { src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/meta.png', alt: 'Meta Partner' },
-  { src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/69a92c79726adfa89004b8bf_Badge%20Premier%20wht%20transpSmall%20%281%29.png', alt: 'Shopify Premier Partner' },
-  { src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/google.png', alt: 'Google Partner' },
-]
-
 const categoryCopy: Record<Category, { eyebrow: string; heading: string; sub: string }> = {
   images: {
     eyebrow: 'Renders',
@@ -309,8 +291,9 @@ function ImageSlider({ images, alt }: { images: string[]; alt: string }) {
           src={images[index]}
           alt={`${alt} — example ${index + 1} of ${images.length}`}
           fill
+          itemProp="image"
           className="object-cover object-center"
-          sizes="(max-width: 1024px) 100vw, 560px"
+          sizes="(max-width: 1024px) 100vw, 800px"
         />
 
         {images.length > 1 && (
@@ -336,13 +319,13 @@ function ImageSlider({ images, alt }: { images: string[]; alt: string }) {
       </div>
 
       {images.length > 1 && (
-        <div className="mt-3 flex justify-center gap-1.5">
+        <div className="mt-3 flex justify-center gap-1.5" aria-hidden="true">
           {images.map((_, i) => (
             <button
               key={i}
               type="button"
+              tabIndex={-1}
               onClick={() => setIndex(i)}
-              aria-label={`Show example ${i + 1}`}
               className={`h-1.5 rounded-full transition-all ${
                 i === index ? 'w-6 bg-foreground' : 'w-1.5 bg-border'
               }`}
@@ -411,40 +394,15 @@ export function PricingContent() {
   const copy = categoryCopy[category]
 
   return (
-    // overflow-x-clip, not overflow-x-hidden — `hidden` creates a scroll
-    // container that breaks position:sticky for descendants on mobile
-    // Safari; `clip` prevents the horizontal bleed without that side effect.
     <main className="min-h-screen overflow-x-clip bg-background text-foreground">
       <Header />
+      
+      {/* Screen-reader only H1 for SEO/accessibility */}
+      <h1 className="sr-only">Pricing</h1>
 
-      {/* Minimal top — a small H1 for a11y/SEO, real content starts fast */}
-      <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[220px] bg-[radial-gradient(circle_at_50%_0%,rgba(219,230,76,0.25),transparent_46%)]" />
-
-        <div className="relative mx-auto max-w-4xl px-4 pb-4 pt-12 text-center sm:px-6 sm:pt-16 lg:px-8">
-          <h1 className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
-            Pricing
-          </h1>
-        </div>
-
-        <div className="relative mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-3 px-4 pb-8 sm:px-6">
-          {trustBadges.map((badge) => (
-            <div
-              key={badge.alt}
-              className="flex h-9 items-center rounded-lg bg-foreground px-3.5"
-            >
-              <img src={badge.src} alt={badge.alt} loading="lazy" className="h-5 w-auto object-contain" />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Category switcher — fixed to the bottom of the viewport, off the
-          document flow entirely. Doesn't fight the Header's own sticky
-          top-0 for stacking, costs zero vertical space in the content
-          column, and needs no horizontal room next to anything else. Same
-          behaviour on mobile and desktop. Safe-area padding for iOS. */}
+      {/* Category switcher — Excluded from indexing bots via data-nosnippet */}
       <div
+        data-nosnippet
         className="pointer-events-none fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 flex justify-center px-4 sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]"
       >
         <div className="pointer-events-auto inline-flex rounded-full border border-border bg-card/95 p-1 shadow-[0_12px_36px_rgba(0,31,63,0.18)] backdrop-blur">
@@ -467,32 +425,35 @@ export function PricingContent() {
       </div>
 
       {/* Section intro line */}
-      <section className="mx-auto max-w-7xl px-4 pb-2 pt-8 sm:px-6 lg:px-8">
-        <div className="max-w-2xl border-b border-border pb-8">
+      <header className="mx-auto max-w-4xl px-4 pb-2 pt-8 sm:px-6 lg:px-8">
+        <div className="border-b border-border pb-8">
           <p className="mb-2 text-sm font-semibold text-muted-foreground">{copy.eyebrow}</p>
           <h2 className="text-[1.6rem] font-semibold leading-[1.1] tracking-[-0.05em] text-foreground sm:text-3xl">
             {copy.heading}
           </h2>
           <p className="mt-3 text-base leading-7 text-foreground/85">{copy.sub}</p>
         </div>
-      </section>
+      </header>
 
-      {/* One full section per tier */}
-      {activePlans.map((plan, idx) => (
-        <section
-          key={plan.id}
-          className={`border-b border-border ${idx % 2 === 1 ? 'bg-secondary/40' : ''}`}
-        >
-          <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-            {/* Buy box + proof, side by side */}
-            <div className="grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-16">
-              <div className="lg:order-2">
+      {/* Tiers rendered with structured layout: Title -> Media -> Pricing -> Included */}
+      <div className="flex flex-col">
+        {activePlans.map((plan, idx) => (
+          <article
+            key={plan.id}
+            itemScope
+            itemType="https://schema.org/Product"
+            className={`border-b border-border ${idx % 2 === 1 ? 'bg-secondary/40' : ''}`}
+          >
+            <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+              
+              {/* 1. TITLE & SUBTITLE */}
+              <header className="mb-8">
                 <div className="mb-3 flex flex-wrap items-center gap-2.5">
-                  <span className="text-xs font-semibold tabular-nums text-muted-foreground">
+                  <span className="text-xs font-semibold tabular-nums text-muted-foreground" aria-hidden="true">
                     {String(idx + 1).padStart(2, '0')} / {String(activePlans.length).padStart(2, '0')}
                   </span>
-                  <span className="text-xs font-semibold text-muted-foreground">·</span>
-                  <span className="text-xs font-semibold text-muted-foreground">{plan.eyebrow}</span>
+                  <span className="text-xs font-semibold text-muted-foreground" aria-hidden="true">·</span>
+                  <span itemProp="category" className="text-xs font-semibold text-muted-foreground">{plan.eyebrow}</span>
                   {plan.featured && (
                     <span className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-foreground">
                       Most chosen
@@ -500,49 +461,21 @@ export function PricingContent() {
                   )}
                 </div>
 
-                <h3 className="text-[1.7rem] font-semibold leading-[1.08] tracking-[-0.05em] text-foreground sm:text-[2.2rem]">
+                <h3 itemProp="name" className="text-[1.7rem] font-semibold leading-[1.08] tracking-[-0.05em] text-foreground sm:text-[2.2rem]">
                   {plan.name}
                 </h3>
 
-                <p className="mt-3 max-w-md text-[0.95rem] leading-7 text-muted-foreground">
+                <p itemProp="description" className="mt-3 max-w-2xl text-[0.95rem] leading-7 text-muted-foreground">
                   {plan.description}
                 </p>
+              </header>
 
-                <div className="mt-6 flex items-end gap-3">
-                  <span className="text-[2.4rem] font-semibold leading-none tracking-[-0.06em] text-foreground sm:text-[2.7rem]">
-                    {getPrice(plan)}
-                  </span>
-                  <span className="pb-1.5 text-sm font-semibold text-muted-foreground">starts at</span>
-                </div>
-
-                {plan.priceNote && <p className="mt-2 text-sm text-muted-foreground">{plan.priceNote}</p>}
-
-                <p className="mt-4 max-w-md text-sm leading-7 text-foreground/80">{plan.bestFor}</p>
-
-                <div className="mt-6">
-                  <a
-                    href={getWhatsAppLink(plan)}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-full bg-foreground px-7 py-3.5 text-sm font-semibold text-background transition hover:-translate-y-0.5 hover:opacity-90"
-                  >
-                    {plan.cta}
-                  </a>
-                </div>
-              </div>
-
-              {/* "Here's what you'll get" — real proof, not a description */}
-              <div className="lg:order-1">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  Here's what you'll get
-                </p>
-
+              {/* 2. MEDIA COMPONENT */}
+              <figure className="mb-10 w-full">
+                <figcaption className="sr-only">Visual preview of the {plan.name} service</figcaption>
                 {plan.category === 'images' ? (
                   <ImageSlider images={plan.sliderImages ?? fallbackSlider} alt={plan.name} />
                 ) : plan.id === 'social-promo' ? (
-                  // Live interactive widget instead of a passive clip
-                  // OVERRIDE WRAPPER: Removes the desktop-only aspect ratio and forces 
-                  // the internal Firework component (and its iframes) to relative/auto-height on mobile
                   <div className="relative overflow-hidden rounded-[1.4rem] bg-secondary sm:aspect-[4/3] [&_.firework-embed]:!relative [&_.firework-embed]:!h-auto [&_fw-widget]:!h-auto [&_iframe]:!h-auto sm:[&_.firework-embed]:!absolute sm:[&_.firework-embed]:!h-full sm:[&_fw-widget]:!h-full sm:[&_iframe]:!h-full">
                     <FireworkEmbed />
                     <span className="absolute bottom-3 left-3 z-10 rounded-full bg-background/90 px-3 py-1 text-xs font-semibold text-foreground">
@@ -552,46 +485,84 @@ export function PricingContent() {
                 ) : (
                   <VideoPreview src={plan.previewVideoSrc ?? ''} label={plan.name} />
                 )}
-              </div>
-            </div>
+              </figure>
 
-            {/* Checkmark cards — scannable, not paragraphs */}
-            <div className="mt-10">
-              <p className="mb-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                What's included
-              </p>
-
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {plan.included.map((item) => (
-                  <div key={item.title} className="rounded-2xl bg-secondary/60 p-5 text-center">
-                    <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg bg-foreground text-background">
-                      <Check size={18} weight="bold" />
-                    </div>
-                    <p className="mt-3 text-sm font-medium leading-5 text-foreground">{item.title}</p>
-                  </div>
-                ))}
-              </div>
-
-              {plan.notIncluded && plan.notIncluded.length > 0 && (
-                <div className="mt-6 flex flex-wrap gap-2 border-t border-border pt-6">
-                  <span className="text-xs font-semibold text-muted-foreground">Not included:</span>
-                  {plan.notIncluded.map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-muted-foreground line-through decoration-muted-foreground/50"
-                    >
-                      {item}
+              {/* 3. PRICING & CTA */}
+              <div 
+                itemProp="offers" 
+                itemScope 
+                itemType="https://schema.org/Offer" 
+                className="mb-12 flex flex-col items-start gap-6 rounded-[1.5rem] border border-border bg-card p-6 shadow-sm sm:flex-row sm:items-end sm:justify-between sm:p-8"
+              >
+                {/* Meta tags required for Schema.org Offer validity */}
+                <meta itemProp="priceCurrency" content={currency} />
+                <meta itemProp="price" content={getPrice(plan).replace(/[^0-9]/g, '')} />
+                <meta itemProp="availability" content="https://schema.org/InStock" />
+                
+                <div>
+                  <div className="flex items-end gap-3">
+                    <span className="text-[2.4rem] font-semibold leading-none tracking-[-0.06em] text-foreground sm:text-[3rem]">
+                      {getPrice(plan)}
                     </span>
-                  ))}
+                    <span className="pb-1.5 text-sm font-semibold text-muted-foreground">starts at</span>
+                  </div>
+                  {plan.priceNote && <p className="mt-2 text-sm text-muted-foreground">{plan.priceNote}</p>}
+                  <p className="mt-4 max-w-sm text-sm leading-6 text-foreground/80">{plan.bestFor}</p>
                 </div>
-              )}
+
+                <div className="shrink-0">
+                  <a
+                    href={getWhatsAppLink(plan)}
+                    target="_blank"
+                    rel="noreferrer"
+                    itemProp="url"
+                    className="inline-flex items-center justify-center rounded-full bg-foreground px-8 py-4 text-sm font-semibold text-background transition hover:-translate-y-0.5 hover:opacity-90"
+                  >
+                    {plan.cta}
+                  </a>
+                </div>
+              </div>
+
+              {/* 4. WHAT'S INCLUDED */}
+              <div>
+                <h4 className="mb-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  What's included
+                </h4>
+
+                <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {plan.included.map((item) => (
+                    <li key={item.title} className="rounded-2xl bg-secondary/60 p-5 text-center">
+                      <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg bg-foreground text-background">
+                        <Check size={18} weight="bold" aria-hidden="true" />
+                      </div>
+                      <p className="mt-3 text-sm font-medium leading-5 text-foreground">{item.title}</p>
+                    </li>
+                  ))}
+                </ul>
+
+                {plan.notIncluded && plan.notIncluded.length > 0 && (
+                  <div className="mt-6 flex flex-wrap gap-2 border-t border-border pt-6">
+                    <span className="text-xs font-semibold text-muted-foreground">Not included:</span>
+                    <ul className="flex flex-wrap gap-2">
+                      {plan.notIncluded.map((item) => (
+                        <li
+                          key={item}
+                          className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-muted-foreground line-through decoration-muted-foreground/50"
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </section>
-      ))}
+          </article>
+        ))}
+      </div>
 
       {/* Bundle cross-sell */}
-      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+      <section className="mx-auto max-w-4xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
         <div className="flex flex-col items-start justify-between gap-5 rounded-[1.5rem] border border-border bg-[linear-gradient(135deg,rgba(219,230,76,0.12),transparent)] p-6 sm:flex-row sm:items-center sm:rounded-[1.75rem] sm:p-8">
           <div>
             <p className="text-sm font-semibold text-muted-foreground">Bundle & save</p>
@@ -613,7 +584,7 @@ export function PricingContent() {
       </section>
 
       {/* Custom scope */}
-      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+      <section className="mx-auto max-w-4xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[1fr_0.95fr] lg:items-center">
           <div>
             <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-sm font-semibold text-foreground">
@@ -639,7 +610,7 @@ export function PricingContent() {
               <ul className="mt-6 space-y-2.5">
                 {customScopeItems.map((item) => (
                   <li key={item} className="flex items-center gap-2 text-sm leading-7 text-foreground/85">
-                    <span className="shrink-0 text-xs">•</span>
+                    <span className="shrink-0 text-xs" aria-hidden="true">•</span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -650,7 +621,7 @@ export function PricingContent() {
       </section>
 
       {/* Closing CTA */}
-      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+      <section className="mx-auto max-w-4xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
         <div className="rounded-[1.75rem] border border-border bg-[linear-gradient(135deg,rgba(219,230,76,0.1),transparent)] p-5 sm:rounded-[2.2rem] sm:p-8">
           <h2 className="max-w-2xl text-[1.75rem] font-semibold leading-[1.14] tracking-[-0.06em] text-foreground sm:text-4xl">
             Know exactly what you're getting.
