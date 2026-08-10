@@ -16,8 +16,8 @@ export function Header() {
   if (!mounted) return null
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-md">
-      {/* 👇 Changed h-20 to h-16 right here to slim it down */}
+    // 👇 Removed 'sticky top-0' and changed to 'relative z-40'
+    <header className="relative z-40 w-full border-b border-border/50 bg-background/80 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
         
         {/* Logo */}

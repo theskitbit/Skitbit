@@ -105,7 +105,8 @@ export function CookieConsent() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ duration: 0.3 }}
-            className="fixed bottom-4 right-4 z-[100] w-[calc(100vw-2rem)] sm:max-w-[320px] rounded-2xl border border-border bg-card p-5 shadow-2xl"
+            // 👇 left-4 right-4 perfectly centers it on mobile, sm:left-auto sm:w-[320px] snaps it to the right on desktop
+            className="fixed bottom-4 left-4 right-4 z-[100] sm:left-auto sm:w-[320px] rounded-2xl border border-border bg-card p-5 shadow-2xl"
           >
             <p className="text-xs text-muted-foreground leading-relaxed">
               We use cookies and tracking pixels to improve ad relevance and site experience. By clicking accept, you agree to our{' '}
