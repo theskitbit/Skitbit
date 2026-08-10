@@ -1,5 +1,6 @@
 import Script from "next/script";
 
+import AnnouncementBanner from '@/components/Announcement-banner'
 import { Header } from '@/components/header'
 import { Hero } from '@/components/hero'
 import { LogoStrip } from '@/components/logo-strip'
@@ -128,6 +129,7 @@ export default function Home() {
         })}
       </Script>
 
+      <AnnouncementBanner />
       <Header />
       <Hero />
       <LogoStrip />
