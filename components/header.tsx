@@ -2,22 +2,40 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useContactOverlay } from './contact-overlay'
 
 export function Header() {
   const [mounted, setMounted] = useState(false)
+  const [hidden, setHidden] = useState(false)
+  const lastScrollY = useRef(0)
   const { open } = useContactOverlay()
 
   useEffect(() => {
     setMounted(true)
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      const scrollingDown = currentScrollY > lastScrollY.current
+
+      if (currentScrollY > 72 && scrollingDown) {
+        setHidden(true)
+      } else if (!scrollingDown || currentScrollY <= 72) {
+        setHidden(false)
+      }
+
+      lastScrollY.current = currentScrollY
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   if (!mounted) return null
 
   return (
     // 👇 Removed 'sticky top-0' and changed to 'relative z-40'
-    <header className="relative z-40 w-full border-b border-border/50 bg-background/80 backdrop-blur-md">
+    <header className={`fixed inset-x-0 top-0 z-40 w-full border-b border-border/50 bg-background/80 backdrop-blur-md transition-transform duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
       <nav className="mx-auto flex h-[50px] max-w-[964px] items-center justify-between px-6 lg:px-4">
         
         {/* Logo */}
