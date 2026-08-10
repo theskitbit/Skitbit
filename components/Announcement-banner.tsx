@@ -39,14 +39,14 @@ export default function AnnouncementBanner() {
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          // 👇 Removed shadow-sm from here
           className="relative w-full bg-white border-b border-gray-200 z-[99999] overflow-hidden flex justify-center"
         >
-          <div className="flex items-center justify-center py-1.5 px-8 sm:px-10 w-full max-w-7xl relative">
+          {/* 👇 Changed px-8 to px-3 to give more horizontal room on mobile */}
+          <div className="flex items-center justify-center py-1.5 px-3 sm:px-10 w-full max-w-7xl relative">
             
-            <div className="flex items-center justify-center gap-3 sm:gap-4">
+            {/* 👇 Changed gap-3 to gap-1.5 on mobile */}
+            <div className="flex items-center justify-center gap-1.5 sm:gap-4">
               
-              {/* Left Laurel (Colored using CSS Mask) */}
               <div 
                 className="w-4 h-4 sm:w-5 sm:h-5 bg-blue-950 shrink-0" 
                 style={{
@@ -61,7 +61,8 @@ export default function AnnouncementBanner() {
                 }}
               />
               
-              <div className="relative w-[280px] sm:w-[320px] h-5 flex items-center justify-center overflow-hidden">
+              {/* 👇 Changed w-[280px] to w-[230px] so it fits on small phones */}
+              <div className="relative w-[230px] sm:w-[320px] h-5 flex items-center justify-center overflow-hidden">
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={currentIndex}
@@ -69,14 +70,14 @@ export default function AnnouncementBanner() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -15 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="text-sm font-medium text-blue-950 tracking-tight whitespace-nowrap block absolute"
+                    // 👇 Changed text-sm to text-[11px] on mobile to prevent clipping
+                    className="text-[11px] sm:text-sm font-medium text-blue-950 tracking-tight whitespace-nowrap block absolute"
                   >
                     {messages[currentIndex]}
                   </motion.span>
                 </AnimatePresence>
               </div>
 
-              {/* Right Laurel (Colored using CSS Mask) */}
               <div 
                 className="w-4 h-4 sm:w-5 sm:h-5 bg-blue-950 shrink-0" 
                 style={{
@@ -94,7 +95,8 @@ export default function AnnouncementBanner() {
 
             <button
               onClick={() => setIsVisible(false)}
-              className="absolute right-2 sm:right-4 p-1 text-gray-400 hover:text-blue-950 transition-colors rounded-md"
+              // 👇 Changed right-2 to right-1 on mobile
+              className="absolute right-1 sm:right-4 p-1 text-gray-400 hover:text-blue-950 transition-colors rounded-md"
               aria-label="Close announcement"
             >
               <X className="w-4 h-4" />
