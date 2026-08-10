@@ -4,14 +4,30 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X } from "lucide-react"
 
+const messages = [
+  "You have the campaign. We have the execution.",
+  "Assets delivered on time, every time.",
+  "Visuals that actually drive ad performance."
+]
+
 export default function AnnouncementBanner() {
   const [isVisible, setIsVisible] = useState(true)
   const [isMounted, setIsMounted] = useState(false)
+  const [currentIndex, setCurrentIndex] = useState(0)
 
-  // Ensures component only renders on client to avoid Next.js SSR hydration bugs
   useEffect(() => {
     setIsMounted(true)
   }, [])
+
+  useEffect(() => {
+    if (!isVisible || !isMounted) return
+    
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % messages.length)
+    }, 2500)
+
+    return () => clearInterval(timer)
+  }, [isVisible, isMounted])
 
   if (!isMounted) return null
 
@@ -23,38 +39,62 @@ export default function AnnouncementBanner() {
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          // Removed shadow-sm from the className below
-          className="relative w-full bg-white text-black border-b border-gray-200 z-[99999] overflow-hidden flex justify-center"
+          // 👇 Removed shadow-sm from here
+          className="relative w-full bg-white border-b border-gray-200 z-[99999] overflow-hidden flex justify-center"
         >
-          <div className="flex items-center justify-center gap-3 py-2.5 px-4 sm:px-10 text-center w-full max-w-7xl relative">
+          <div className="flex items-center justify-center py-1.5 px-8 sm:px-10 w-full max-w-7xl relative">
             
-            {/* Blue Award Icon */}
-            <div className="flex items-center justify-center w-6 h-6 bg-[#1a4eff] text-white shrink-0 rounded-sm">
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                className="w-3.5 h-3.5"
-              >
-                <path d="M12 15c-2 0-4-1.5-4-3s1.5-3 3-3c.5 0 1 .1 1.5.3" />
-                <path d="M12 15c2 0 4-1.5 4-3s-1.5-3-3-3c-.5 0-1 .1-1.5.3" />
-                <path d="M7 6.5C5.5 8 4 10.5 4 13.5c0 4 3 6.5 8 8 5-1.5 8-4 8-8 0-3-1.5-5.5-3-7" />
-              </svg>
-            </div>
-            
-            {/* Banner Text */}
-            <span className="text-sm font-normal text-black tracking-tight">
-              Motion Recognized by Motion Design Awards.
-            </span>
+            <div className="flex items-center justify-center gap-3 sm:gap-4">
+              
+              {/* Left Laurel (Colored using CSS Mask) */}
+              <div 
+                className="w-4 h-4 sm:w-5 sm:h-5 bg-blue-950 shrink-0" 
+                style={{
+                  WebkitMaskImage: 'url("https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/left%20wreath.svg")',
+                  WebkitMaskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'center',
+                  maskImage: 'url("https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/left%20wreath.svg")',
+                  maskSize: 'contain',
+                  maskRepeat: 'no-repeat',
+                  maskPosition: 'center',
+                }}
+              />
+              
+              <div className="relative w-[280px] sm:w-[320px] h-5 flex items-center justify-center overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={currentIndex}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -15 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="text-sm font-medium text-blue-950 tracking-tight whitespace-nowrap block absolute"
+                  >
+                    {messages[currentIndex]}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
 
-            {/* Close Button */}
+              {/* Right Laurel (Colored using CSS Mask) */}
+              <div 
+                className="w-4 h-4 sm:w-5 sm:h-5 bg-blue-950 shrink-0" 
+                style={{
+                  WebkitMaskImage: 'url("https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/Right%20wreath.svg")',
+                  WebkitMaskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'center',
+                  maskImage: 'url("https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/Right%20wreath.svg")',
+                  maskSize: 'contain',
+                  maskRepeat: 'no-repeat',
+                  maskPosition: 'center',
+                }}
+              />
+            </div>
+
             <button
               onClick={() => setIsVisible(false)}
-              className="absolute right-2 sm:right-4 p-1 text-gray-400 hover:text-black transition-colors rounded-md"
+              className="absolute right-2 sm:right-4 p-1 text-gray-400 hover:text-blue-950 transition-colors rounded-md"
               aria-label="Close announcement"
             >
               <X className="w-4 h-4" />
