@@ -23,7 +23,8 @@ export default function AnnouncementBanner() {
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="relative w-full bg-white text-black border-b border-gray-200 z-[99999] overflow-hidden shadow-sm flex justify-center"
+          // Removed shadow-sm from the className below
+          className="relative w-full bg-white text-black border-b border-gray-200 z-[99999] overflow-hidden flex justify-center"
         >
           <div className="flex items-center justify-center gap-3 py-2.5 px-4 sm:px-10 text-center w-full max-w-7xl relative">
             
