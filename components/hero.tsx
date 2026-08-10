@@ -8,7 +8,7 @@ export function Hero() {
 
   return (
     <section aria-label="Skitbit introduction" className="w-full border-b border-border bg-background pb-0 pt-[48px]">
-      <div className="relative mx-auto grid min-h-[629px] w-full max-w-[964px] grid-cols-1 border-x border-border lg:grid-cols-2">
+      <div className="relative mx-auto grid min-h-[629px] w-full max-w-[964px] lg:max-w-7xl grid-cols-1 border-x border-border lg:grid-cols-2">
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/2 z-10 hidden w-px -translate-x-1/2 bg-border lg:block" />
 
         <div className="flex items-end px-8 pb-8 pt-16 sm:px-12 lg:px-6 lg:pb-8 xl:px-6">

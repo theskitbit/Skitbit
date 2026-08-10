@@ -42,7 +42,7 @@ export default function AnnouncementBanner() {
           className="sticky top-0 w-full bg-white border-b border-gray-200 z-[99999] overflow-hidden flex justify-center"
         >
           {/* 👇 MATCHED HEADER GLOBAL WIDTH: mx-auto, px-6, lg:px-8, max-w-7xl */}
-          <div className="relative mx-auto flex min-h-[28px] w-full max-w-[964px] items-center justify-center px-12 py-1 sm:px-14 lg:px-0">
+          <div className="relative mx-auto flex min-h-[28px] w-full max-w-[964px] items-center justify-center lg:max-w-7xl px-12 py-1 sm:px-14 lg:px-0">
             
             <div className="flex items-center justify-center gap-1.5 sm:gap-4">
               
