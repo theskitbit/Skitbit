@@ -9,6 +9,9 @@ export function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false)
   const [isLogging, setIsLogging] = useState(false)
   const [hasConsent, setHasConsent] = useState(false)
+  
+  // State for the toggle switch, defaulted to true (Opted-in)
+  const [isToggled, setIsToggled] = useState(true)
 
   useEffect(() => {
     // Check if user previously consented
@@ -50,6 +53,15 @@ export function CookieConsent() {
     setHasConsent(false)
     setIsVisible(false)
     await logConsentToServer('reject')
+  }
+
+  // Handle the single primary button click based on toggle state
+  const handleSavePreferences = () => {
+    if (isToggled) {
+      accept()
+    } else {
+      reject()
+    }
   }
 
   return (
@@ -130,20 +142,33 @@ export function CookieConsent() {
               .
             </p>
 
-            <div className="mt-4 flex gap-2">
+            <div className="mt-4 flex flex-col gap-3">
+              {/* Optional Tracking Toggle */}
+              <div className="flex items-center justify-between rounded-lg border border-border/50 bg-background/50 px-3 py-2">
+                <span className="text-[11px] font-medium text-foreground">Analytics & Ad Tracking</span>
+                <button
+                  type="button"
+                  onClick={() => setIsToggled(!isToggled)}
+                  className={`relative inline-flex h-4 w-8 items-center rounded-full transition-colors focus:outline-none shrink-0 ${
+                    isToggled ? 'bg-blue-500' : 'bg-muted-foreground/30'
+                  }`}
+                  aria-label="Toggle tracking"
+                >
+                  <span
+                    className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform shadow-sm ${
+                      isToggled ? 'translate-x-[18px]' : 'translate-x-0.5'
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {/* Primary Action Button */}
               <button
-                onClick={reject}
+                onClick={handleSavePreferences}
                 disabled={isLogging}
-                className="flex-1 rounded-full border border-border bg-transparent py-2 text-xs font-semibold text-foreground transition hover:bg-muted disabled:opacity-50"
+                className="w-full rounded-full bg-[#D4F05A] py-2.5 text-xs font-semibold text-[#0B1A28] transition hover:opacity-90 disabled:opacity-50"
               >
-                Reject
-              </button>
-              <button
-                onClick={accept}
-                disabled={isLogging}
-                className="flex-1 rounded-full bg-[#D4F05A] py-2 text-xs font-semibold text-[#0B1A28] transition hover:opacity-90 disabled:opacity-50"
-              >
-                {isLogging ? 'Saving...' : 'Accept'}
+                {isLogging ? 'Saving...' : 'Accept & Continue'}
               </button>
             </div>
 
