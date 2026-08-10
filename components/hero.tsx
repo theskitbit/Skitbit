@@ -7,11 +7,11 @@ export function Hero() {
   const { open } = useContactOverlay();
 
   return (
-    <section aria-label="Skitbit introduction" className="w-full border-b border-border bg-background py-0">
+    <section aria-label="Skitbit introduction" className="w-full border-b border-border bg-background pt-[76px]">
       <div className="relative mx-auto grid min-h-[629px] w-full max-w-[964px] grid-cols-1 border-x border-border lg:grid-cols-2">
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/2 z-10 hidden w-px -translate-x-1/2 bg-border lg:block" />
 
-        <div className="flex items-center px-8 py-16 sm:px-12 lg:px-6 xl:px-6">
+        <div className="flex items-end px-8 pb-8 pt-16 sm:px-12 lg:px-6 lg:pb-8 xl:px-6">
           <div className="w-full max-w-[500px]">
             <h1 className="m-0 max-w-[490px] text-[54px] font-medium leading-[0.9] tracking-[-0.065em] text-foreground sm:text-[64px] lg:text-[70px] xl:text-[72px]">
               <span className="block">Stop</span>
