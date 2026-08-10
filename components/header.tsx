@@ -16,28 +16,29 @@ export function Header() {
   if (!mounted) return null
 
   return (
-    <header className="fixed top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-md">
+    // Changed "fixed" to "sticky" right here 👇
+    <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-md">
       <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
         {/* Logo */}
-<Link
-  href="/"
-  aria-label="Skitbit Home"
-  className="group flex items-center"
->
-  <Image
-    src="/Black icon - without symbol.svg"
-    alt="Skitbit Logo"
-    width={20}
-    height={20}
-    priority
-    className="mr-2 h-5 w-auto shrink-0 transition-transform duration-300 group-hover:scale-105"
-  />
+        <Link
+          href="/"
+          aria-label="Skitbit Home"
+          className="group flex items-center"
+        >
+          <Image
+            src="/Black icon - without symbol.svg"
+            alt="Skitbit Logo"
+            width={20}
+            height={20}
+            priority
+            className="mr-2 h-5 w-auto shrink-0 transition-transform duration-300 group-hover:scale-105"
+          />
 
-<h1 className="text-[1.35rem] font-semibold tracking-[-0.025em] leading-none text-foreground">
-  Skitbit
-  <span className="ml-0.5 align-top text-[0.55rem] font-medium">®</span>
-</h1>
-</Link>
+          <h1 className="text-[1.35rem] font-semibold tracking-[-0.025em] leading-none text-foreground">
+            Skitbit
+            <span className="ml-0.5 align-top text-[0.55rem] font-medium">®</span>
+          </h1>
+        </Link>
 
         {/* Navigation */}
         <div className="hidden items-center gap-8 md:flex">

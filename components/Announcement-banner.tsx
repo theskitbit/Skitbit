@@ -1,27 +1,42 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X } from "lucide-react"
 
 export default function AnnouncementBanner() {
   const [isVisible, setIsVisible] = useState(true)
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    // Ensures component only renders on client to avoid Next.js SSR bugs
+    setIsMounted(true)
+    
+    // Increased to 4.5s to ensure it's comfortably visible after page load
+    const timer = setTimeout(() => {
+      setIsVisible(false)
+    }, 4500) 
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  // If the browser hasn't hydrated yet, render nothing
+  if (!isMounted) return null
 
   return (
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: "auto", opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="relative flex items-center justify-center w-full bg-white border-b border-gray-100 overflow-hidden"
+          // Swapped from 'height: 0' to 'y: -50' to prevent the Framer Motion 0px height bug
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, height: 0, y: -10 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="relative w-full bg-white border-b border-gray-200 z-[99999] overflow-hidden shadow-sm flex justify-center"
         >
-          {/* Banner Content Container */}
-          <div className="flex items-center gap-3 py-3 px-12 sm:px-6 lg:px-8">
-            {/* Blue Icon Square */}
-            <div className="flex items-center justify-center w-[26px] h-[26px] bg-[#1a4eff] text-white shrink-0">
-              {/* Custom SVG mimicking the laurel wreath from image_702a93.png */}
+          <div className="flex items-center justify-center gap-3 py-2.5 px-4 sm:px-10 text-center w-full max-w-7xl relative">
+            {/* Blue Award Icon */}
+            <div className="flex items-center justify-center w-6 h-6 bg-[#1a4eff] text-white shrink-0 rounded-sm">
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 viewBox="0 0 24 24" 
@@ -30,7 +45,7 @@ export default function AnnouncementBanner() {
                 strokeWidth="2" 
                 strokeLinecap="round" 
                 strokeLinejoin="round" 
-                className="w-4 h-4"
+                className="w-3.5 h-3.5"
               >
                 <path d="M12 15c-2 0-4-1.5-4-3s1.5-3 3-3c.5 0 1 .1 1.5.3" />
                 <path d="M12 15c2 0 4-1.5 4-3s-1.5-3-3-3c-.5 0-1 .1-1.5.3" />
@@ -38,20 +53,20 @@ export default function AnnouncementBanner() {
               </svg>
             </div>
             
-            {/* Text */}
-            <p className="text-[15px] font-normal text-black tracking-tight">
+            {/* Banner Text */}
+            <span className="text-sm font-normal text-black tracking-tight">
               Motion Recognized by Motion Design Awards.
-            </p>
-          </div>
+            </span>
 
-          {/* Close Button */}
-          <button
-            onClick={() => setIsVisible(false)}
-            className="absolute right-4 p-1.5 text-gray-400 hover:text-black transition-colors rounded-md"
-            aria-label="Close announcement"
-          >
-            <X className="w-5 h-5" />
-          </button>
+            {/* Close Button */}
+            <button
+              onClick={() => setIsVisible(false)}
+              className="absolute right-2 sm:right-4 p-1 text-gray-400 hover:text-black transition-colors rounded-md"
+              aria-label="Close announcement"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
