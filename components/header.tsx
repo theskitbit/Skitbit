@@ -18,7 +18,7 @@ export function Header() {
   return (
     // 👇 Removed 'sticky top-0' and changed to 'relative z-40'
     <header className="relative z-40 w-full border-b border-border/50 bg-background/80 backdrop-blur-md">
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
+      <nav className="mx-auto flex h-[50px] max-w-[964px] items-center justify-between px-6 lg:px-4">
         
         {/* Logo */}
         <Link
