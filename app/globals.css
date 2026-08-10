@@ -54,6 +54,11 @@
   --space-section: 5rem;
   --space-block: 2.5rem;
 
+  /* Container — Single source of truth for layout width */
+  --container-max: 1400px;
+  --container-lg: 1280px;
+  --container-px: 1.5rem; /* responsive padding on mobile */
+
   /* Transitions */
   --transition-base: 180ms ease;
   --transition-slow: 320ms ease;
@@ -188,6 +193,38 @@
     padding-top: var(--space-section);
     padding-bottom: var(--space-section);
   }
+}
+
+/* =========================
+   LAYOUT UTILITIES
+   ========================= */
+
+/* Global container for full-bleed sections with internal max-width */
+.container-full {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Internal grid/flex wrapper respecting max-width */
+.container-inner {
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-px);
+  padding-right: var(--container-px);
+}
+
+/* For hero-style sections: full-width BG, inner constraint */
+.container-hero {
+  width: 100%;
+  background-color: inherit;
+}
+
+.container-hero-inner {
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* =========================

@@ -84,15 +84,6 @@ export function LogoStrip() {
         }
       `}</style>
 
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.025]"
-        style={{
-          backgroundImage:
-            'linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)',
-          backgroundSize: '44px 44px',
-        }}
-      />
 
       <div className="relative mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
@@ -112,7 +103,7 @@ export function LogoStrip() {
 
           {/* Looping rail for all screens */}
           <div className="overflow-hidden">
-            <div className="skitbit-logo-marquee flex w-max divide-x divide-foreground/10">
+            <div className="skitbit-logo-marquee flex w-max">
               {[...logos, ...logos].map((logo, index) => (
                 <LogoMark
                   key={`${logo.label}-${index}`}

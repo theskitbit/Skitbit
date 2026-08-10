@@ -42,7 +42,7 @@ export default function AnnouncementBanner() {
           className="sticky top-0 w-full bg-white border-b border-gray-200 z-[99999] overflow-hidden flex justify-center"
         >
           {/* 👇 MATCHED HEADER GLOBAL WIDTH: mx-auto, px-6, lg:px-8, max-w-7xl */}
-          <div className="mx-auto flex items-center justify-center py-1.5 px-6 lg:px-8 w-full max-w-7xl relative">
+          <div className="relative mx-auto flex min-h-[28px] w-full max-w-[964px] items-center justify-center lg:max-w-7xl px-12 py-1 sm:px-14 lg:px-0">
             
             <div className="flex items-center justify-center gap-1.5 sm:gap-4">
               
@@ -93,7 +93,7 @@ export default function AnnouncementBanner() {
             <button
               onClick={() => setIsVisible(false)}
               // 👇 MATCHED TO EXACT PADDING: right-6 and lg:right-8 to perfectly align with the content below it
-              className="absolute right-6 lg:right-8 p-1 text-gray-400 hover:text-blue-950 transition-colors rounded-md"
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-gray-400 transition-colors hover:text-blue-950 sm:right-4 lg:-right-1"
               aria-label="Close announcement"
             >
               <X className="w-4 h-4" />
