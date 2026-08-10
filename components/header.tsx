@@ -16,28 +16,30 @@ export function Header() {
   if (!mounted) return null
 
   return (
-    <header className="fixed top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-md">
-      <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
+    // 👇 Removed 'sticky top-0' and changed to 'relative z-40'
+    <header className="relative z-40 w-full border-b border-border/50 bg-background/80 backdrop-blur-md">
+      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
+        
         {/* Logo */}
-<Link
-  href="/"
-  aria-label="Skitbit Home"
-  className="group flex items-center"
->
-  <Image
-    src="/Black icon - without symbol.svg"
-    alt="Skitbit Logo"
-    width={20}
-    height={20}
-    priority
-    className="mr-2 h-5 w-auto shrink-0 transition-transform duration-300 group-hover:scale-105"
-  />
+        <Link
+          href="/"
+          aria-label="Skitbit Home"
+          className="group flex items-center"
+        >
+          <Image
+            src="/Black icon - without symbol.svg"
+            alt="Skitbit Logo"
+            width={20}
+            height={20}
+            priority
+            className="mr-2 h-5 w-auto shrink-0 transition-transform duration-300 group-hover:scale-105"
+          />
 
-<h1 className="text-[1.35rem] font-semibold tracking-[-0.025em] leading-none text-foreground">
-  Skitbit
-  <span className="ml-0.5 align-top text-[0.55rem] font-medium">®</span>
-</h1>
-</Link>
+          <h1 className="text-[1.35rem] font-semibold tracking-[-0.025em] leading-none text-foreground">
+            Skitbit
+            <span className="ml-0.5 align-top text-[0.55rem] font-medium">®</span>
+          </h1>
+        </Link>
 
         {/* Navigation */}
         <div className="hidden items-center gap-8 md:flex">
@@ -67,7 +69,7 @@ export function Header() {
         <button
           type="button"
           onClick={() => open()}
-          className="btn-primary focus-ring group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300 hover:scale-[1.03] hover:opacity-90 active:scale-[0.98]"
+          className="btn-primary focus-ring group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-2.5 text-sm font-semibold transition-all duration-300 hover:scale-[1.03] hover:opacity-90 active:scale-[0.98]"
         >
           <span
             aria-hidden="true"

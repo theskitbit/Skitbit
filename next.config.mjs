@@ -10,6 +10,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'k7fdlkciit9qv6j1.public.blob.vercel-storage.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
     ],
   },
   async redirects() {

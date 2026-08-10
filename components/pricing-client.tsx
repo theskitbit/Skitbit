@@ -1,12 +1,57 @@
 'use client'
 
+// Uses @phosphor-icons/react for icons (never hand-roll icon SVGs).
+//   npm install @phosphor-icons/react
+
 import { useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
+import Script from 'next/script'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { Check, CaretLeft, CaretRight } from '@phosphor-icons/react'
+
+function FireworkEmbed() {
+  const [isReady, setIsReady] = useState(false)
+
+  return (
+    <>
+      <Script
+        src="https://asset.fwcdn3.com/js/fwn.js"
+        strategy="afterInteractive"
+        onReady={() => setIsReady(true)}
+      />
+
+      <style jsx global>{`
+        .firework-embed fw-widget {
+          display: block !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+        .firework-embed fw-widget > div,
+        .firework-embed fw-widget iframe {
+          width: 100% !important;
+          height: 100% !important;
+        }
+      `}</style>
+
+      <div className="firework-embed absolute inset-0">
+        {isReady && (
+          <div
+            className="h-full w-full"
+            dangerouslySetInnerHTML={{
+              __html:
+                '<fw-widget widget_config_id="95D10o_efc" class="w-full h-full" autoplay="true" loop="true" muted="true"></fw-widget>',
+            }}
+          />
+        )}
+      </div>
+    </>
+  )
+}
 
 type Currency = 'INR' | 'USD'
+type Category = 'images' | 'video'
 
 type IncludedItem = {
   title: string
@@ -15,168 +60,200 @@ type IncludedItem = {
 
 type PricingPlan = {
   id: string
+  category: Category
   eyebrow: string
   name: string
-  shortName: string
   description: string
   priceInr: string
   priceUsd: string
+  priceNote?: string
   cta: string
   intent: string
   featured?: boolean
   bestFor: string
+  sliderImages?: string[]
+  previewVideoSrc?: string
   included: IncludedItem[]
   notIncluded?: string[]
 }
 
+const FALLBACK_IMAGE = '/images/After.webp'
+const fallbackSlider = Array(6).fill(FALLBACK_IMAGE)
+
 const plans: PricingPlan[] = [
+  // ---------- IMAGES ----------
   {
-    id: 'starter',
-    eyebrow: 'Starter',
-    name: 'Starter System',
-    shortName: 'Starter',
-    description: 'Clean ecommerce basics for one simple product.',
-    priceInr: '₹39,000',
-    priceUsd: '$475',
-    cta: 'Try This',
-    intent: 'We need basic ecommerce product visuals.',
+    id: 'amazon-renders',
+    category: 'images',
+    eyebrow: 'Amazon',
+    name: 'Amazon Listing Renders',
+    description: 'White background renders built for marketplace compliance.',
+    priceInr: '₹25,000',
+    priceUsd: '$300',
+    cta: 'Get Listing Renders',
+    intent: 'We need white background Amazon listing renders.',
     bestFor:
-      'For brands that need clean product listing visuals and want to test 3D before building a full content system.',
+      'For brands that need a compliant, complete Amazon listing image set — clean white background, marketplace-ready.',
+    sliderImages: fallbackSlider,
     included: [
-      {
-        title: '3D model setup',
-        description:
-          'We create or prepare one simple product model for clean ecommerce visuals.',
-      },
-      {
-        title: '3 white/grey background renders',
-        description:
-          'Front view, angle view, and hero/detail view for Shopify, Amazon, or marketplace use.',
-      },
-      {
-        title: '5–8 sec 360° turntable animation',
-        description:
-          'A simple rotating product animation for PDPs, reels, or product previews.',
-      },
-      {
-        title: 'Basic studio lighting',
-        description:
-          'Clean product lighting focused on clarity, shape, and label visibility.',
-      },
-      {
-        title: '1 minor revision round',
-        description:
-          'Small corrections for label placement, angle, framing, lighting, or material tweaks.',
-      },
+      { title: '3D model setup', description: 'Built or prepared in 3D for consistent angles.' },
+      { title: '5–6 white bg renders', description: 'Full listing set, Amazon-compliant.' },
+      { title: 'Marketplace-ready export', description: 'Sized for direct Seller Central upload.' },
+      { title: '1 revision round', description: 'Angle, framing, or lighting corrections.' },
     ],
-    notIncluded: [
-      'Stylized render',
-      'Lifestyle scene',
-      'Promo video',
-      'Ad creative variations',
-      'Complex material work',
-    ],
+    notIncluded: ['Branded grey background', 'Hero/hover pairing', 'Lifestyle scene', 'Video'],
   },
   {
-    id: 'core',
-    eyebrow: 'Recommended',
-    name: 'Product Content System',
-    shortName: 'Content System',
-    description:
-      'Complete product content system — built once, reused across PDPs, ads, launch posts, and website sections.',
-    priceInr: '₹79,000',
-    priceUsd: '$950',
+    id: 'shopify-renders',
+    category: 'images',
+    eyebrow: 'Shopify',
+    name: 'Shopify Brand Renders',
+    description: 'Branded grey background renders with consistent hero and hover pairs.',
+    priceInr: '₹35,000',
+    priceUsd: '$420',
     cta: 'Get Started',
-    intent: 'We need a complete product content system.',
+    intent: 'We need branded grey background renders for Shopify with hero and hover images.',
     featured: true,
     bestFor:
-      'For D2C brands that want premium product pages, launch visuals, and reusable creative assets.',
+      'For D2C brands that need a stronger, more consistent brand look than Amazon requires — hero and hover pairs included.',
+    sliderImages: fallbackSlider,
     included: [
-      {
-        title: 'Reusable 3D model setup',
-        description:
-          'Your product is built properly in 3D so future renders, angles, and animations become easier to create.',
-      },
-      {
-        title: '5 ecommerce renders',
-        description:
-          'Front, back, left/right side, top/detail, and premium angle/hero view on white or grey background.',
-      },
-      {
-        title: '1 stylized hero render',
-        description:
-          'A premium CGI visual designed for ads, website sections, launch posts, and hero sections.',
-      },
-      {
-        title: '10–12 sec looping product animation',
-        description:
-          'A short product animation inside a simple environment. Useful for PDPs, reels, ads, and website sections.',
-      },
-      {
-        title: 'Simple environment setup',
-        description:
-          'A clean brand-relevant 3D environment. Not a full promo film, but enough to make the product feel premium.',
-      },
-      {
-        title: 'Lighting and material refinement',
-        description:
-          'We refine reflections, shadows, materials, labels, and product finish so the product looks more valuable online.',
-      },
-      {
-        title: '2 minor revision rounds',
-        description:
-          'Enough refinement room to polish the content system without turning it into a fully custom campaign scope.',
-      },
+      { title: '3D model setup', description: 'Built to a higher finish standard.' },
+      { title: '4–5 grey bg renders', description: 'Styled to match your PDP aesthetic.' },
+      { title: 'Hero + hover pairing', description: 'Matched pair for every product.' },
+      { title: 'Brand-matched lighting', description: 'Tuned to your existing brand visuals.' },
+      { title: '1 revision round', description: 'Framing, lighting, or material tweaks.' },
+    ],
+    notIncluded: ['Full PDP set', 'Lifestyle/environment scene', 'Video'],
+  },
+  {
+    id: 'full-pdp',
+    category: 'images',
+    eyebrow: 'Shopify',
+    name: 'Full PDP Listing',
+    description: 'Complete Shopify product page visual set, brand-consistent end to end.',
+    priceInr: '₹55,000',
+    priceUsd: '$660',
+    cta: 'Get Full Listing',
+    intent: 'We need a full Shopify PDP listing image set.',
+    bestFor:
+      'For brands that want their entire product page — not just a few renders — to look like one cohesive shoot.',
+    sliderImages: fallbackSlider,
+    included: [
+      { title: 'Reusable 3D model', description: 'Built once, reused for future assets.' },
+      { title: 'Full render set', description: 'Hero, hover, detail, in-use, scale shots.' },
+      { title: 'Hero + hover across set', description: 'Consistent pairing, every slot.' },
+      { title: 'One art direction', description: 'Applied across the full set.' },
+      { title: '2 revision rounds', description: 'Room to refine the full set.' },
+    ],
+    notIncluded: ['Lifestyle/environment scene', 'Video'],
+  },
+  {
+    id: 'campaign-visuals',
+    category: 'images',
+    eyebrow: 'Campaign',
+    name: 'Campaign Visuals',
+    description: 'High-end, multi-angle renders in full environments with creative direction.',
+    priceInr: '₹8,000–10,000',
+    priceUsd: '$95–120',
+    priceNote: 'per image',
+    cta: 'Discuss Campaign',
+    intent: 'We need high-end campaign visuals with environments and creative direction.',
+    bestFor:
+      'For launches, ad campaigns, and hero content that needs full environments, not just product-on-background.',
+    sliderImages: fallbackSlider,
+    included: [
+      { title: 'Creative direction', description: 'Planned as a scene, not just an angle.' },
+      { title: 'Full environment build', description: 'Custom scenes, not template backdrops.' },
+      { title: 'Priced per image', description: 'Scoped to complexity.' },
+      { title: 'Scoped revisions', description: 'Agreed upfront per project.' },
+    ],
+  },
+
+  // ---------- VIDEO ----------
+  {
+    id: 'turntable',
+    category: 'video',
+    eyebrow: 'Amazon',
+    name: 'Turntable Video',
+    description: 'Simple 360° turntable video for the Amazon video slot.',
+    priceInr: '₹10,000',
+    priceUsd: '$120',
+    priceNote: '₹8,000 if model already exists',
+    cta: 'Get Turntable',
+    intent: 'We need a simple turntable video for Amazon.',
+    bestFor:
+      'For sellers who need the Amazon video slot filled with a clean, simple rotating product shot.',
+    previewVideoSrc: '/videos/pricing/turntable.mp4',
+    included: [
+      { title: '3D modelling', description: 'Skipped (and cheaper) if a model exists.' },
+      { title: '360° rotation', description: 'A smooth, continuous turntable.' },
+      { title: 'Marketplace export', description: 'Sized for direct Amazon upload.' },
+    ],
+    notIncluded: ['Scene/environment', 'Camera movement', 'Sound design'],
+  },
+  {
+    id: 'social-promo',
+    category: 'video',
+    eyebrow: 'Social',
+    name: 'Social Promo Animation',
+    description: 'Product animation built for reels, stories, and social ads.',
+    priceInr: '₹55,000',
+    priceUsd: '$660',
+    priceNote: 'up to ~15 sec',
+    cta: 'Get Started',
+    intent: 'We need a social media product promo animation.',
+    bestFor:
+      'For brands running paid social or organic content that needs a short, scroll-stopping product animation.',
+    included: [
+      { title: '3D model setup', description: 'Prepared for animation.' },
+      { title: 'Up to 15 sec', description: 'Camera movement, product highlights.' },
+      { title: 'Simple environment', description: 'Clean, brand-relevant setting.' },
+      { title: '1 revision round', description: 'Timing, framing, or pacing.' },
+    ],
+    notIncluded: ['Full campaign scene design', 'Sound-ready final mix'],
+  },
+  {
+    id: 'full-animation',
+    category: 'video',
+    eyebrow: 'Brand',
+    name: 'Full Product Animation',
+    description: 'A proper hero brand video, longer and more directed than a social cut.',
+    priceInr: '₹75,000',
+    priceUsd: '$900',
+    priceNote: '25–30 sec',
+    cta: 'Get Started',
+    intent: 'We need a full product animation, 25-30 seconds.',
+    featured: true,
+    bestFor:
+      'For brands that want one strong hero video reusable across the website, ads, and launch posts.',
+    previewVideoSrc: '/videos/pricing/full-animation.mp4',
+    included: [
+      { title: 'Reusable 3D model', description: 'Supports future renders too.' },
+      { title: '25–30 sec animation', description: 'Full scene direction, camera movement.' },
+      { title: 'Scene direction', description: 'Planned like a brand asset.' },
+      { title: 'Sound-ready edit', description: 'Ready for hero sections, ads, social.' },
+      { title: '2 revision rounds', description: 'After preview and direction lock.' },
     ],
   },
   {
-    id: 'growth',
+    id: 'launch-video',
+    category: 'video',
     eyebrow: 'Launch',
-    name: 'Growth Content Engine',
-    shortName: 'Growth',
-    description: 'Launch-ready promo video plus premium campaign assets.',
-    priceInr: '₹1,29,000',
-    priceUsd: '$1,550',
-    cta: 'Scale Now',
-    intent: 'We need a product launch promo video and campaign assets.',
+    name: 'Product Launch Video',
+    description: 'Full launch creative — multi-scene, campaign-grade direction.',
+    priceInr: '₹1,60,000',
+    priceUsd: '$1,930',
+    cta: 'Discuss Launch',
+    intent: 'We need a full product launch video.',
     bestFor:
-      'For brands launching a product, running paid ads, or needing a proper CGI promo video.',
+      'For a real product launch moment — multiple scenes, full creative direction, campaign-level polish.',
+    previewVideoSrc: '/videos/pricing/launch-video.mp4',
     included: [
-      {
-        title: '3D model setup',
-        description:
-          'A polished product model prepared for renders, animation, and campaign visuals.',
-      },
-      {
-        title: '5 white/grey background renders',
-        description:
-          'Clean ecommerce-ready renders for PDPs, marketplaces, decks, and website sections.',
-      },
-      {
-        title: '1 stylized campaign render',
-        description:
-          'A premium CGI render with stronger art direction. Individually, stylized renders can cost around ₹7k+ each.',
-      },
-      {
-        title: '20–25 sec product promo animation',
-        description:
-          'A proper product promo video with scene direction, camera movement, product highlights, and final edit.',
-      },
-      {
-        title: 'Scene design and animation direction',
-        description:
-          'The video is planned like a campaign asset, not just a basic rotating product animation.',
-      },
-      {
-        title: 'Music / sound-ready final edit',
-        description:
-          'Final edited animation ready for website hero sections, launch pages, ads, and social platforms.',
-      },
-      {
-        title: '2 minor revision rounds',
-        description:
-          'Small corrections and refinements after preview stages and final direction lock.',
-      },
+      { title: 'Full creative direction', description: 'Concept, scenes, shot list.' },
+      { title: 'Multi-scene animation', description: 'More than one environment, one film.' },
+      { title: 'Sound design & mix', description: 'Fully finished, launch-ready.' },
+      { title: 'Scoped revisions', description: 'Agreed upfront per brief.' },
     ],
   },
 ]
@@ -184,16 +261,104 @@ const plans: PricingPlan[] = [
 const customScopeItems = [
   'Multiple products or bundles',
   'More than one stylized scene',
-  'Animation longer than 25 seconds',
+  'Animation longer than 30 seconds',
   'Advanced glass, liquid, fabric, or mechanical detail',
   'Multiple ad cutdowns or campaign versions',
   'Full launch creative direction',
 ]
 
+const categoryCopy: Record<Category, { eyebrow: string; heading: string; sub: string }> = {
+  images: {
+    eyebrow: 'Renders',
+    heading: 'Every render tier, fully laid out.',
+    sub: 'Pick by where the image will live — Amazon, Shopify, or a campaign.',
+  },
+  video: {
+    eyebrow: 'Video',
+    heading: 'Every video tier, fully laid out.',
+    sub: 'Pick by where it will run — a marketplace slot, a feed, or a launch.',
+  },
+}
+
+function ImageSlider({ images, alt }: { images: string[]; alt: string }) {
+  const [index, setIndex] = useState(0)
+  const go = (dir: number) => setIndex((i) => (i + dir + images.length) % images.length)
+
+  return (
+    <div>
+      <div className="relative aspect-[4/3] overflow-hidden rounded-[1.4rem] bg-secondary">
+        <Image
+          src={images[index]}
+          alt={`${alt} — example ${index + 1} of ${images.length}`}
+          fill
+          itemProp="image"
+          className="object-cover object-center"
+          sizes="(max-width: 1024px) 100vw, 800px"
+        />
+
+        {images.length > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={() => go(-1)}
+              aria-label="Previous example"
+              className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm transition hover:bg-background"
+            >
+              <CaretLeft size={16} weight="bold" />
+            </button>
+            <button
+              type="button"
+              onClick={() => go(1)}
+              aria-label="Next example"
+              className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm transition hover:bg-background"
+            >
+              <CaretRight size={16} weight="bold" />
+            </button>
+          </>
+        )}
+      </div>
+
+      {images.length > 1 && (
+        <div className="mt-3 flex justify-center gap-1.5" aria-hidden="true">
+          {images.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              tabIndex={-1}
+              onClick={() => setIndex(i)}
+              className={`h-1.5 rounded-full transition-all ${
+                i === index ? 'w-6 bg-foreground' : 'w-1.5 bg-border'
+              }`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function VideoPreview({ src, label }: { src: string; label: string }) {
+  return (
+    <div className="relative aspect-[4/3] overflow-hidden rounded-[1.4rem] bg-secondary">
+      <video
+        src={src}
+        poster={FALLBACK_IMAGE}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="h-full w-full object-cover"
+      />
+      <span className="absolute bottom-3 left-3 rounded-full bg-background/90 px-3 py-1 text-xs font-semibold text-foreground">
+        Example — {label}
+      </span>
+    </div>
+  )
+}
+
 export function PricingContent() {
   const [currency, setCurrency] = useState<Currency>('INR')
-  const [selectedPlan, setSelectedPlan] = useState<PricingPlan | null>(null)
-  const [openItem, setOpenItem] = useState<number | null>(0)
+  const [category, setCategory] = useState<Category>('images')
 
   useEffect(() => {
     let isMounted = true
@@ -202,7 +367,6 @@ export function PricingContent() {
       .then((res) => res.json())
       .then((data) => {
         if (!isMounted) return
-
         if (data?.country_code && data.country_code !== 'IN') {
           setCurrency('USD')
         }
@@ -214,259 +378,218 @@ export function PricingContent() {
     }
   }, [])
 
-  useEffect(() => {
-    if (!selectedPlan) return
+  const activePlans = useMemo(() => plans.filter((plan) => plan.category === category), [category])
 
-    const originalOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        closeBreakdown()
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      document.body.style.overflow = originalOverflow
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [selectedPlan])
-
-  const featuredPlan = useMemo(
-    () => plans.find((plan) => plan.featured) || plans[1],
-    []
-  )
-
-  const starterPlan = useMemo(
-    () => plans.find((plan) => plan.id === 'starter') || plans[0],
-    []
-  )
-
-  const growthPlan = useMemo(
-    () => plans.find((plan) => plan.id === 'growth') || plans[2],
-    []
-  )
-
-  const getPrice = (plan: PricingPlan) =>
-    currency === 'INR' ? plan.priceInr : plan.priceUsd
+  const getPrice = (plan: PricingPlan) => (currency === 'INR' ? plan.priceInr : plan.priceUsd)
 
   const getWhatsAppLink = (plan: PricingPlan) => {
     const message = encodeURIComponent(
-      `Hey, I'm interested in the ${plan.name} (${getPrice(plan)}). ${plan.intent}`
+      `Hey, I'm interested in the ${plan.name} (${getPrice(plan)}${
+        plan.priceNote ? `, ${plan.priceNote}` : ''
+      }). ${plan.intent}`
     )
-
     return `https://wa.me/918384092211?text=${message}`
   }
 
-  const openBreakdown = (plan: PricingPlan) => {
-    setSelectedPlan(plan)
-    setOpenItem(0)
-  }
-
-  const closeBreakdown = () => {
-    setSelectedPlan(null)
-    setOpenItem(0)
-  }
+  const copy = categoryCopy[category]
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-background text-foreground">
+    <main className="min-h-screen overflow-x-clip bg-background text-foreground">
       <Header />
 
-      <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[540px] bg-[radial-gradient(circle_at_50%_0%,rgba(219,230,76,0.34),transparent_46%)]" />
+      {/* Category switcher — Excluded from indexing bots via data-nosnippet */}
+      <div
+        data-nosnippet
+        className="pointer-events-none fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 flex justify-center px-4 sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]"
+      >
+        <div className="pointer-events-auto inline-flex rounded-full border border-border bg-card/95 p-1 shadow-[0_12px_36px_rgba(0,31,63,0.18)] backdrop-blur">
+          {(['images', 'video'] as Category[]).map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setCategory(cat)}
+              aria-pressed={category === cat}
+              className={`rounded-full px-6 py-2.5 text-sm font-semibold capitalize transition ${
+                category === cat
+                  ? 'bg-foreground text-background'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {cat === 'images' ? 'Images' : 'Video'}
+            </button>
+          ))}
+        </div>
+      </div>
 
-        <div className="relative mx-auto max-w-7xl px-4 pb-14 pt-24 sm:px-6 sm:pb-20 sm:pt-32 lg:px-8">
-          <div className="mx-auto max-w-5xl text-center">
-            <h1 className="text-balance text-[3rem] font-semibold leading-[0.98] tracking-[-0.09em] text-foreground sm:text-[5.2rem] lg:text-[6.4rem]">
-              Simple pricing. No guesswork.
-            </h1>
+      {/* Section intro line (Adjusted pt-28 sm:pt-32 to clear fixed header) */}
+      <header className="mx-auto max-w-4xl px-4 pb-2 pt-28 sm:pt-32 sm:px-6 lg:px-8">
+        <div className="border-b border-border pb-8">
+          <p className="mb-2 text-sm font-semibold text-muted-foreground">{copy.eyebrow}</p>
+          {/* Main page heading (H1) for SEO */}
+          <h1 className="text-[1.6rem] font-semibold leading-[1.1] tracking-[-0.05em] text-foreground sm:text-3xl">
+            {copy.heading}
+          </h1>
+          <p className="mt-3 text-base leading-7 text-foreground/85">{copy.sub}</p>
+        </div>
+      </header>
 
-            <p className="mx-auto mt-8 max-w-2xl text-balance text-base leading-8 text-muted-foreground sm:text-lg">
-              Send your product once — get the renders, animation, and campaign
-              assets needed for ecommerce, ads, websites, and launches.
-            </p>
-          </div>
-
-          <div className="mt-16 sm:mt-20">
-            <article className="group mx-auto max-w-6xl rounded-[1.55rem] border border-border bg-card p-3 shadow-[0_28px_90px_rgba(0,31,63,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_38px_120px_rgba(0,31,63,0.12)] sm:rounded-[2rem] sm:p-4 lg:p-5">
-              <div className="grid gap-5 lg:grid-cols-[1fr_1.05fr] lg:items-stretch">
-                <div className="order-1 aspect-[1.05/1] overflow-hidden rounded-[1.2rem] bg-secondary sm:aspect-[16/10] sm:rounded-[1.55rem] lg:order-2 lg:aspect-auto lg:min-h-[455px]">
-                  <Image
-                    src="/images/After.webp"
-                    alt="Premium product visual example"
-                    fill
-                    className="object-cover object-center transition duration-700 group-hover:scale-[1.04]"
-                    sizes="(max-width: 1024px) 100vw, 560px"
-                    priority
-                  />
-                </div>
-
-                <div className="order-2 flex min-h-0 flex-col px-2 pb-3 pt-1 sm:px-4 sm:pb-5 sm:pt-2 lg:order-1 lg:min-h-[455px] lg:px-5 lg:py-5">
-                  <div className="mb-5 flex flex-wrap items-center gap-2 lg:mb-8">
-                    <span className="inline-flex rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-muted-foreground">
-                      {featuredPlan.eyebrow}
-                    </span>
-
+      {/* Tiers rendered with structured layout: Title -> Media -> Pricing -> Included */}
+      <div className="flex flex-col">
+        {activePlans.map((plan, idx) => (
+          <article
+            key={plan.id}
+            itemScope
+            itemType="https://schema.org/Product"
+            className={`border-b border-border ${idx % 2 === 1 ? 'bg-secondary/40' : ''}`}
+          >
+            <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+              
+              {/* 1. TITLE & SUBTITLE */}
+              <header className="mb-8">
+                <div className="mb-3 flex flex-wrap items-center gap-2.5">
+                  <span className="text-xs font-semibold tabular-nums text-muted-foreground" aria-hidden="true">
+                    {String(idx + 1).padStart(2, '0')} / {String(activePlans.length).padStart(2, '0')}
+                  </span>
+                  <span className="text-xs font-semibold text-muted-foreground" aria-hidden="true">·</span>
+                  <span itemProp="category" className="text-xs font-semibold text-muted-foreground">{plan.eyebrow}</span>
+                  {plan.featured && (
                     <span className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-foreground">
                       Most chosen
                     </span>
-                  </div>
-
-                  <h2 className="max-w-xl text-[1.55rem] font-semibold leading-[1.12] tracking-[-0.065em] text-foreground sm:text-[2.25rem] lg:text-[2.9rem]">
-                    {featuredPlan.name}
-                  </h2>
-
-                  <p className="mt-4 max-w-xl text-sm leading-7 text-muted-foreground sm:text-base">
-                    {featuredPlan.description}
-                  </p>
-
-                  <div className="mt-7 text-[3.1rem] font-semibold leading-none tracking-[-0.08em] text-foreground sm:text-[4rem]">
-                    {getPrice(featuredPlan)}
-                  </div>
-
-                  <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                    <a
-                      href={getWhatsAppLink(featuredPlan)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center justify-center rounded-full bg-foreground px-8 py-4 text-sm font-semibold text-background transition hover:-translate-y-0.5 hover:opacity-90"
-                    >
-                      {featuredPlan.cta}
-                    </a>
-
-                    <button
-                      type="button"
-                      onClick={() => openBreakdown(featuredPlan)}
-                      className="inline-flex items-center justify-center rounded-full border border-border bg-background px-8 py-4 text-sm font-semibold text-foreground transition hover:bg-secondary"
-                    >
-                      What's included
-                    </button>
-                  </div>
-
-                  <div className="mt-7 grid gap-3 border-t border-border pt-6 sm:grid-cols-2 lg:mt-auto">
-                    {[
-                      '5 ecommerce renders',
-                      '1 stylized hero render',
-                      '10–12 sec product animation',
-                      'Reusable 3D setup',
-                    ].map((item) => (
-                      <button
-                        key={item}
-                        type="button"
-                        onClick={() => openBreakdown(featuredPlan)}
-                        className="rounded-full bg-secondary px-4 py-2.5 text-left text-xs font-semibold text-muted-foreground transition hover:bg-primary hover:text-foreground"
-                      >
-                        {item}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
-        <div className="mb-8 max-w-2xl sm:mb-10">
-          <p className="mb-3 text-sm font-semibold text-muted-foreground">
-            Compare Packages
-          </p>
-
-          <h2 className="text-[2rem] font-semibold leading-[1.08] tracking-[-0.07em] text-foreground sm:text-5xl">
-            Pick the package based on how much content the product needs.
-          </h2>
-
-          <p className="mt-6 text-base leading-8 text-foreground/85 sm:text-lg">
-            Starter covers clean listing assets. Product Content System gives
-            the best all-round value. Growth adds a proper promo video.
-          </p>
-        </div>
-
-        <div className="grid gap-5 lg:grid-cols-2">
-          {[starterPlan, growthPlan].map((plan) => (
-            <article
-              key={plan.id}
-              className="group rounded-[1.15rem] border border-border bg-card p-3 shadow-[0_18px_55px_rgba(0,31,63,0.045)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_26px_80px_rgba(0,31,63,0.09)] sm:rounded-[1.4rem]"
-            >
-              <div className="grid grid-cols-[110px_minmax(0,1fr)] gap-3 sm:grid-cols-[170px_minmax(0,1fr)] sm:gap-5 lg:grid-cols-1">
-                <div className="aspect-square overflow-hidden rounded-[0.9rem] bg-secondary sm:rounded-[1.1rem] lg:aspect-[1.25/1]">
-                  <div className="flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_35%_20%,rgba(219,230,76,0.85),transparent_34%),linear-gradient(135deg,var(--secondary),var(--background))]">
-                    <span className="rounded-full border border-border bg-card/80 px-4 py-2 text-xs font-semibold text-foreground shadow-sm backdrop-blur">
-                      {plan.eyebrow}
-                    </span>
-                  </div>
+                  )}
                 </div>
 
-                <div className="min-w-0 py-1 lg:px-2 lg:pb-3 lg:pt-4">
-                  <div className="mb-2 flex items-center gap-2 overflow-hidden whitespace-nowrap">
-                    <span className="truncate text-xs font-semibold text-muted-foreground">
-                      {plan.eyebrow}
-                    </span>
+                <h3 itemProp="name" className="text-[1.7rem] font-semibold leading-[1.08] tracking-[-0.05em] text-foreground sm:text-[2.2rem]">
+                  {plan.name}
+                </h3>
 
-                    <span className="shrink-0 text-xs font-semibold text-muted-foreground">
-                      •
-                    </span>
+                <p itemProp="description" className="mt-3 max-w-2xl text-[0.95rem] leading-7 text-muted-foreground">
+                  {plan.description}
+                </p>
+              </header>
 
-                    <span className="truncate text-xs font-semibold text-muted-foreground">
-                      Fixed scope
+              {/* 2. MEDIA COMPONENT */}
+              <figure className="mb-10 w-full">
+                <figcaption className="sr-only">Visual preview of the {plan.name} service</figcaption>
+                {plan.category === 'images' ? (
+                  <ImageSlider images={plan.sliderImages ?? fallbackSlider} alt={plan.name} />
+                ) : plan.id === 'social-promo' ? (
+                  <div className="relative overflow-hidden rounded-[1.4rem] bg-secondary sm:aspect-[4/3] [&_.firework-embed]:!relative [&_.firework-embed]:!h-auto [&_fw-widget]:!h-auto [&_iframe]:!h-auto sm:[&_.firework-embed]:!absolute sm:[&_.firework-embed]:!h-full sm:[&_fw-widget]:!h-full sm:[&_iframe]:!h-full">
+                    <FireworkEmbed />
+                    <span className="absolute bottom-3 left-3 z-10 rounded-full bg-background/90 px-3 py-1 text-xs font-semibold text-foreground">
+                      Interactive preview
                     </span>
                   </div>
+                ) : (
+                  <VideoPreview src={plan.previewVideoSrc ?? ''} label={plan.name} />
+                )}
+              </figure>
 
-                  <h3 className="overflow-hidden text-[1.02rem] font-semibold leading-[1.25] tracking-[-0.035em] text-foreground [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3] sm:text-lg lg:text-2xl lg:leading-[1.16] lg:tracking-[-0.055em]">
-                    {plan.name}
-                  </h3>
-
-                  <p className="mt-3 hidden text-sm leading-7 text-muted-foreground sm:block">
-                    {plan.description}
-                  </p>
-
-                  <div className="mt-4 text-3xl font-semibold tracking-[-0.07em] text-foreground">
-                    {getPrice(plan)}
+              {/* 3. PRICING & CTA */}
+              <div 
+                itemProp="offers" 
+                itemScope 
+                itemType="https://schema.org/Offer" 
+                className="mb-12 flex flex-col items-start gap-6 rounded-[1.5rem] border border-border bg-card p-6 shadow-sm sm:flex-row sm:items-end sm:justify-between sm:p-8"
+              >
+                {/* Meta tags required for Schema.org Offer validity */}
+                <meta itemProp="priceCurrency" content={currency} />
+                <meta itemProp="price" content={getPrice(plan).replace(/[^0-9]/g, '')} />
+                <meta itemProp="availability" content="https://schema.org/InStock" />
+                
+                <div>
+                  <div className="flex items-end gap-3">
+                    <span className="text-[2.4rem] font-semibold leading-none tracking-[-0.06em] text-foreground sm:text-[3rem]">
+                      {getPrice(plan)}
+                    </span>
+                    <span className="pb-1.5 text-sm font-semibold text-muted-foreground">starts at</span>
                   </div>
+                  {plan.priceNote && <p className="mt-2 text-sm text-muted-foreground">{plan.priceNote}</p>}
+                  <p className="mt-4 max-w-sm text-sm leading-6 text-foreground/80">{plan.bestFor}</p>
                 </div>
-              </div>
 
-              <div className="mt-4 border-t border-border pt-4">
-                <div className="flex flex-col gap-3 sm:flex-row">
+                <div className="shrink-0">
                   <a
                     href={getWhatsAppLink(plan)}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-full bg-foreground px-6 py-3.5 text-sm font-semibold text-background transition hover:opacity-90"
+                    itemProp="url"
+                    className="inline-flex items-center justify-center rounded-full bg-foreground px-8 py-4 text-sm font-semibold text-background transition hover:-translate-y-0.5 hover:opacity-90"
                   >
                     {plan.cta}
                   </a>
-
-                  <button
-                    type="button"
-                    onClick={() => openBreakdown(plan)}
-                    className="inline-flex items-center justify-center rounded-full border border-border bg-background px-6 py-3.5 text-sm font-semibold text-foreground transition hover:bg-secondary"
-                  >
-                    What's included
-                  </button>
                 </div>
-
-                <p className="mt-4 text-sm leading-7 text-muted-foreground">
-                  {plan.bestFor}
-                </p>
               </div>
-            </article>
-          ))}
+
+              {/* 4. WHAT'S INCLUDED */}
+              <div>
+                <h4 className="mb-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  What's included
+                </h4>
+
+                <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {plan.included.map((item) => (
+                    <li key={item.title} className="rounded-2xl bg-secondary/60 p-5 text-center">
+                      <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg bg-foreground text-background">
+                        <Check size={18} weight="bold" aria-hidden="true" />
+                      </div>
+                      <p className="mt-3 text-sm font-medium leading-5 text-foreground">{item.title}</p>
+                    </li>
+                  ))}
+                </ul>
+
+                {plan.notIncluded && plan.notIncluded.length > 0 && (
+                  <div className="mt-6 flex flex-wrap gap-2 border-t border-border pt-6">
+                    <span className="text-xs font-semibold text-muted-foreground">Not included:</span>
+                    <ul className="flex flex-wrap gap-2">
+                      {plan.notIncluded.map((item) => (
+                        <li
+                          key={item}
+                          className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-muted-foreground line-through decoration-muted-foreground/50"
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      {/* Bundle cross-sell */}
+      <section className="mx-auto max-w-4xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+        <div className="flex flex-col items-start justify-between gap-5 rounded-[1.5rem] border border-border bg-[linear-gradient(135deg,rgba(219,230,76,0.12),transparent)] p-6 sm:flex-row sm:items-center sm:rounded-[1.75rem] sm:p-8">
+          <div>
+            <p className="text-sm font-semibold text-muted-foreground">Bundle & save</p>
+            <h3 className="mt-2 max-w-xl text-xl font-semibold leading-[1.2] tracking-[-0.04em] text-foreground sm:text-2xl">
+              Need renders and a video for the same product? Bundle both from one
+              3D setup.
+            </h3>
+          </div>
+
+          <a
+            href="https://wa.me/918384092211?text=I'd%20like%20to%20bundle%20renders%20and%20video%20for%20one%20product%20to%20save%20on%20a%20shared%203D%20setup."
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex shrink-0 items-center justify-center rounded-full bg-foreground px-6 py-3.5 text-sm font-semibold text-background transition hover:-translate-y-0.5 hover:opacity-90"
+          >
+            Ask About Bundling
+          </a>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+      {/* Custom scope */}
+      <section className="mx-auto max-w-4xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[1fr_0.95fr] lg:items-center">
           <div>
             <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-sm font-semibold text-foreground">
               Custom scope
             </div>
-
             <h2 className="max-w-3xl text-[1.75rem] font-semibold leading-[1.14] tracking-[-0.06em] text-foreground sm:text-5xl">
-              Custom quotes are only for work outside the fixed packages.
+              Custom quotes are only for work outside the fixed tiers.
             </h2>
           </div>
 
@@ -477,18 +600,15 @@ export function PricingContent() {
               </h3>
 
               <p className="mt-3 leading-8 text-muted-foreground">
-                We start with our fixed packages to keep everything simple and
+                We start with our fixed tiers to keep everything simple and
                 transparent. Custom scope is only when something can't be covered
-                by the packages above.
+                by the tiers above.
               </p>
 
               <ul className="mt-6 space-y-2.5">
                 {customScopeItems.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-center gap-2 text-sm leading-7 text-foreground/85"
-                  >
-                    <span className="shrink-0 text-xs">•</span>
+                  <li key={item} className="flex items-center gap-2 text-sm leading-7 text-foreground/85">
+                    <span className="shrink-0 text-xs" aria-hidden="true">•</span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -498,14 +618,15 @@ export function PricingContent() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+      {/* Closing CTA */}
+      <section className="mx-auto max-w-4xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
         <div className="rounded-[1.75rem] border border-border bg-[linear-gradient(135deg,rgba(219,230,76,0.1),transparent)] p-5 sm:rounded-[2.2rem] sm:p-8">
           <h2 className="max-w-2xl text-[1.75rem] font-semibold leading-[1.14] tracking-[-0.06em] text-foreground sm:text-4xl">
             Know exactly what you're getting.
           </h2>
 
           <p className="mt-6 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
-            No hourly rates. No surprises. We price fixed packages based on scope and
+            No hourly rates. No surprises. We price fixed tiers based on scope and
             complexity. You get clear deliverables. We stay committed to that scope.
           </p>
 
@@ -530,113 +651,6 @@ export function PricingContent() {
       </section>
 
       <Footer />
-
-      {selectedPlan && (
-        <div
-          className="fixed inset-0 z-40 flex items-end bg-black/40 backdrop-blur-sm sm:items-center"
-          onClick={closeBreakdown}
-        >
-          <div
-            className="w-full max-w-2xl rounded-t-[1.75rem] border-t border-border bg-background p-5 shadow-[0_-20px_70px_rgba(0,0,0,0.15)] sm:rounded-[1.75rem] sm:p-8 lg:p-10"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between">
-              <h2 className="text-[1.75rem] font-semibold leading-[1.14] tracking-[-0.06em] text-foreground sm:text-3xl">
-                {selectedPlan.name}
-              </h2>
-
-              <button
-                type="button"
-                onClick={closeBreakdown}
-                className="shrink-0 rounded-full hover:opacity-75"
-              >
-                <svg
-                  className="h-6 w-6 text-foreground"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            <div className="mt-8">
-              <h3 className="text-base font-semibold text-foreground">
-                What's Included
-              </h3>
-
-              <div className="mt-6 space-y-3">
-                {selectedPlan.included.map((item, idx) => (
-                  <div key={idx} className="border-b border-border pb-4 last:border-b-0 last:pb-0">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setOpenItem(openItem === idx ? null : idx)
-                      }
-                      className="flex w-full items-center justify-between gap-3 py-2 text-left"
-                    >
-                      <span className="text-sm font-semibold text-foreground">
-                        {item.title}
-                      </span>
-                      <span className="shrink-0 text-xs text-muted-foreground">
-                        {openItem === idx ? '−' : '+'}
-                      </span>
-                    </button>
-
-                    {openItem === idx && (
-                      <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                        {item.description}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {selectedPlan.notIncluded && selectedPlan.notIncluded.length > 0 && (
-              <div className="mt-8">
-                <h3 className="text-base font-semibold text-foreground">
-                  Not Included
-                </h3>
-
-                <div className="mt-4 space-y-2">
-                  {selectedPlan.notIncluded.map((item) => (
-                    <div key={item} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <span>•</span>
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={getWhatsAppLink(selectedPlan)}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center justify-center rounded-full bg-foreground px-8 py-4 text-sm font-semibold text-background transition hover:opacity-90"
-              >
-                {selectedPlan.cta}
-              </a>
-
-              <button
-                type="button"
-                onClick={closeBreakdown}
-                className="inline-flex items-center justify-center rounded-full border border-border bg-background px-8 py-4 text-sm font-semibold text-foreground transition hover:bg-secondary"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </main>
   )
 }
