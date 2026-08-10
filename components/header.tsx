@@ -16,9 +16,10 @@ export function Header() {
   if (!mounted) return null
 
   return (
-    // Changed "fixed" to "sticky" right here 👇
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-md">
-      <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
+      {/* 👇 Changed h-20 to h-16 right here to slim it down */}
+      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
+        
         {/* Logo */}
         <Link
           href="/"
@@ -68,7 +69,7 @@ export function Header() {
         <button
           type="button"
           onClick={() => open()}
-          className="btn-primary focus-ring group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300 hover:scale-[1.03] hover:opacity-90 active:scale-[0.98]"
+          className="btn-primary focus-ring group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-2.5 text-sm font-semibold transition-all duration-300 hover:scale-[1.03] hover:opacity-90 active:scale-[0.98]"
         >
           <span
             aria-hidden="true"

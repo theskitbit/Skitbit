@@ -8,33 +8,25 @@ export default function AnnouncementBanner() {
   const [isVisible, setIsVisible] = useState(true)
   const [isMounted, setIsMounted] = useState(false)
 
+  // Ensures component only renders on client to avoid Next.js SSR hydration bugs
   useEffect(() => {
-    // Ensures component only renders on client to avoid Next.js SSR bugs
     setIsMounted(true)
-    
-    // Increased to 4.5s to ensure it's comfortably visible after page load
-    const timer = setTimeout(() => {
-      setIsVisible(false)
-    }, 4500) 
-
-    return () => clearTimeout(timer)
   }, [])
 
-  // If the browser hasn't hydrated yet, render nothing
   if (!isMounted) return null
 
   return (
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          // Swapped from 'height: 0' to 'y: -50' to prevent the Framer Motion 0px height bug
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, height: 0, y: -10 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="relative w-full bg-white border-b border-gray-200 z-[99999] overflow-hidden shadow-sm flex justify-center"
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="relative w-full bg-white text-black border-b border-gray-200 z-[99999] overflow-hidden shadow-sm flex justify-center"
         >
           <div className="flex items-center justify-center gap-3 py-2.5 px-4 sm:px-10 text-center w-full max-w-7xl relative">
+            
             {/* Blue Award Icon */}
             <div className="flex items-center justify-center w-6 h-6 bg-[#1a4eff] text-white shrink-0 rounded-sm">
               <svg 
