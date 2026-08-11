@@ -90,7 +90,7 @@ export const metadata: Metadata = {
     apple: '/apple-icon.png',
   },
   alternates: {
-    canonical: 'https://theskitbit.com',
+    canonical: '/',
     languages: {
       'en-IN': '/in',
       'en-US': '/us',
