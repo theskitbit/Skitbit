@@ -8,7 +8,8 @@ export function Hero() {
 
   return (
     <section aria-label="Skitbit introduction" className="w-full border-b border-border bg-background pb-0 pt-[48px]">
-      <div className="relative mx-auto grid min-h-[629px] w-full max-w-[964px] lg:max-w-7xl grid-cols-1 border-x border-border lg:grid-cols-2">
+      <div className="mx-auto w-full max-w-7xl lg:px-8">
+        <div className="relative grid min-h-[629px] w-full grid-cols-1 border-x border-border lg:grid-cols-2">
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/2 z-10 hidden w-px -translate-x-1/2 bg-border lg:block" />
 
         <div className="flex items-end px-8 pb-8 pt-16 sm:px-12 lg:px-6 lg:pb-8 xl:px-6">
@@ -36,6 +37,7 @@ export function Hero() {
 
         <div className="relative min-h-[520px] overflow-hidden bg-muted lg:min-h-0">
           <video src="https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/_HerovideoMainpage%20%281%29.mp4" autoPlay muted loop playsInline preload="metadata" aria-label="Colorful 3D product visualization" className="absolute inset-0 block h-full w-full object-cover object-center" />
+        </div>
         </div>
       </div>
     </section>
