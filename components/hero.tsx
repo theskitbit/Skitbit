@@ -14,7 +14,7 @@ export function Hero() {
 
         <div className="flex items-end border-b border-border px-8 pb-8 pt-16 sm:px-12 lg:border-b-0 lg:px-6 lg:pb-8 xl:px-6">
           <div className="w-full max-w-[500px]">
-            <h1 className="m-0 max-w-[490px] text-[54px] font-medium leading-[0.9] tracking-[-0.065em] text-foreground sm:text-[64px] lg:text-[66px] xl:text-[66px]">
+            <h1 className="m-0 max-w-[490px] text-[54px] font-regular leading-[0.9] tracking-[-0.065em] text-foreground sm:text-[64px] lg:text-[66px] xl:text-[66px]">
               <span className="block">Stop</span>
               <span className="block">explaining.</span>
               <span className="block">Show it in 3D.</span>
