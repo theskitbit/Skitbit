@@ -36,7 +36,7 @@ export function Hero() {
         </div>
 
         <div className="relative min-h-[520px] overflow-hidden bg-muted lg:min-h-0">
-          <video src="https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/_HerovideoMainpage%20%281%29.mp4" autoPlay muted loop playsInline preload="metadata" aria-label="Colorful 3D product visualization" className="absolute inset-0 -mx-px block h-full w-[calc(100%+2px)] object-cover object-center lg:mx-0 lg:w-full" />
+          <video src="https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/_HerovideoMainpage%20%281%29.mp4" autoPlay muted loop playsInline preload="metadata" aria-label="Colorful 3D product visualization" className="absolute inset-0 mx-4 block h-full w-[calc(100%-2rem)] object-cover object-center lg:mx-0 lg:w-full" />
         </div>
         </div>
       </div>
