@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { animate, motion, useMotionValue } from 'framer-motion'
 
@@ -26,20 +26,45 @@ export function Testimonials() {
   const trackRef = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const animationRef = useRef<ReturnType<typeof animate> | null>(null)
-  const dragStartRef = useRef(0)
+  
+  // Calculate the width of one full set of testimonials
   const loopWidth = TESTIMONIALS.length * (typeof window !== 'undefined' && window.innerWidth < 640 ? 344 : 444)
-  const maxDragDistance = typeof window !== 'undefined' && window.innerWidth < 640 ? 300 : 380
+  const speed = 40 // Pixels per second for constant scroll speed
+  
+  const startInfiniteLoop = () => {
+    animationRef.current?.stop()
+    x.set(0)
+    animationRef.current = animate(x, -loopWidth, {
+      ease: 'linear',
+      duration: loopWidth / speed,
+      repeat: Infinity,
+      repeatType: 'loop',
+    })
+  }
+
   const resume = () => {
     animationRef.current?.stop()
     const current = x.get()
-    animationRef.current = animate(x, current - loopWidth, {
-      ease: 'linear', duration: Math.max(0.1, (loopWidth + current) / 38), repeat: Infinity, repeatType: 'loop', repeatDelay: 0,
+    
+    // If we've hit the exact boundaries during drag, just restart the loop
+    if (current >= 0 || current <= -loopWidth) {
+      startInfiniteLoop()
+      return
+    }
+    
+    // Seamlessly finish the remaining distance to the end of the loop
+    const distanceRemaining = loopWidth + current
+    animationRef.current = animate(x, -loopWidth, {
+      ease: 'linear',
+      duration: distanceRemaining / speed,
+      onComplete: startInfiniteLoop
     })
   }
-  const pause = () => animationRef.current?.stop()
 
   useEffect(() => {
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) resume()
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      resume()
+    }
     return () => animationRef.current?.stop()
   }, [loopWidth])
 
@@ -54,26 +79,36 @@ export function Testimonials() {
           className="flex shrink-0 gap-6 py-4"
           style={{ x }}
           drag="x"
-          dragMomentum={false}
-          dragElastic={0.05}
-          onDragStart={() => {
-            pause()
-            dragStartRef.current = x.get()
-          }}
-          onDrag={(_, info) => {
-            const next = dragStartRef.current + info.offset.x
-            const capped = Math.max(dragStartRef.current - maxDragDistance, Math.min(dragStartRef.current + maxDragDistance, next))
-            x.set(capped)
-          }}
-          onDragEnd={() => {
-            const capped = Math.max(dragStartRef.current - maxDragDistance, Math.min(dragStartRef.current + maxDragDistance, x.get()))
-            animate(x, capped, { type: 'spring', stiffness: 420, damping: 34, mass: 0.7 }).then(() => resume())
-          }}
+          // Native framer-motion constraints prevent dragging into empty space
+          dragConstraints={{ left: -loopWidth, right: 0 }}
+          dragElastic={0} // Prevents bouncy stretching past the ends
+          dragMomentum={false} // Hands control back cleanly as soon as you let go
+          onDragStart={() => animationRef.current?.stop()}
+          onDragEnd={() => resume()}
         >
           {[...TESTIMONIALS, ...TESTIMONIALS].map((item, index) => (
             <article key={`${item.name}-${index}`} className="flex w-[320px] shrink-0 cursor-grab flex-col justify-between rounded-2xl border border-border/60 bg-card p-6 active:cursor-grabbing sm:w-[420px] sm:p-8">
-              <div><div className="mb-6 flex items-start justify-between gap-4"><h3 className="text-xl font-bold tracking-tight text-foreground">“{item.headline}”</h3><span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-xs font-semibold text-foreground">5 <span className="text-amber-500">★</span></span></div><p className="mb-8 text-base leading-relaxed text-muted-foreground">“{item.text}”</p></div>
-              <div className="flex items-center justify-between border-t border-border/40 pt-6"><div className="flex items-center gap-3.5"><div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-border/40 bg-muted"><Image src={item.image} alt={item.name} fill sizes="44px" className="object-cover" loading="lazy" /></div><div><div className="text-sm font-semibold text-foreground">{item.name}</div><div className="mt-0.5 text-xs text-muted-foreground">{item.role}</div></div></div><div className="text-xs font-medium text-muted-foreground">{item.category}</div></div>
+              <div>
+                <div className="mb-6 flex items-start justify-between gap-4">
+                  <h3 className="text-xl font-bold tracking-tight text-foreground">“{item.headline}”</h3>
+                  <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-xs font-semibold text-foreground">
+                    5 <span className="text-amber-500">★</span>
+                  </span>
+                </div>
+                <p className="mb-8 text-base leading-relaxed text-muted-foreground">“{item.text}”</p>
+              </div>
+              <div className="flex items-center justify-between border-t border-border/40 pt-6">
+                <div className="flex items-center gap-3.5">
+                  <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-border/40 bg-muted">
+                    <Image src={item.image} alt={item.name} fill sizes="44px" className="object-cover" loading="lazy" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-foreground">{item.name}</div>
+                    <div className="mt-0.5 text-xs text-muted-foreground">{item.role}</div>
+                  </div>
+                </div>
+                <div className="text-xs font-medium text-muted-foreground">{item.category}</div>
+              </div>
             </article>
           ))}
         </motion.div>
