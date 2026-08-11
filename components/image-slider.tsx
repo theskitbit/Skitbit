@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { animate, motion, useMotionValue } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -16,106 +16,101 @@ const sliderImages = [
 
 export function ImageSlider() {
   const x = useMotionValue(0)
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const [isHovered, setIsHovered] = useState(false)
+  const animationRef = useRef<ReturnType<typeof animate> | null>(null)
   
-  // Calculate item width + gap dynamically
-  const step = typeof window !== 'undefined' && window.innerWidth < 640 ? 272 : 280
-  
-  // Render enough duplicates so it takes a long time to hit the end visually
-  const repeatedImages = [...sliderImages, ...sliderImages, ...sliderImages, ...sliderImages]
-  const maxScroll = -((repeatedImages.length - 1) * step)
+  // Math for seamless loop: 256px image width (w-64) + 16px gap (gap-4) or 24px gap (gap-6)
+  const loopWidth = sliderImages.length * (typeof window !== 'undefined' && window.innerWidth < 640 ? 272 : 280)
+  const speed = 40 // Pixels per second for constant scroll speed
 
-  const moveToIndex = useCallback((direction: 1 | -1) => {
-    const currentX = x.get()
-    // Find current snap index, then add direction
-    const currentIndex = Math.round(currentX / step)
-    let nextX = (currentIndex + direction) * step
-    
-    // Prevent scrolling past the ends
-    if (nextX > 0) nextX = 0
-    if (nextX < maxScroll) nextX = maxScroll
-
-    animate(x, nextX, { type: 'spring', damping: 26, stiffness: 140 })
-  }, [maxScroll, step, x])
-
-  const pauseAutoPlay = () => {
-    if (timerRef.current) clearTimeout(timerRef.current)
+  const startInfiniteLoop = () => {
+    animationRef.current?.stop()
+    x.set(0)
+    animationRef.current = animate(x, -loopWidth, {
+      ease: 'linear',
+      duration: loopWidth / speed,
+      repeat: Infinity,
+      repeatType: 'loop',
+    })
   }
 
-  const startAutoPlay = useCallback(() => {
-    pauseAutoPlay()
-    timerRef.current = setTimeout(() => {
-      moveToIndex(-1) // Move one step left
-      startAutoPlay() // Schedule the next move
-    }, 3000)
-  }, [moveToIndex])
-
-  // Handle play/pause on hover
-  useEffect(() => {
-    if (isHovered) {
-      pauseAutoPlay()
-    } else {
-      startAutoPlay()
+  const resume = () => {
+    animationRef.current?.stop()
+    const current = x.get()
+    
+    // If we've hit the exact boundaries, restart the loop
+    if (current >= 0 || current <= -loopWidth) {
+      startInfiniteLoop()
+      return
     }
-    return pauseAutoPlay
-  }, [isHovered, startAutoPlay])
+    
+    // Seamlessly finish the remaining distance to the end of the loop
+    const distanceRemaining = loopWidth + current
+    animationRef.current = animate(x, -loopWidth, {
+      ease: 'linear',
+      duration: distanceRemaining / speed,
+      onComplete: startInfiniteLoop
+    })
+  }
 
-  const handleDragEnd = (e: any, { velocity }: any) => {
-    const currentX = x.get()
-    
-    // Use swipe velocity to predict the target snap point for a natural "flick" feel
-    const targetX = currentX + velocity.x * 0.2
-    const nextIndex = Math.round(targetX / step)
-    
-    let nextX = nextIndex * step
-    if (nextX > 0) nextX = 0
-    if (nextX < maxScroll) nextX = maxScroll
+  const pause = () => animationRef.current?.stop()
 
-    animate(x, nextX, { type: 'spring', damping: 26, stiffness: 140 })
+  useEffect(() => {
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      resume()
+    }
+    return () => animationRef.current?.stop()
+  }, [loopWidth])
+
+  // Move function for manual arrow clicks
+  const step = typeof window !== 'undefined' && window.innerWidth < 640 ? 272 : 280
+  const move = (direction: 1 | -1) => {
+    pause()
+    const current = x.get()
+    let next = current + direction * step
     
-    // Restart the 3-second wait after dragging
-    if (!isHovered) startAutoPlay()
+    // Wrap around bounds cleanly if jumping past the ends
+    if (next > 0) next -= loopWidth
+    if (next < -loopWidth) next += loopWidth
+    
+    animate(x, next, {
+      type: 'spring', 
+      damping: 22, 
+      stiffness: 100, 
+      onComplete: resume
+    })
   }
 
   return (
     <section className="relative overflow-hidden bg-background py-12 sm:py-14 lg:py-16" aria-label="Featured product images">
       <div 
         className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden" 
-        onMouseEnter={() => setIsHovered(true)} 
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseEnter={pause} 
+        onMouseLeave={resume}
       >
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-background to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-background to-transparent" />
         
         <div className="absolute right-6 top-4 z-20 flex gap-2 sm:right-8">
-          <button 
-            onClick={() => { moveToIndex(1); startAutoPlay(); }} 
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:bg-secondary" 
-            aria-label="Previous image"
-          >
+          <button onClick={() => move(1)} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:bg-secondary" aria-label="Previous image">
             <ChevronLeft className="h-5 w-5" />
           </button>
-          <button 
-            onClick={() => { moveToIndex(-1); startAutoPlay(); }} 
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:bg-secondary" 
-            aria-label="Next image"
-          >
+          <button onClick={() => move(-1)} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:bg-secondary" aria-label="Next image">
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
         
+        {/* Exact same constraints and physics as the Testimonials slider */}
         <motion.div 
-          className="flex w-max gap-4 px-4 sm:gap-6 sm:px-6" 
+          className="flex w-max gap-4 sm:gap-6 py-4" 
           style={{ x }} 
           drag="x" 
-          dragConstraints={{ left: maxScroll, right: 0 }}
-          dragElastic={0.1}
+          dragConstraints={{ left: -loopWidth, right: 0 }}
+          dragElastic={0}
           dragMomentum={false}
-          onDragStart={pauseAutoPlay}
-          onDragEnd={handleDragEnd}
+          onDragStart={pause}
+          onDragEnd={resume}
         >
-          {repeatedImages.map((image, index) => (
+          {[...sliderImages, ...sliderImages].map((image, index) => (
             <div key={`${image.id}-${index}`} className="relative h-80 w-64 shrink-0 cursor-grab overflow-hidden rounded-lg bg-muted active:cursor-grabbing">
               <Image 
                 src={image.src} 
