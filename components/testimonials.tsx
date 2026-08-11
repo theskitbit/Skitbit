@@ -26,7 +26,9 @@ export function Testimonials() {
   const trackRef = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const animationRef = useRef<ReturnType<typeof animate> | null>(null)
+  const dragStartRef = useRef(0)
   const loopWidth = TESTIMONIALS.length * (typeof window !== 'undefined' && window.innerWidth < 640 ? 344 : 444)
+  const maxDragDistance = typeof window !== 'undefined' && window.innerWidth < 640 ? 300 : 380
   const resume = () => {
     animationRef.current?.stop()
     const current = x.get()
@@ -48,7 +50,26 @@ export function Testimonials() {
         <h2 className="mt-6 text-[34px] font-bold leading-tight tracking-[-0.055em] text-foreground sm:text-[44px] lg:text-[50px]">Client Success &amp; Performance</h2>
       </div>
       <div className="relative flex w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]" ref={trackRef}>
-        <motion.div className="flex shrink-0 gap-6 py-4" style={{ x }} drag="x" dragMomentum={false} onDragStart={pause} onDragEnd={resume}>
+        <motion.div
+          className="flex shrink-0 gap-6 py-4"
+          style={{ x }}
+          drag="x"
+          dragMomentum={false}
+          dragElastic={0.05}
+          onDragStart={() => {
+            pause()
+            dragStartRef.current = x.get()
+          }}
+          onDrag={(_, info) => {
+            const next = dragStartRef.current + info.offset.x
+            const capped = Math.max(dragStartRef.current - maxDragDistance, Math.min(dragStartRef.current + maxDragDistance, next))
+            x.set(capped)
+          }}
+          onDragEnd={() => {
+            const capped = Math.max(dragStartRef.current - maxDragDistance, Math.min(dragStartRef.current + maxDragDistance, x.get()))
+            animate(x, capped, { type: 'spring', stiffness: 420, damping: 34, mass: 0.7 }).then(() => resume())
+          }}
+        >
           {[...TESTIMONIALS, ...TESTIMONIALS].map((item, index) => (
             <article key={`${item.name}-${index}`} className="flex w-[320px] shrink-0 cursor-grab flex-col justify-between rounded-2xl border border-border/60 bg-card p-6 active:cursor-grabbing sm:w-[420px] sm:p-8">
               <div><div className="mb-6 flex items-start justify-between gap-4"><h3 className="text-xl font-bold tracking-tight text-foreground">“{item.headline}”</h3><span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-xs font-semibold text-foreground">5 <span className="text-amber-500">★</span></span></div><p className="mb-8 text-base leading-relaxed text-muted-foreground">“{item.text}”</p></div>
