@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { animate, motion, useMotionValue } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -15,94 +15,69 @@ const sliderImages = [
 ]
 
 export function ImageSlider() {
-  const trackRef = useRef<HTMLDivElement>(null)
-  const [loopWidth, setLoopWidth] = useState(0)
   const x = useMotionValue(0)
   const animationRef = useRef<ReturnType<typeof animate> | null>(null)
-  const speed = 50 // Pixels per second
   
-  // Render 3 sets so there is never a visible blank edge when dragging aggressively
-  const repeatedImages = [...sliderImages, ...sliderImages, ...sliderImages]
+  // The exact same math logic from your Testimonials slider
+  // 256px width + 16px gap (mobile) = 272
+  // 256px width + 24px gap (desktop) = 280
+  const loopWidth = sliderImages.length * (typeof window !== 'undefined' && window.innerWidth < 640 ? 272 : 280)
+  const speed = 50 // Pixels per second
 
-  // 1. Measure the exact DOM width of ONE set to prevent hardcoded math bugs (jerks)
-  useEffect(() => {
-    const measure = () => {
-      if (!trackRef.current) return
-      const children = trackRef.current.children
-      if (children.length >= sliderImages.length + 1) {
-        const first = children[0] as HTMLElement
-        const nextSetFirst = children[sliderImages.length] as HTMLElement
-        // Exact distance from Set 1 start to Set 2 start
-        setLoopWidth(nextSetFirst.offsetLeft - first.offsetLeft)
-      }
+  const resume = () => {
+    animationRef.current?.stop()
+    let current = x.get()
+    
+    // Invisible Math Wrapping: Always keep the start position within one loop width.
+    // This ensures the repeat: 'loop' animation never gets confused or runs out of track.
+    if (current <= -loopWidth || current > 0) {
+      current = current % loopWidth
+      if (current > 0) current -= loopWidth
+      x.set(current)
     }
     
-    measure()
-    // Small timeout to catch any late layout shifts from font/image loading
-    const timer = setTimeout(measure, 200) 
-    window.addEventListener('resize', measure)
-    return () => {
-      clearTimeout(timer)
-      window.removeEventListener('resize', measure)
-    }
-  }, [])
-
-  const startInfiniteLoop = useCallback(() => {
-    if (!loopWidth) return
-    animationRef.current?.stop()
-    x.set(0)
-    animationRef.current = animate(x, -loopWidth, {
+    // The bulletproof infinite loop pattern
+    animationRef.current = animate(x, current - loopWidth, {
       ease: 'linear',
       duration: loopWidth / speed,
       repeat: Infinity,
       repeatType: 'loop',
+      repeatDelay: 0,
     })
-  }, [loopWidth, x])
-
-  const resume = useCallback(() => {
-    if (!loopWidth) return
-    animationRef.current?.stop()
-    let current = x.get()
-
-    // Seamlessly wrap the position if dragged way out of bounds
-    if (current <= -loopWidth) {
-      current = current % loopWidth
-      x.set(current)
-    } else if (current > 0) {
-      current = 0
-      x.set(current)
-    }
-    
-    const distanceRemaining = loopWidth + current
-    animationRef.current = animate(x, -loopWidth, {
-      ease: 'linear',
-      duration: distanceRemaining / speed,
-      onComplete: startInfiniteLoop
-    })
-  }, [loopWidth, x, startInfiniteLoop])
+  }
 
   const pause = () => animationRef.current?.stop()
 
   useEffect(() => {
-    if (loopWidth > 0 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       resume()
     }
-    return pause
-  }, [loopWidth, resume])
+    return () => animationRef.current?.stop()
+  }, [loopWidth])
 
+  // Click handler for the arrows
+  const step = typeof window !== 'undefined' && window.innerWidth < 640 ? 272 : 280
   const move = (direction: 1 | -1) => {
     pause()
-    const current = x.get()
-    const jumpWidth = typeof window !== 'undefined' && window.innerWidth < 640 ? 272 : 280
-    const next = current + direction * jumpWidth
+    let current = x.get()
+    let next = current + direction * step
+    
+    // If clicking 'prev' pushes us into positive (blank space), invisibly wrap it first
+    if (next > 0) {
+      current -= loopWidth
+      x.set(current)
+      next = current + direction * step
+    }
     
     animate(x, next, {
       type: 'spring', 
       damping: 24, 
-      stiffness: 120, 
-      onComplete: resume
-    })
+      stiffness: 120,
+    }).then(() => resume()) // Safely resume ONLY after the spring finishes
   }
+
+  // Brute-force render 16 sets so even the most aggressive flick never hits a visual edge
+  const repeatedImages = Array.from({ length: 16 }).flatMap(() => sliderImages)
 
   return (
     <section className="relative overflow-hidden bg-background py-12 sm:py-14 lg:py-16" aria-label="Featured product images">
@@ -121,12 +96,11 @@ export function ImageSlider() {
         </div>
         
         <motion.div 
-          ref={trackRef}
           className="flex w-max gap-4 px-4 py-4 sm:gap-6 sm:px-6" 
           style={{ x }} 
           drag="x" 
-          // Allows dragging far to the left without hitting a wall before it wraps on let go
-          dragConstraints={{ left: loopWidth ? -(loopWidth * 2) : -10000, right: 0 }}
+          // Massive left constraint allows aggressive pulling; right constraint blocked at 0
+          dragConstraints={{ left: -20000, right: 0 }}
           dragElastic={0.05}
           dragMomentum={false}
           onDragStart={pause}
@@ -138,7 +112,7 @@ export function ImageSlider() {
                 src={image.src} 
                 alt={image.alt} 
                 fill 
-                draggable={false} // Prevents browser from "stealing" the drag gesture
+                draggable={false} 
                 className="pointer-events-none object-cover"
                 sizes="(max-width: 768px) 160px, 256px" 
                 loading="lazy" 
