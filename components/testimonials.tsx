@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { animate, motion, useMotionValue } from 'framer-motion'
 
 type Testimonial = {
   name: string
@@ -24,24 +23,23 @@ const TESTIMONIALS: Testimonial[] = [
 ]
 
 export function Testimonials() {
-  const [offset, setOffset] = useState(0)
-  const [running, setRunning] = useState(true)
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const step = 444
-  const advance = (direction: 1 | -1) => setOffset((current) => current + direction * step)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const x = useMotionValue(0)
+  const animationRef = useRef<ReturnType<typeof animate> | null>(null)
+  const loopWidth = TESTIMONIALS.length * (typeof window !== 'undefined' && window.innerWidth < 640 ? 344 : 444)
   const resume = () => {
-    if (timer.current) clearTimeout(timer.current)
-    timer.current = setTimeout(() => {
-      setOffset((current) => current - step)
-      setRunning(true)
-    }, 2800)
+    animationRef.current?.stop()
+    const current = x.get()
+    animationRef.current = animate(x, current - loopWidth, {
+      ease: 'linear', duration: Math.max(0.1, (loopWidth + current) / 38), repeat: Infinity, repeatType: 'loop', repeatDelay: 0,
+    })
   }
+  const pause = () => animationRef.current?.stop()
 
   useEffect(() => {
-    if (!running) return
-    resume()
-    return () => { if (timer.current) clearTimeout(timer.current) }
-  }, [running, offset])
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) resume()
+    return () => animationRef.current?.stop()
+  }, [loopWidth])
 
   return (
     <section id="testimonials" className="overflow-hidden bg-background py-16 lg:py-28">
@@ -49,12 +47,8 @@ export function Testimonials() {
         <span className="rounded-full border border-border px-4 py-1.5 text-xs font-medium text-foreground">Client Proof</span>
         <h2 className="mt-6 text-[34px] font-bold leading-tight tracking-[-0.055em] text-foreground sm:text-[44px] lg:text-[50px]">Client Success &amp; Performance</h2>
       </div>
-      <div className="relative flex w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]" onMouseEnter={() => { setRunning(false); if (timer.current) clearTimeout(timer.current) }} onMouseLeave={() => { setRunning(true); resume() }}>
-        <div className="absolute right-6 top-0 z-20 flex gap-2 sm:right-8">
-          <button onClick={() => { setRunning(false); advance(1) }} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground" aria-label="Previous testimonial"><ChevronLeft className="h-5 w-5" /></button>
-          <button onClick={() => { setRunning(false); advance(-1) }} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground" aria-label="Next testimonial"><ChevronRight className="h-5 w-5" /></button>
-        </div>
-        <motion.div className="flex shrink-0 gap-6 py-4" animate={{ x: offset }} transition={{ type: 'spring', damping: 22, stiffness: 100 }} drag="x" dragElastic={0.15} onDragStart={() => { setRunning(false); if (timer.current) clearTimeout(timer.current) }} onDragEnd={() => { setRunning(true); resume() }}>
+      <div className="relative flex w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]" ref={trackRef}>
+        <motion.div className="flex shrink-0 gap-6 py-4" style={{ x }} drag="x" dragMomentum={false} onDragStart={pause} onDragEnd={resume}>
           {[...TESTIMONIALS, ...TESTIMONIALS].map((item, index) => (
             <article key={`${item.name}-${index}`} className="flex w-[320px] shrink-0 cursor-grab flex-col justify-between rounded-2xl border border-border/60 bg-card p-6 active:cursor-grabbing sm:w-[420px] sm:p-8">
               <div><div className="mb-6 flex items-start justify-between gap-4"><h3 className="text-xl font-bold tracking-tight text-foreground">“{item.headline}”</h3><span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-xs font-semibold text-foreground">5 <span className="text-amber-500">★</span></span></div><p className="mb-8 text-base leading-relaxed text-muted-foreground">“{item.text}”</p></div>

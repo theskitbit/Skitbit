@@ -1,9 +1,8 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { animate, motion, useMotionValue } from 'framer-motion'
 
 const HERO_STILLS = [
   {
@@ -37,59 +36,27 @@ const HERO_STILLS = [
 ]
 
 export function ProductShowcase() {
-  const [position, setPosition] = useState(0)
-  const [isAutoplay, setIsAutoplay] = useState(true)
-  const [isDragging, setIsDragging] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const autoplayRef = useRef<NodeJS.Timeout | null>(null)
-  const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const trackRef = useRef<HTMLDivElement>(null)
+  const x = useMotionValue(0)
+  const animationRef = useRef<ReturnType<typeof animate> | null>(null)
+  const loopWidth = HERO_STILLS.length * (typeof window !== 'undefined' && window.innerWidth < 768 ? 284 : 364)
 
-  const cardWidth = typeof window !== 'undefined' ? 
-    (window.innerWidth < 768 ? 260 + 24 : 340 + 24) : 340 + 24
-  const totalWidth = HERO_STILLS.length * cardWidth
-  const maxPosition = -totalWidth / 2
-
-  const startAutoplay = () => {
-    if (autoplayRef.current) clearTimeout(autoplayRef.current)
-    if (prefersReducedMotion) return
-    
-    autoplayRef.current = setTimeout(() => {
-      setPosition(prev => {
-        const newPos = prev - cardWidth
-        return newPos <= maxPosition ? maxPosition + cardWidth : newPos
-      })
-    }, 3000)
-  }
-
-  const handleNext = () => {
-    setIsAutoplay(false)
-    setPosition(prev => {
-      const newPos = prev - cardWidth
-      return newPos <= maxPosition ? 0 : newPos
+  const resume = () => {
+    animationRef.current?.stop()
+    const current = x.get()
+    const remaining = Math.max(0.1, (loopWidth + current) / 42)
+    animationRef.current = animate(x, current - loopWidth, {
+      ease: 'linear', duration: remaining, repeat: Infinity, repeatType: 'loop',
+      repeatDelay: 0,
     })
-  }
-
-  const handlePrev = () => {
-    setIsAutoplay(false)
-    setPosition(prev => {
-      const newPos = prev + cardWidth
-      return newPos > 0 ? maxPosition : newPos
-    })
-  }
-
-  const handleDragEnd = () => {
-    setIsDragging(false)
-    setIsAutoplay(true)
   }
 
   useEffect(() => {
-    if (isAutoplay && !isDragging) {
-      startAutoplay()
-    }
-    return () => {
-      if (autoplayRef.current) clearTimeout(autoplayRef.current)
-    }
-  }, [isAutoplay, isDragging, cardWidth, maxPosition])
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) resume()
+    return () => animationRef.current?.stop()
+  }, [loopWidth])
+
+  const pause = () => animationRef.current?.stop()
 
   return (
     <section className="w-full bg-[#FAF9F5] py-16 overflow-hidden">
@@ -106,47 +73,19 @@ export function ProductShowcase() {
       </div>
 
       {/* Full Width Slider Wrapper */}
-      <div className="relative w-full overflow-hidden" ref={containerRef}>
+      <div className="relative w-full overflow-hidden" ref={trackRef}>
         {/* Soft edge fade overlays */}
         <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-12 bg-gradient-to-r from-[#FAF9F5] to-transparent" />
         <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-12 bg-gradient-to-l from-[#FAF9F5] to-transparent" />
 
-        {/* Controls */}
-        <div className="absolute bottom-4 right-6 z-20 flex gap-2 sm:bottom-6 sm:right-8">
-          <button
-            onClick={handlePrev}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white border border-zinc-200 text-zinc-900 transition-all hover:bg-zinc-50 active:scale-95"
-            aria-label="Previous slide"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <button
-            onClick={handleNext}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white border border-zinc-200 text-zinc-900 transition-all hover:bg-zinc-50 active:scale-95"
-            aria-label="Next slide"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-        </div>
-
         {/* Dynamic Track */}
         <motion.div
           className="flex gap-6 w-max"
-          animate={{ x: position }}
-          transition={{ type: 'spring', damping: 20, mass: 1, stiffness: 100 }}
+          style={{ x }}
           drag="x"
-          dragElastic={0.2}
-          onDragStart={() => {
-            setIsDragging(true)
-            setIsAutoplay(false)
-            if (autoplayRef.current) clearTimeout(autoplayRef.current)
-          }}
-          onDragEnd={handleDragEnd}
-          onMouseEnter={() => {
-            setIsAutoplay(false)
-            if (autoplayRef.current) clearTimeout(autoplayRef.current)
-          }}
-          onMouseLeave={() => setIsAutoplay(true)}
+          dragMomentum={false}
+          onDragStart={pause}
+          onDragEnd={resume}
         >
           {[...HERO_STILLS, ...HERO_STILLS].map((image, index) => (
             <motion.div
