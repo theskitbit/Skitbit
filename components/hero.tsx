@@ -9,12 +9,12 @@ export function Hero() {
   return (
     <section aria-label="Skitbit introduction" className="w-full border-b border-border bg-background pb-0 pt-[48px]">
       <div className="mx-auto w-full max-w-7xl lg:px-8">
-        <div className="relative grid min-h-[629px] w-full grid-cols-1 border-x border-border lg:grid-cols-2">
+        <div className="relative mx-4 grid min-h-[629px] w-[calc(100%-2rem)] grid-cols-1 border-x border-border lg:mx-0 lg:w-full lg:grid-cols-2">
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/2 z-10 hidden w-px -translate-x-1/2 bg-border lg:block" />
 
-        <div className="flex items-end px-8 pb-8 pt-16 sm:px-12 lg:px-6 lg:pb-8 xl:px-6">
+        <div className="flex items-end border-b border-border px-8 pb-8 pt-16 sm:px-12 lg:border-b-0 lg:px-6 lg:pb-8 xl:px-6">
           <div className="w-full max-w-[500px]">
-            <h1 className="m-0 max-w-[490px] text-[54px] font-medium leading-[0.9] tracking-[-0.065em] text-foreground sm:text-[64px] lg:text-[66px] xl:text-[66px]">
+            <h1 className="m-0 max-w-[490px] text-[54px] font-regular leading-[0.9] tracking-[-0.065em] text-foreground sm:text-[64px] lg:text-[66px] xl:text-[66px]">
               <span className="block">Stop</span>
               <span className="block">explaining.</span>
               <span className="block">Show it in 3D.</span>
@@ -35,8 +35,8 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="relative min-h-[520px] overflow-hidden bg-muted lg:min-h-0">
-          <video src="https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/_HerovideoMainpage%20%281%29.mp4" autoPlay muted loop playsInline preload="metadata" aria-label="Colorful 3D product visualization" className="absolute inset-0 block h-full w-full object-cover object-center" />
+        <div className="relative min-h-[520px] overflow-hidden border-b border-border bg-background lg:min-h-0 lg:border-b-0">
+          <video src="https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/_HerovideoMainpage%20%281%29.mp4" autoPlay muted loop playsInline preload="metadata" aria-label="Colorful 3D product visualization" className="absolute inset-0 block h-full w-full object-cover object-center lg:mx-0 lg:w-full" />
         </div>
         </div>
       </div>

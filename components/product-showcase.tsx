@@ -1,6 +1,8 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import Image from 'next/image'
+import { animate, motion, useMotionValue } from 'framer-motion'
 
 const HERO_STILLS = [
   {
@@ -33,33 +35,37 @@ const HERO_STILLS = [
   }
 ]
 
-// Duplicate the array to create a flawless, gapless repeating loop mirror
-const SCROLL_ITEMS = [...HERO_STILLS, ...HERO_STILLS]
-
 export function ProductShowcase() {
+  const trackRef = useRef<HTMLDivElement>(null)
+  const x = useMotionValue(0)
+  const animationRef = useRef<ReturnType<typeof animate> | null>(null)
+  const loopWidth = HERO_STILLS.length * (typeof window !== 'undefined' && window.innerWidth < 768 ? 284 : 364)
+
+  const resume = () => {
+    animationRef.current?.stop()
+    const current = x.get()
+    const remaining = Math.max(0.1, (loopWidth + current) / 42)
+    animationRef.current = animate(x, current - loopWidth, {
+      ease: 'linear', duration: remaining, repeat: Infinity, repeatType: 'loop',
+      repeatDelay: 0,
+    })
+  }
+
+  useEffect(() => {
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) resume()
+    return () => animationRef.current?.stop()
+  }, [loopWidth])
+
+  const pause = () => animationRef.current?.stop()
+
   return (
     <section className="w-full bg-[#FAF9F5] py-16 overflow-hidden">
-      
-      {/* CSS Injection for Universal Right-to-Left Infinite Loop */}
-      <style jsx global>{`
-        @keyframes universalMarquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-global-marquee {
-          animation: universalMarquee 30s linear infinite;
-        }
-      `}</style>
-
       {/* Header Container */}
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 mb-10">
         <div>
-          {/* 🔥 SEO FIX: Eyebrow is now an H2 packed with a core keyword */}
           <h2 className="inline-block rounded-full bg-white px-3 py-1 text-xs font-medium border border-zinc-200 text-zinc-600 shadow-xs m-0">
             3D Product Visualization
           </h2>
-          
-          {/* 🔥 SEO FIX: The styling remains identical, but this is now a <p> tag */}
           <p className="mt-4 text-2xl font-bold tracking-tight text-zinc-900 sm:text-4xl m-0">
             Hero Stills → <span className="text-zinc-500 font-normal">Improve Conversions</span>
           </p>
@@ -67,18 +73,25 @@ export function ProductShowcase() {
       </div>
 
       {/* Full Width Slider Wrapper */}
-      <div className="relative w-full overflow-hidden">
-        
+      <div className="relative w-full overflow-hidden" ref={trackRef}>
         {/* Soft edge fade overlays */}
         <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-12 bg-gradient-to-r from-[#FAF9F5] to-transparent" />
         <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-12 bg-gradient-to-l from-[#FAF9F5] to-transparent" />
 
-        {/* Dynamic Track: Auto-animates on both mobile and desktop seamlessly */}
-        <div className="flex gap-6 w-max animate-global-marquee hover:[animation-play-state:paused] active:[animation-play-state:paused]">
-          {SCROLL_ITEMS.map((image, index) => (
-            <div 
-              key={index} 
-              className="relative aspect-[4/5] w-[260px] shrink-0 overflow-hidden rounded-2xl bg-white sm:w-[340px] border border-zinc-100 shadow-xs transition-all duration-300 hover:scale-[1.02]"
+        {/* Dynamic Track */}
+        <motion.div
+          className="flex gap-6 w-max"
+          style={{ x }}
+          drag="x"
+          dragMomentum={false}
+          onDragStart={pause}
+          onDragEnd={resume}
+        >
+          {[...HERO_STILLS, ...HERO_STILLS].map((image, index) => (
+            <motion.div
+              key={index}
+              className="relative aspect-[4/5] w-[260px] shrink-0 overflow-hidden rounded-2xl bg-white sm:w-[340px] border border-zinc-100 shadow-xs transition-all duration-300 hover:scale-[1.02] cursor-grab active:cursor-grabbing"
+              whileHover={{ y: -4 }}
             >
               <Image
                 src={image.src}
@@ -87,11 +100,11 @@ export function ProductShowcase() {
                 className="object-cover"
                 sizes="(max-width: 768px) 260px, 340px"
                 unoptimized
+                priority={index < 4}
               />
-            </div>
+            </motion.div>
           ))}
-        </div>
-        
+        </motion.div>
       </div>
     </section>
   )

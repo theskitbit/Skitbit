@@ -130,7 +130,7 @@ export default function Home() {
       </Script>
 
       <AnnouncementBanner />
-      <Header />
+      <Header hasAnnouncement />
       <Hero />
       <LogoStrip />
       <FireworkWidget />

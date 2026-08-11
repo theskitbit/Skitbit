@@ -17,6 +17,10 @@ export default function AnnouncementBanner() {
 
   useEffect(() => {
     setIsMounted(true)
+    window.dispatchEvent(new CustomEvent('skitbit-announcement', { detail: { visible: true } }))
+    return () => {
+      window.dispatchEvent(new CustomEvent('skitbit-announcement', { detail: { visible: false } }))
+    }
   }, [])
 
   useEffect(() => {
@@ -91,7 +95,10 @@ export default function AnnouncementBanner() {
             </div>
 
             <button
-              onClick={() => setIsVisible(false)}
+              onClick={() => {
+                setIsVisible(false)
+                window.dispatchEvent(new CustomEvent('skitbit-announcement', { detail: { visible: false } }))
+              }}
               // 👇 MATCHED TO EXACT PADDING: right-6 and lg:right-8 to perfectly align with the content below it
               className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-gray-400 transition-colors hover:text-blue-950 sm:right-4 lg:right-8"
               aria-label="Close announcement"

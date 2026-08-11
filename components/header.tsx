@@ -5,8 +5,9 @@ import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import { useContactOverlay } from './contact-overlay'
 
-export function Header() {
+export function Header({ hasAnnouncement = false }: { hasAnnouncement?: boolean }) {
   const [mounted, setMounted] = useState(false)
+  const [announcementVisible, setAnnouncementVisible] = useState(hasAnnouncement)
   const [hidden, setHidden] = useState(false)
   const lastScrollY = useRef(0)
   const { open } = useContactOverlay()
@@ -27,15 +28,20 @@ export function Header() {
       lastScrollY.current = currentScrollY
     }
 
+    const handleAnnouncement = (event: Event) => setAnnouncementVisible((event as CustomEvent<{ visible: boolean }>).detail.visible)
     window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    window.addEventListener('skitbit-announcement', handleAnnouncement)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('skitbit-announcement', handleAnnouncement)
+    }
   }, [])
 
   if (!mounted) return null
 
   return (
     // 👇 Removed 'sticky top-0' and changed to 'relative z-40'
-    <header className={`fixed inset-x-0 top-[28px] z-40 w-full border-b border-border/50 bg-background/80 backdrop-blur-md transition-transform duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
+    <header className={`fixed inset-x-0 ${announcementVisible ? 'top-[28px]' : 'top-0'} z-40 w-full border-b border-border/50 bg-background/80 backdrop-blur-md transition-transform duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
       <nav className="mx-auto flex h-[48px] w-full max-w-7xl items-center justify-between px-5 sm:px-6 lg:px-8">
         
         {/* Logo */}

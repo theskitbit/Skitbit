@@ -1,6 +1,8 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import Image from 'next/image'
+import { animate, motion, useMotionValue } from 'framer-motion'
 
 type Testimonial = {
   name: string
@@ -12,131 +14,105 @@ type Testimonial = {
 }
 
 const TESTIMONIALS: Testimonial[] = [
-  {
-    name: 'Farooq Abraham',
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Skyborne-p4ezaqFZ5OfdsvHpwahK8hQpOCamyf.png',
-    category: 'SKYBORNE',
-    role: 'Founder',
-    headline: 'Endless assets. Zero reshoots.',
-    text: 'We went from struggling with creatives to a full pipeline of high-performing assets for ads, PDPs, and social.',
-  },
-  {
-    name: 'MESSIKA Paris',
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Messika-qejIUYic4Yr2Ll5RU7os9DNNdgGIqJ.png',
-    category: 'Luxury jewellery',
-    role: 'Luxury brand',
-    headline: 'Perfect brand consistency.',
-    text: 'The biggest win was consistency. Every product and every campaign finally looks like one cohesive brand.',
-  },
-  {
-    name: 'Joe Niehaus',
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Skinny.rx-8WN3MckWWMQPMDKhdXo8iASOv4vQKK.png',
-    category: 'Skinny.Rx',
-    role: 'Growth Manager',
-    headline: 'No more photoshoot delays.',
-    text: 'Faster launches, better creatives, and no dependency on shoots. This changed how we produce content.',
-  },
-  {
-    name: 'Wilder Polycarpe',
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/HerFantasyBox-B6XxTEH5jYtYcPFtMaxBWX2xIarg4t.png',
-    category: 'HerFantasyBox',
-    role: 'Co-founder',
-    headline: 'One streamlined workflow.',
-    text: 'Our team saves so much time now. What used to take multiple vendors is handled in one streamlined process.',
-  },
-  {
-    name: 'Nadine Schürmann',
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Plan%20B-pZTphn7CFyGcxlfnSqeXbfzbouJQZI.png',
-    category: 'Plan B Cosmetics',
-    role: 'Founder',
-    headline: 'Flawless execution.',
-    text: 'They did everything according to my ideas, responded to every request, and I would book the service again.',
-  },
-  {
-    name: 'Angelica Angulo',
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Palladio-4gVgAm7yrCStetxUP88iEXM1CTtJkY.png',
-    category: 'PALLADIO Beauty',
-    role: 'Social Media Manager',
-    headline: 'Precision and creativity.',
-    text: 'They took our idea and turned it into a wonderful project with great precision and creativity.',
-  },
+  { name: 'Farooq Abraham', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Skyborne-p4ezaqFZ5OfdsvHpwahK8hQpOCamyf.png', category: 'SKYBORNE', role: 'Founder', headline: 'Endless assets. Zero reshoots.', text: 'We went from struggling with creatives to a full pipeline of high-performing assets for ads, PDPs, and social.' },
+  { name: 'MESSIKA Paris', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Messika-qejIUYic4Yr2Ll5RU7os9DNNdgGIqJ.png', category: 'Luxury jewellery', role: 'Luxury brand', headline: 'Perfect brand consistency.', text: 'The biggest win was consistency. Every product and every campaign finally looks like one cohesive brand.' },
+  { name: 'Joe Niehaus', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Skinny.rx-8WN3MckWWMQPMDKhdXo8iASOv4vQKK.png', category: 'Skinny.Rx', role: 'Growth Manager', headline: 'No more photoshoot delays.', text: 'Faster launches, better creatives, and no dependency on shoots. This changed how we produce content.' },
+  { name: 'Wilder Polycarpe', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/HerFantasyBox-B6XxTEH5jYtYcPFtMaxBWX2xIarg4t.png', category: 'HerFantasyBox', role: 'Co-founder', headline: 'One streamlined workflow.', text: 'Our team saves so much time now. What used to take multiple vendors is handled in one streamlined process.' },
+  { name: 'Nadine Schürmann', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Plan%20B-pZTphn7CFyGcxlfnSqeXbfzbouJQZI.png', category: 'Plan B Cosmetics', role: 'Founder', headline: 'Flawless execution.', text: 'They did everything according to my ideas, responded to every request, and I would book the service again.' },
+  { name: 'Angelica Angulo', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Palladio-4gVgAm7yrCStetxUP88iEXM1CTtJkY.png', category: 'PALLADIO Beauty', role: 'Social Media Manager', headline: 'Precision and creativity.', text: 'They took our idea and turned it into a wonderful project with great precision and creativity.' },
 ]
 
-const DOUBLE_TESTIMONIALS = [...TESTIMONIALS, ...TESTIMONIALS]
-
 export function Testimonials() {
+  const trackRef = useRef<HTMLDivElement>(null)
+  const x = useMotionValue(0)
+  const animationRef = useRef<ReturnType<typeof animate> | null>(null)
+  
+  // Calculate the width of one full set of testimonials
+  const loopWidth = TESTIMONIALS.length * (typeof window !== 'undefined' && window.innerWidth < 640 ? 344 : 444)
+  const speed = 40 // Pixels per second for constant scroll speed
+  
+  const startInfiniteLoop = () => {
+    animationRef.current?.stop()
+    x.set(0)
+    animationRef.current = animate(x, -loopWidth, {
+      ease: 'linear',
+      duration: loopWidth / speed,
+      repeat: Infinity,
+      repeatType: 'loop',
+    })
+  }
+
+  const resume = () => {
+    animationRef.current?.stop()
+    const current = x.get()
+    
+    // If we've hit the exact boundaries during drag, just restart the loop
+    if (current >= 0 || current <= -loopWidth) {
+      startInfiniteLoop()
+      return
+    }
+    
+    // Seamlessly finish the remaining distance to the end of the loop
+    const distanceRemaining = loopWidth + current
+    animationRef.current = animate(x, -loopWidth, {
+      ease: 'linear',
+      duration: distanceRemaining / speed,
+      onComplete: startInfiniteLoop
+    })
+  }
+
+  useEffect(() => {
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      resume()
+    }
+    return () => animationRef.current?.stop()
+  }, [loopWidth])
+
   return (
-    <section id="testimonials" className="bg-background py-16 lg:py-28 overflow-hidden">
-      <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8 mb-12">
-        <div className="flex flex-col items-start">
-          <span className="rounded-full border border-border px-4 py-1.5 text-xs font-medium text-foreground">
-            Client Proof
-          </span>
-          <h2 className="mt-6 text-[34px] font-bold leading-tight tracking-[-0.055em] text-foreground sm:text-[44px] lg:text-[50px]">
-            Client Success & Performance
-          </h2>
-        </div>
+    <section id="testimonials" className="overflow-hidden bg-background py-16 lg:py-28">
+      <div className="mx-auto mb-12 w-full max-w-7xl px-5 sm:px-6 lg:px-8">
+        <span className="rounded-full border border-border px-4 py-1.5 text-xs font-medium text-foreground">Client Proof</span>
+        <h2 className="mt-6 text-[34px] font-bold leading-tight tracking-[-0.055em] text-foreground sm:text-[44px] lg:text-[50px]">Client Success &amp; Performance</h2>
       </div>
-
-      <div className="relative w-full overflow-hidden flex [mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]">
-        <div className="flex gap-6 shrink-0 min-w-full py-4 animate-marquee">
-          {DOUBLE_TESTIMONIALS.map((item, index) => (
-            <div
-              key={index}
-              className="bg-card rounded-2xl p-6 sm:p-8 border border-border/60 flex flex-col justify-between w-[320px] sm:w-[420px] shrink-0"
-            >
+      <div className="relative flex w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]" ref={trackRef}>
+        <motion.div
+          className="flex shrink-0 gap-6 py-4"
+          style={{ x }}
+          drag="x"
+          // Native framer-motion constraints prevent dragging into empty space
+          dragConstraints={{ left: -loopWidth, right: 0 }}
+          dragElastic={0} // Prevents bouncy stretching past the ends
+          dragMomentum={false} // Hands control back cleanly as soon as you let go
+          onDragStart={() => animationRef.current?.stop()}
+          onDragEnd={() => resume()}
+        >
+          {[...TESTIMONIALS, ...TESTIMONIALS].map((item, index) => (
+            <article key={`${item.name}-${index}`} className="flex w-[320px] shrink-0 cursor-grab flex-col justify-between rounded-2xl border border-border/60 bg-card p-6 active:cursor-grabbing sm:w-[420px] sm:p-8">
               <div>
-                <div className="flex justify-between items-start mb-6 gap-4">
-                  <h3 className="text-xl font-bold tracking-tight text-foreground">
-                    “{item.headline}”
-                  </h3>
-                  <div className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-xs font-semibold text-foreground shrink-0">
-                    <span>5</span>
-                    <span className="text-amber-500">★</span>
-                  </div>
+                <div className="mb-6 flex items-start justify-between gap-4">
+                  <h3 className="text-xl font-bold tracking-tight text-foreground">“{item.headline}”</h3>
+                  <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-xs font-semibold text-foreground">
+                    5 <span className="text-amber-500">★</span>
+                  </span>
                 </div>
-                <p className="text-base text-muted-foreground leading-relaxed mb-8">
-                  "{item.text}"
-                </p>
+                <p className="mb-8 text-base leading-relaxed text-muted-foreground">“{item.text}”</p>
               </div>
-
-              <div className="pt-6 border-t border-border/40 flex items-center justify-between">
+              <div className="flex items-center justify-between border-t border-border/40 pt-6">
                 <div className="flex items-center gap-3.5">
-                  <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-muted border border-border/40">
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      fill
-                      sizes="44px"
-                      className="object-cover"
-                      loading="lazy"
-                    />
+                  <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-border/40 bg-muted">
+                    <Image src={item.image} alt={item.name} fill sizes="44px" className="object-cover" loading="lazy" />
                   </div>
                   <div>
                     <div className="text-sm font-semibold text-foreground">{item.name}</div>
-                    <div className="text-xs text-muted-foreground mt-0.5">{item.role}</div>
+                    <div className="mt-0.5 text-xs text-muted-foreground">{item.role}</div>
                   </div>
                 </div>
                 <div className="text-xs font-medium text-muted-foreground">{item.category}</div>
               </div>
-            </div>
+            </article>
           ))}
-        </div>
+        </motion.div>
       </div>
-
-      <style jsx global>{`
-        @keyframes marquee {
-          0% {
-            transform: translateX(0%);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-        .animate-marquee {
-          animation: marquee 35s linear infinite;
-        }
-      `}</style>
     </section>
   )
 }
