@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import Image from 'next/image'
 import { animate, motion, useMotionValue } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -15,14 +15,40 @@ const sliderImages = [
 ]
 
 export function ImageSlider() {
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [loopWidth, setLoopWidth] = useState(0)
   const x = useMotionValue(0)
   const animationRef = useRef<ReturnType<typeof animate> | null>(null)
+  const speed = 50 // Pixels per second
   
-  // Math for seamless loop: 256px image width (w-64) + 16px gap (gap-4) or 24px gap (gap-6)
-  const loopWidth = sliderImages.length * (typeof window !== 'undefined' && window.innerWidth < 640 ? 272 : 280)
-  const speed = 40 // Pixels per second
+  // Render 3 sets so there is never a visible blank edge when dragging aggressively
+  const repeatedImages = [...sliderImages, ...sliderImages, ...sliderImages]
 
-  const startInfiniteLoop = () => {
+  // 1. Measure the exact DOM width of ONE set to prevent hardcoded math bugs (jerks)
+  useEffect(() => {
+    const measure = () => {
+      if (!trackRef.current) return
+      const children = trackRef.current.children
+      if (children.length >= sliderImages.length + 1) {
+        const first = children[0] as HTMLElement
+        const nextSetFirst = children[sliderImages.length] as HTMLElement
+        // Exact distance from Set 1 start to Set 2 start
+        setLoopWidth(nextSetFirst.offsetLeft - first.offsetLeft)
+      }
+    }
+    
+    measure()
+    // Small timeout to catch any late layout shifts from font/image loading
+    const timer = setTimeout(measure, 200) 
+    window.addEventListener('resize', measure)
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('resize', measure)
+    }
+  }, [])
+
+  const startInfiniteLoop = useCallback(() => {
+    if (!loopWidth) return
     animationRef.current?.stop()
     x.set(0)
     animationRef.current = animate(x, -loopWidth, {
@@ -31,51 +57,49 @@ export function ImageSlider() {
       repeat: Infinity,
       repeatType: 'loop',
     })
-  }
+  }, [loopWidth, x])
 
-  const resume = () => {
+  const resume = useCallback(() => {
+    if (!loopWidth) return
     animationRef.current?.stop()
-    const current = x.get()
-    
-    // If we've hit the exact boundaries, restart the loop cleanly
-    if (current >= 0 || current <= -loopWidth) {
-      startInfiniteLoop()
-      return
+    let current = x.get()
+
+    // Seamlessly wrap the position if dragged way out of bounds
+    if (current <= -loopWidth) {
+      current = current % loopWidth
+      x.set(current)
+    } else if (current > 0) {
+      current = 0
+      x.set(current)
     }
     
-    // Seamlessly finish the remaining distance to the end of the loop
     const distanceRemaining = loopWidth + current
     animationRef.current = animate(x, -loopWidth, {
       ease: 'linear',
       duration: distanceRemaining / speed,
       onComplete: startInfiniteLoop
     })
-  }
+  }, [loopWidth, x, startInfiniteLoop])
 
   const pause = () => animationRef.current?.stop()
 
   useEffect(() => {
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (loopWidth > 0 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       resume()
     }
-    return () => animationRef.current?.stop()
-  }, [loopWidth])
+    return pause
+  }, [loopWidth, resume])
 
-  // Move function for manual arrow clicks
-  const step = typeof window !== 'undefined' && window.innerWidth < 640 ? 272 : 280
   const move = (direction: 1 | -1) => {
     pause()
     const current = x.get()
-    let next = current + direction * step
-    
-    // Wrap around bounds cleanly if jumping past the ends
-    if (next > 0) next -= loopWidth
-    if (next < -loopWidth) next += loopWidth
+    const jumpWidth = typeof window !== 'undefined' && window.innerWidth < 640 ? 272 : 280
+    const next = current + direction * jumpWidth
     
     animate(x, next, {
       type: 'spring', 
-      damping: 22, 
-      stiffness: 100, 
+      damping: 24, 
+      stiffness: 120, 
       onComplete: resume
     })
   }
@@ -96,24 +120,26 @@ export function ImageSlider() {
           </button>
         </div>
         
-        {/* Exact same drag configuration as the working Testimonials */}
         <motion.div 
-          className="flex w-max gap-4 sm:gap-6 py-4" 
+          ref={trackRef}
+          className="flex w-max gap-4 px-4 py-4 sm:gap-6 sm:px-6" 
           style={{ x }} 
           drag="x" 
-          dragConstraints={{ left: -loopWidth, right: 0 }}
-          dragElastic={0}
+          // Allows dragging far to the left without hitting a wall before it wraps on let go
+          dragConstraints={{ left: loopWidth ? -(loopWidth * 2) : -10000, right: 0 }}
+          dragElastic={0.05}
           dragMomentum={false}
           onDragStart={pause}
           onDragEnd={resume}
         >
-          {[...sliderImages, ...sliderImages].map((image, index) => (
+          {repeatedImages.map((image, index) => (
             <div key={`${image.id}-${index}`} className="relative h-80 w-64 shrink-0 cursor-grab overflow-hidden rounded-lg bg-muted active:cursor-grabbing">
               <Image 
                 src={image.src} 
                 alt={image.alt} 
                 fill 
-                className="object-cover" 
+                draggable={false} // Prevents browser from "stealing" the drag gesture
+                className="pointer-events-none object-cover"
                 sizes="(max-width: 768px) 160px, 256px" 
                 loading="lazy" 
                 quality={75} 
