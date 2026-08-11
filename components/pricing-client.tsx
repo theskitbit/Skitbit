@@ -116,7 +116,13 @@ const plans: PricingPlan[] = [
     featured: true,
     bestFor:
       'For D2C brands that need a stronger, more consistent brand look than Amazon requires — hero and hover pairs included.',
-    sliderImages: fallbackSlider,
+    sliderImages: [
+      'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/DO_Case_HERO_Render_Asset.png',
+      'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/DO_Case_Utility_Render_Asset.png',
+      'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/DO_Case_Symmetrical_Render_Asset.png',
+      'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/DO_Case_Features_Render_Asset.png',
+      'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/DO_Case_Drop_Protection_Render_Asset.png'
+    ],
     included: [
       { title: '3D model setup', description: 'Built to a higher finish standard.' },
       { title: '4–5 grey bg renders', description: 'Styled to match your PDP aesthetic.' },
