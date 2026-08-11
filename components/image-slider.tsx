@@ -18,37 +18,31 @@ export function ImageSlider() {
   const x = useMotionValue(0)
   const animationRef = useRef<ReturnType<typeof animate> | null>(null)
   
-  // Math for seamless loop: 256px image width (w-64) + 16px gap (gap-4) or 24px gap (gap-6)
+  // The exact same math logic from your Testimonials slider
+  // 256px width + 16px gap (mobile) = 272
+  // 256px width + 24px gap (desktop) = 280
   const loopWidth = sliderImages.length * (typeof window !== 'undefined' && window.innerWidth < 640 ? 272 : 280)
-  const speed = 40 // Pixels per second
+  const speed = 50 // Pixels per second
 
-  const startInfiniteLoop = () => {
+  const resume = () => {
     animationRef.current?.stop()
-    x.set(0)
-    animationRef.current = animate(x, -loopWidth, {
+    let current = x.get()
+    
+    // Invisible Math Wrapping: Always keep the start position within one loop width.
+    // This ensures the repeat: 'loop' animation never gets confused or runs out of track.
+    if (current <= -loopWidth || current > 0) {
+      current = current % loopWidth
+      if (current > 0) current -= loopWidth
+      x.set(current)
+    }
+    
+    // The bulletproof infinite loop pattern
+    animationRef.current = animate(x, current - loopWidth, {
       ease: 'linear',
       duration: loopWidth / speed,
       repeat: Infinity,
       repeatType: 'loop',
-    })
-  }
-
-  const resume = () => {
-    animationRef.current?.stop()
-    const current = x.get()
-    
-    // If we've hit the exact boundaries, restart the loop cleanly
-    if (current >= 0 || current <= -loopWidth) {
-      startInfiniteLoop()
-      return
-    }
-    
-    // Seamlessly finish the remaining distance to the end of the loop
-    const distanceRemaining = loopWidth + current
-    animationRef.current = animate(x, -loopWidth, {
-      ease: 'linear',
-      duration: distanceRemaining / speed,
-      onComplete: startInfiniteLoop
+      repeatDelay: 0,
     })
   }
 
@@ -61,24 +55,29 @@ export function ImageSlider() {
     return () => animationRef.current?.stop()
   }, [loopWidth])
 
-  // Move function for manual arrow clicks
+  // Click handler for the arrows
   const step = typeof window !== 'undefined' && window.innerWidth < 640 ? 272 : 280
   const move = (direction: 1 | -1) => {
     pause()
-    const current = x.get()
+    let current = x.get()
     let next = current + direction * step
     
-    // Wrap around bounds cleanly if jumping past the ends
-    if (next > 0) next -= loopWidth
-    if (next < -loopWidth) next += loopWidth
+    // If clicking 'prev' pushes us into positive (blank space), invisibly wrap it first
+    if (next > 0) {
+      current -= loopWidth
+      x.set(current)
+      next = current + direction * step
+    }
     
     animate(x, next, {
       type: 'spring', 
-      damping: 22, 
-      stiffness: 100, 
-      onComplete: resume
-    })
+      damping: 24, 
+      stiffness: 120,
+    }).then(() => resume()) // Safely resume ONLY after the spring finishes
   }
+
+  // Brute-force render 16 sets so even the most aggressive flick never hits a visual edge
+  const repeatedImages = Array.from({ length: 16 }).flatMap(() => sliderImages)
 
   return (
     <section className="relative overflow-hidden bg-background py-12 sm:py-14 lg:py-16" aria-label="Featured product images">
@@ -96,24 +95,25 @@ export function ImageSlider() {
           </button>
         </div>
         
-        {/* Exact same drag configuration as the working Testimonials */}
         <motion.div 
-          className="flex w-max gap-4 sm:gap-6 py-4" 
+          className="flex w-max gap-4 px-4 py-4 sm:gap-6 sm:px-6" 
           style={{ x }} 
           drag="x" 
-          dragConstraints={{ left: -loopWidth, right: 0 }}
-          dragElastic={0}
+          // Massive left constraint allows aggressive pulling; right constraint blocked at 0
+          dragConstraints={{ left: -20000, right: 0 }}
+          dragElastic={0.05}
           dragMomentum={false}
           onDragStart={pause}
           onDragEnd={resume}
         >
-          {[...sliderImages, ...sliderImages].map((image, index) => (
+          {repeatedImages.map((image, index) => (
             <div key={`${image.id}-${index}`} className="relative h-80 w-64 shrink-0 cursor-grab overflow-hidden rounded-lg bg-muted active:cursor-grabbing">
               <Image 
                 src={image.src} 
                 alt={image.alt} 
                 fill 
-                className="object-cover" 
+                draggable={false} 
+                className="pointer-events-none object-cover"
                 sizes="(max-width: 768px) 160px, 256px" 
                 loading="lazy" 
                 quality={75} 
