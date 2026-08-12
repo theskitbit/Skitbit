@@ -40,14 +40,33 @@ export function ProductShowcase() {
   const x = useMotionValue(0)
   const animationRef = useRef<ReturnType<typeof animate> | null>(null)
   const loopWidth = HERO_STILLS.length * (typeof window !== 'undefined' && window.innerWidth < 768 ? 284 : 364)
+  const speed = 40
+
+  const startInfiniteLoop = () => {
+    animationRef.current?.stop()
+    x.set(0)
+    animationRef.current = animate(x, -loopWidth, {
+      ease: 'linear',
+      duration: loopWidth / speed,
+      repeat: Infinity,
+      repeatType: 'loop',
+    })
+  }
 
   const resume = () => {
     animationRef.current?.stop()
     const current = x.get()
-    const remaining = Math.max(0.1, (loopWidth + current) / 42)
-    animationRef.current = animate(x, current - loopWidth, {
-      ease: 'linear', duration: remaining, repeat: Infinity, repeatType: 'loop',
-      repeatDelay: 0,
+
+    if (current >= 0 || current <= -loopWidth) {
+      startInfiniteLoop()
+      return
+    }
+
+    const distanceRemaining = loopWidth + current
+    animationRef.current = animate(x, -loopWidth, {
+      ease: 'linear',
+      duration: distanceRemaining / speed,
+      onComplete: startInfiniteLoop,
     })
   }
 
@@ -83,6 +102,8 @@ export function ProductShowcase() {
           className="flex gap-6 w-max"
           style={{ x }}
           drag="x"
+          dragConstraints={{ left: -loopWidth, right: 0 }}
+          dragElastic={0}
           dragMomentum={false}
           onDragStart={pause}
           onDragEnd={resume}
