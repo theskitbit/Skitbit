@@ -71,11 +71,9 @@ export function ProductShowcase() {
   }
 
   useEffect(() => {
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) resume()
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) startInfiniteLoop()
     return () => animationRef.current?.stop()
   }, [loopWidth])
-
-  const pause = () => animationRef.current?.stop()
 
   return (
     <section className="w-full bg-[#FAF9F5] py-16 overflow-hidden">
@@ -101,17 +99,11 @@ export function ProductShowcase() {
         <motion.div
           className="flex gap-6 w-max"
           style={{ x }}
-          drag="x"
-          dragConstraints={{ left: -loopWidth, right: 0 }}
-          dragElastic={0}
-          dragMomentum={false}
-          onDragStart={pause}
-          onDragEnd={resume}
         >
           {[...HERO_STILLS, ...HERO_STILLS].map((image, index) => (
             <motion.div
               key={index}
-              className="relative aspect-[4/5] w-[260px] shrink-0 overflow-hidden rounded-2xl bg-white sm:w-[340px] border border-zinc-100 shadow-xs transition-all duration-300 hover:scale-[1.02] cursor-grab active:cursor-grabbing"
+              className="relative aspect-[4/5] w-[260px] shrink-0 overflow-hidden rounded-2xl bg-white sm:w-[340px] border border-zinc-100 shadow-xs transition-all duration-300 hover:scale-[1.02]"
               whileHover={{ y: -4 }}
             >
               <Image
