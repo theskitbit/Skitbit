@@ -40,23 +40,40 @@ export function ProductShowcase() {
   const x = useMotionValue(0)
   const animationRef = useRef<ReturnType<typeof animate> | null>(null)
   const loopWidth = HERO_STILLS.length * (typeof window !== 'undefined' && window.innerWidth < 768 ? 284 : 364)
+  const speed = 40
+
+  const startInfiniteLoop = () => {
+    animationRef.current?.stop()
+    x.set(0)
+    animationRef.current = animate(x, -loopWidth, {
+      ease: 'linear',
+      duration: loopWidth / speed,
+      repeat: Infinity,
+      repeatType: 'loop',
+    })
+  }
 
   const resume = () => {
     animationRef.current?.stop()
     const current = x.get()
-    const remaining = Math.max(0.1, (loopWidth + current) / 42)
-    animationRef.current = animate(x, current - loopWidth, {
-      ease: 'linear', duration: remaining, repeat: Infinity, repeatType: 'loop',
-      repeatDelay: 0,
+
+    if (current >= 0 || current <= -loopWidth) {
+      startInfiniteLoop()
+      return
+    }
+
+    const distanceRemaining = loopWidth + current
+    animationRef.current = animate(x, -loopWidth, {
+      ease: 'linear',
+      duration: distanceRemaining / speed,
+      onComplete: startInfiniteLoop,
     })
   }
 
   useEffect(() => {
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) resume()
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) startInfiniteLoop()
     return () => animationRef.current?.stop()
   }, [loopWidth])
-
-  const pause = () => animationRef.current?.stop()
 
   return (
     <section className="w-full bg-[#FAF9F5] py-16 overflow-hidden">
@@ -82,15 +99,11 @@ export function ProductShowcase() {
         <motion.div
           className="flex gap-6 w-max"
           style={{ x }}
-          drag="x"
-          dragMomentum={false}
-          onDragStart={pause}
-          onDragEnd={resume}
         >
           {[...HERO_STILLS, ...HERO_STILLS].map((image, index) => (
             <motion.div
               key={index}
-              className="relative aspect-[4/5] w-[260px] shrink-0 overflow-hidden rounded-2xl bg-white sm:w-[340px] border border-zinc-100 shadow-xs transition-all duration-300 hover:scale-[1.02] cursor-grab active:cursor-grabbing"
+              className="relative aspect-[4/5] w-[260px] shrink-0 overflow-hidden rounded-2xl bg-white sm:w-[340px] border border-zinc-100 shadow-xs transition-all duration-300 hover:scale-[1.02]"
               whileHover={{ y: -4 }}
             >
               <Image

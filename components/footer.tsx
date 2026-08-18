@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useContactOverlay } from './contact-overlay'
 
 const PARTNER_LOGOS = [
   { id: 'top-rated', src: "https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/top%20rated%20agency.png", alt: "Top Rated Agency", width: 110, height: 45 },
@@ -52,6 +53,8 @@ const NAV_STUDIO = [
 ]
 
 function FooterNav({ title, links }: { title: string; links: { href: string; label: string }[] }) {
+  const { open } = useContactOverlay()
+
   return (
     <div>
       <h4 className="mb-4 text-xs font-semibold uppercase tracking-wider text-foreground">
@@ -60,12 +63,22 @@ function FooterNav({ title, links }: { title: string; links: { href: string; lab
       <ul className="space-y-3">
         {links.map(({ href, label }) => (
           <li key={href}>
-            <Link
-              href={href}
-              className="text-sm transition-colors duration-200 hover:opacity-100 hover:text-foreground text-muted-foreground"
-            >
-              {label}
-            </Link>
+            {label === 'Contact' ? (
+              <button
+                type="button"
+                onClick={open}
+                className="text-sm transition-colors duration-200 hover:opacity-100 hover:text-foreground text-muted-foreground"
+              >
+                {label}
+              </button>
+            ) : (
+              <Link
+                href={href}
+                className="text-sm transition-colors duration-200 hover:opacity-100 hover:text-foreground text-muted-foreground"
+              >
+                {label}
+              </Link>
+            )}
           </li>
         ))}
       </ul>
