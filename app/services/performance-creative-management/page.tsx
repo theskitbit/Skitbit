@@ -845,7 +845,7 @@ export default function PerformanceCreativeManagementPage() {
       {/* HERO + CREATIVE GALLERY */}
       <section className="mx-[24px] mt-[86px] overflow-hidden bg-[var(--acid)] max-md:mx-[13px] max-md:mt-[76px]">
         <div className="mx-auto flex max-w-[1360px] flex-col items-center px-[22px] pb-[58px] pt-[76px] text-center md:px-[54px] md:pb-[76px] md:pt-[92px]">
-          <h1 className="max-w-[1120px] text-balance text-[52px] font-black leading-[0.96] tracking-[-0.075em] text-black sm:text-[68px] md:text-[92px] lg:text-[108px]">
+          <h1 className="performance-hero-title text-balance text-black">
             Turn ad spend
             <br />
             into new customers.
