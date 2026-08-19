@@ -71,6 +71,33 @@
   --text-small: 0.875rem;
 }
 
+/* Performance service hero typography is centralized here to keep page markup semantic and predictable. */
+.performance-hero-title {
+  max-width: 1120px;
+  font-size: 52px;
+  font-weight: 900;
+  line-height: 0.96;
+  letter-spacing: -0.075em;
+}
+
+@media (min-width: 640px) {
+  .performance-hero-title {
+    font-size: 68px;
+  }
+}
+
+@media (min-width: 768px) {
+  .performance-hero-title {
+    font-size: 92px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .performance-hero-title {
+    font-size: 108px;
+  }
+}
+
 /* =========================
    DARK MODE
    ========================= */
