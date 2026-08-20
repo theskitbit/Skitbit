@@ -23,11 +23,12 @@ export default defineType({
   title: 'Mobile Navigation',
   type: 'document',
   fields: [
-    defineField({ name: 'primaryLinks', title: 'Primary links', type: 'array', of: [defineArrayMember({ type: 'object', name: 'link', fields: linkFields })] }),
-    defineField({ name: 'featuredCards', title: 'Featured image cards', type: 'array', of: [imageCard] }),
+    defineField({ name: 'primaryLinks', title: 'Primary links', description: 'Drag items to change their mobile display order.', type: 'array', of: [defineArrayMember({ type: 'object', name: 'link', fields: linkFields })] }),
+    defineField({ name: 'featuredCards', title: 'Featured image cards', description: 'Drag cards to change their mobile display order.', type: 'array', of: [imageCard] }),
     defineField({
       name: 'groups',
       title: 'Expandable groups',
+      description: 'Drag groups and their links to change their mobile display order.',
       type: 'array',
       of: [defineArrayMember({
         type: 'object', name: 'navigationGroup', fields: [
@@ -36,6 +37,6 @@ export default defineType({
         ],
       })],
     }),
-    defineField({ name: 'utilityLinks', title: 'Utility links', type: 'array', of: [defineArrayMember({ type: 'object', name: 'link', fields: linkFields })] }),
+    defineField({ name: 'utilityLinks', title: 'Utility links', description: 'Drag items to change their mobile display order.', type: 'array', of: [defineArrayMember({ type: 'object', name: 'link', fields: linkFields })] }),
   ],
 })
