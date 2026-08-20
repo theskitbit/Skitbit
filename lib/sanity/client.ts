@@ -55,3 +55,14 @@ export async function getUniqueIndustries(): Promise<string[]> {
   })
   return Array.from(industries).sort()
 }
+
+export const MOBILE_NAVIGATION_QUERY = `*[_type == "mobileNavigation"][0]{
+  primaryLinks[]{_key, label, href},
+  featuredCards[]{_key, title, subtitle, href, alt, "imageUrl": image.asset->url},
+  groups[]{_key, title, links[]{_key, label, href}},
+  utilityLinks[]{_key, label, href}
+}`
+
+export async function getMobileNavigation() {
+  return client.fetch(MOBILE_NAVIGATION_QUERY)
+}

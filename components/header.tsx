@@ -4,8 +4,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import { useContactOverlay } from './contact-overlay'
+import { MobileNavigationDrawer, type MobileNavContent } from './mobile-navigation-drawer'
 
-export function Header({ hasAnnouncement = false }: { hasAnnouncement?: boolean }) {
+export function Header({ hasAnnouncement = false, mobileNavigation }: { hasAnnouncement?: boolean; mobileNavigation?: MobileNavContent | null }) {
   const [mounted, setMounted] = useState(false)
   const [announcementVisible, setAnnouncementVisible] = useState(hasAnnouncement)
   const [hidden, setHidden] = useState(false)
@@ -43,6 +44,7 @@ export function Header({ hasAnnouncement = false }: { hasAnnouncement?: boolean 
     // 👇 Removed 'sticky top-0' and changed to 'relative z-40'
     <header className={`fixed inset-x-0 ${announcementVisible ? 'top-[28px]' : 'top-0'} z-40 w-full border-b border-border/50 bg-background/80 backdrop-blur-md transition-transform duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
       <nav className="mx-auto flex h-[48px] w-full max-w-7xl items-center justify-between px-5 sm:px-6 lg:px-8">
+        <div className="md:hidden"><MobileNavigationDrawer content={mobileNavigation ?? undefined} /></div>
         
         {/* Logo */}
         <Link
