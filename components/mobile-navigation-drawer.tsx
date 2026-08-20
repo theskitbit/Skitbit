@@ -69,7 +69,7 @@ export function MobileNavigationDrawer({ content = fallbackContent }: { content?
       {mounted && createPortal(
         <AnimatePresence>
           {open && (
-          <div className="fixed inset-0 z-[9999] md:hidden" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+          <div className="fixed inset-0 z-[100000] md:hidden" role="dialog" aria-modal="true" aria-label="Mobile navigation">
             <motion.button type="button" aria-label="Close navigation menu" className="absolute inset-0 bg-black/45" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(false)} />
             <motion.aside className="relative flex h-full w-[min(88vw,390px)] flex-col overflow-y-auto bg-background px-5 pb-8 pt-5 shadow-2xl" initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} transition={{ type: 'spring', stiffness: 320, damping: 32 }}>
               <div className="flex items-center justify-between border-b border-border/70 pb-5">
