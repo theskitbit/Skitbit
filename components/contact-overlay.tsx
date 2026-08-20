@@ -163,7 +163,7 @@ const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(messag
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div className="fixed inset-0 z-50 bg-[#F6F7F2] overflow-y-auto text-foreground flex flex-col" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <motion.div className="fixed inset-0 z-[100000] bg-[#F6F7F2] overflow-y-auto text-foreground flex flex-col" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <div className="w-full h-1 bg-muted fixed top-0 left-0 z-50">
             <motion.div className="h-full bg-primary" animate={{ width: `${(step / TOTAL_STEPS) * 100}%` }} transition={{ duration: 0.3 }} />
           </div>

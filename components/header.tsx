@@ -4,8 +4,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import { useContactOverlay } from './contact-overlay'
+import { MobileNavigationDrawer, type MobileNavContent } from './mobile-navigation-drawer'
 
-export function Header({ hasAnnouncement = false }: { hasAnnouncement?: boolean }) {
+export function Header({ hasAnnouncement = false, mobileNavigation }: { hasAnnouncement?: boolean; mobileNavigation?: MobileNavContent | null }) {
   const [mounted, setMounted] = useState(false)
   const [announcementVisible, setAnnouncementVisible] = useState(hasAnnouncement)
   const [hidden, setHidden] = useState(false)
@@ -48,7 +49,7 @@ export function Header({ hasAnnouncement = false }: { hasAnnouncement?: boolean 
         <Link
           href="/"
           aria-label="Skitbit Home"
-          className="group flex items-center"
+          className="group flex shrink-0 items-center"
         >
           <Image
             src="/Black icon - without symbol.svg"
@@ -89,11 +90,12 @@ export function Header({ hasAnnouncement = false }: { hasAnnouncement?: boolean 
           </Link>
         </div>
 
-        {/* CTA */}
+        {/* CTA and mobile menu: desktop navigation remains unchanged. */}
+        <div className="flex shrink-0 items-center gap-1">
         <button
           type="button"
           onClick={() => open()}
-          className="btn-primary focus-ring group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-2.5 text-sm font-semibold transition-all duration-300 hover:scale-[1.03] hover:opacity-90 active:scale-[0.98]"
+          className="btn-primary focus-ring group relative hidden items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-2.5 text-sm font-semibold transition-all duration-300 hover:scale-[1.03] hover:opacity-90 active:scale-[0.98] min-[360px]:inline-flex md:inline-flex"
         >
           <span
             aria-hidden="true"
@@ -101,6 +103,10 @@ export function Header({ hasAnnouncement = false }: { hasAnnouncement?: boolean 
           />
           <span className="relative z-10">Contact</span>
         </button>
+        <div className="md:hidden">
+          <MobileNavigationDrawer content={mobileNavigation ?? undefined} />
+        </div>
+        </div>
       </nav>
     </header>
   )

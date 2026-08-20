@@ -11,8 +11,10 @@ import { WhatWeOffer } from '@/components/what-we-offer'
 import { Testimonials } from '@/components/testimonials'
 import { CTA } from '@/components/cta'
 import { Footer } from '@/components/footer'
+import { getMobileNavigation } from '@/lib/sanity/client'
 
-export default function Home() {
+export default async function Home() {
+  const mobileNavigation = await getMobileNavigation()
   return (
     <main className="bg-background text-foreground">
 
@@ -130,7 +132,7 @@ export default function Home() {
       </Script>
 
       <AnnouncementBanner />
-      <Header hasAnnouncement />
+      <Header hasAnnouncement mobileNavigation={mobileNavigation} />
       <Hero />
       <LogoStrip />
       <FireworkWidget />
