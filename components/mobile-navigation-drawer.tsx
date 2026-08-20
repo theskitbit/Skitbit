@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight, ChevronDown, ChevronRight, Menu, X } from 'lucide-react'
 import { useContactOverlay } from './contact-overlay'
@@ -32,10 +33,15 @@ const fallbackContent: MobileNavContent = {
 
 export function MobileNavigationDrawer({ content = fallbackContent }: { content?: MobileNavContent }) {
   const [open, setOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const [expanded, setExpanded] = useState<string | null>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
   const { open: openContact } = useContactOverlay()
   const data = content.primaryLinks?.length ? content : fallbackContent
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     if (!open) return
@@ -60,9 +66,10 @@ export function MobileNavigationDrawer({ content = fallbackContent }: { content?
       <button type="button" className="inline-flex items-center justify-center rounded-full p-2 md:hidden" aria-label="Open navigation menu" onClick={() => setOpen(true)}>
         <Menu className="h-6 w-6" aria-hidden="true" />
       </button>
-      <AnimatePresence>
-        {open && (
-          <div className="fixed inset-0 z-[80] md:hidden" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+      {mounted && createPortal(
+        <AnimatePresence>
+          {open && (
+          <div className="fixed inset-0 z-[9999] md:hidden" role="dialog" aria-modal="true" aria-label="Mobile navigation">
             <motion.button type="button" aria-label="Close navigation menu" className="absolute inset-0 bg-black/45" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(false)} />
             <motion.aside className="relative flex h-full w-[min(88vw,390px)] flex-col overflow-y-auto bg-background px-5 pb-8 pt-5 shadow-2xl" initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} transition={{ type: 'spring', stiffness: 320, damping: 32 }}>
               <div className="flex items-center justify-between border-b border-border/70 pb-5">
@@ -90,7 +97,9 @@ export function MobileNavigationDrawer({ content = fallbackContent }: { content?
             </motion.aside>
           </div>
         )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body,
+      )}
     </>
   )
 }
