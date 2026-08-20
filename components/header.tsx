@@ -42,9 +42,9 @@ export function Header({ hasAnnouncement = false, mobileNavigation }: { hasAnnou
 
   return (
     // 👇 Removed 'sticky top-0' and changed to 'relative z-40'
-    <header className={`fixed inset-x-0 ${announcementVisible ? 'top-[28px]' : 'top-0'} z-[90] w-full border-b border-border/50 bg-background/80 backdrop-blur-md transition-transform duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
-      <nav className="relative mx-auto flex h-[48px] w-full max-w-7xl items-center justify-center px-5 sm:px-6 lg:px-8">
-        <div className="absolute right-5 md:hidden"><MobileNavigationDrawer content={mobileNavigation ?? undefined} /></div>
+    <header className={`fixed inset-x-0 ${announcementVisible ? 'top-[28px]' : 'top-0'} z-40 w-full border-b border-border/50 bg-background/80 backdrop-blur-md transition-transform duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
+      <nav className="mx-auto flex h-[48px] w-full max-w-7xl items-center justify-between px-5 sm:px-6 lg:px-8">
+        <div className="md:hidden"><MobileNavigationDrawer content={mobileNavigation ?? undefined} /></div>
         
         {/* Logo */}
         <Link
