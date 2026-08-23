@@ -36,17 +36,35 @@ export function MobileNavigationDrawer({ content = fallbackContent }: { content?
   const [mounted, setMounted] = useState(false)
   const [expanded, setExpanded] = useState<string | null>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
   const { open: openContact } = useContactOverlay()
-  const data = content.primaryLinks?.length ? content : fallbackContent
+  const data: MobileNavContent = {
+    primaryLinks: content.primaryLinks?.length ? content.primaryLinks : fallbackContent.primaryLinks,
+    featuredCards: content.featuredCards?.length ? content.featuredCards : fallbackContent.featuredCards,
+    groups: content.groups?.length ? content.groups : fallbackContent.groups,
+    utilityLinks: content.utilityLinks?.length ? content.utilityLinks : fallbackContent.utilityLinks,
+  }
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
   useEffect(() => {
-    if (!open) return
+    if (!open) {
+      triggerRef.current?.focus()
+      return
+    }
     closeButtonRef.current?.focus()
-    const onKeyDown = (event: KeyboardEvent) => event.key === 'Escape' && setOpen(false)
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false)
+      if (event.key === 'Tab') {
+        const focusable = document.querySelectorAll<HTMLElement>('[data-mobile-drawer] a, [data-mobile-drawer] button')
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus() }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus() }
+      }
+    }
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     window.addEventListener('keydown', onKeyDown)
@@ -63,21 +81,21 @@ export function MobileNavigationDrawer({ content = fallbackContent }: { content?
 
   return (
     <>
-      <button type="button" className="inline-flex items-center justify-center rounded-full p-2 md:hidden" aria-label="Open navigation menu" onClick={() => setOpen(true)}>
+      <button ref={triggerRef} type="button" className="inline-flex items-center justify-center rounded-full p-2 md:hidden" aria-label="Open navigation menu" title="Open navigation menu" onClick={() => setOpen(true)}>
         <Menu className="h-6 w-6" aria-hidden="true" />
       </button>
       {mounted && createPortal(
         <AnimatePresence>
           {open && (
           <div className="fixed inset-0 z-[100000] md:hidden" role="dialog" aria-modal="true" aria-label="Mobile navigation">
-            <motion.button type="button" aria-label="Close navigation menu" className="absolute inset-0 bg-black/45" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(false)} />
-            <motion.aside className="relative flex h-full w-[min(88vw,390px)] flex-col overflow-y-auto bg-background px-5 pb-8 pt-5 shadow-2xl" initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} transition={{ type: 'spring', stiffness: 320, damping: 32 }}>
+            <motion.button type="button" aria-label="Close navigation menu" title="Close navigation menu" className="absolute inset-0 bg-black/45" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(false)} />
+            <motion.aside data-mobile-drawer className="relative flex h-full w-[min(88vw,390px)] flex-col overflow-y-auto bg-background px-5 pb-8 pt-5 shadow-2xl" initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} transition={{ type: 'spring', stiffness: 320, damping: 32 }}>
               <div className="flex items-center justify-between border-b border-border/70 pb-5">
                 <Link href="/" onClick={() => setOpen(false)} aria-label="Skitbit Home" className="flex items-center">
                   <Image src="/Black icon - without symbol.svg" alt="Skitbit Logo" width={20} height={20} className="mr-2 h-5 w-auto" />
                   <span className="text-xl font-semibold tracking-tight">Skitbit<span className="text-xs align-top">®</span></span>
                 </Link>
-                <button ref={closeButtonRef} type="button" onClick={() => setOpen(false)} className="rounded-full border border-border p-2" aria-label="Close navigation menu"><X className="h-5 w-5" /></button>
+                <button ref={closeButtonRef} type="button" onClick={() => setOpen(false)} className="rounded-full border border-border p-2" aria-label="Close navigation menu" title="Close navigation menu"><X className="h-5 w-5" /></button>
               </div>
 
               <nav className="flex flex-col gap-2 py-5" aria-label="Mobile primary navigation">
