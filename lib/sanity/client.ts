@@ -44,7 +44,7 @@ export const WORK_ITEMS_QUERY = `
 `
 
 export async function getWorkItems(): Promise<WorkItem[]> {
-  return client.fetch(WORK_ITEMS_QUERY)
+  return client.fetch(WORK_ITEMS_QUERY, {}, { next: { revalidate: 300, tags: ['sanity-work-items'] } })
 }
 
 export async function getUniqueIndustries(): Promise<string[]> {
@@ -64,5 +64,5 @@ export const MOBILE_NAVIGATION_QUERY = `*[_type == "mobileNavigation"][0]{
 }`
 
 export async function getMobileNavigation() {
-  return client.fetch(MOBILE_NAVIGATION_QUERY)
+  return client.fetch(MOBILE_NAVIGATION_QUERY, {}, { next: { revalidate: 300, tags: ['sanity-mobile-navigation'] } })
 }
