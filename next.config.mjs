@@ -16,6 +16,14 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com',
       },
+      {
+        protocol: 'https',
+        hostname: '**.sanity.io',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.public.blob.vercel-storage.com',
+      },
     ],
   },
   async redirects() {
@@ -35,7 +43,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.googleadservices.com; style-src 'self' 'unsafe-inline'; font-src 'self' data: https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data: blob: https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.google.com https://images.unsplash.com https://*.public.blob.vercel-storage.com; media-src 'self' data: blob: https://*.public.blob.vercel-storage.com; frame-src 'self' https://www.googletagmanager.com https://www.google.com; connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://stats.g.doubleclick.net https://googleads.g.doubleclick.net https://www.googleadservices.com https://*.sanity.io https://*.api.sanity.io https://api.airtable.com; worker-src 'self' blob:;",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://asset.fwcdn3.com https://*.fwcdn3.com https://www.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.googleadservices.com; style-src 'self' 'unsafe-inline'; font-src 'self' data: https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data: blob: https://*.fireworktv.com https://*.fwcdn3.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.google.com https://images.unsplash.com https://*.public.blob.vercel-storage.com; media-src 'self' data: blob: https://*.public.blob.vercel-storage.com https://*.fireworktv.com https://*.fwcdn3.com; frame-src 'self' https://*.fireworktv.com https://*.fwcdn3.com https://www.googletagmanager.com https://www.google.com; connect-src 'self' https://asset.fwcdn3.com https://*.fwcdn3.com https://*.fireworktv.com https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://stats.g.doubleclick.net https://googleads.g.doubleclick.net https://www.googleadservices.com https://*.sanity.io https://*.api.sanity.io https://api.airtable.com; worker-src 'self' blob:;",
           },
           {
             key: 'Referrer-Policy',
