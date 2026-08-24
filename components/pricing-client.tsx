@@ -308,7 +308,6 @@ function ImageSlider({ images, alt }: { images: string[]; alt: string }) {
               type="button"
               onClick={() => go(-1)}
               aria-label="Previous example"
-              title="Previous example"
               className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm transition hover:bg-background"
             >
               <CaretLeft size={16} weight="bold" />
@@ -317,7 +316,6 @@ function ImageSlider({ images, alt }: { images: string[]; alt: string }) {
               type="button"
               onClick={() => go(1)}
               aria-label="Next example"
-              title="Next example"
               className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm transition hover:bg-background"
             >
               <CaretRight size={16} weight="bold" />

@@ -102,7 +102,6 @@ export default function AnnouncementBanner() {
               // 👇 MATCHED TO EXACT PADDING: right-6 and lg:right-8 to perfectly align with the content below it
               className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-gray-400 transition-colors hover:text-blue-950 sm:right-4 lg:right-8"
               aria-label="Close announcement"
-              title="Close announcement"
             >
               <X className="w-4 h-4" />
             </button>

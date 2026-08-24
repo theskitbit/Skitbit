@@ -95,8 +95,6 @@ export function Header({ hasAnnouncement = false, mobileNavigation }: { hasAnnou
         <button
           type="button"
           onClick={() => open()}
-          title="Open contact form"
-          aria-label="Open contact form"
           className="btn-primary focus-ring group relative hidden items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-2.5 text-sm font-semibold transition-all duration-300 hover:scale-[1.03] hover:opacity-90 active:scale-[0.98] min-[360px]:inline-flex md:inline-flex"
         >
           <span
