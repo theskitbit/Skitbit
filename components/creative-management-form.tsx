@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion'
 import { Check } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -573,13 +573,15 @@ export function CreativeManagementForm({ onClose }: CreativeManagementFormProps)
   const config = marketConfig[geoData.market]
 
   // Handlers for closing the form safely
-  const handleClose = useCallback(() => {
-    onClose?.()
+  const handleClose = () => {
+    if (onClose) {
+      onClose()
+    }
     // Fallback: If they are viewing this on the dedicated page, go back to home
     if (typeof window !== 'undefined' && window.location.pathname.includes('/contact-form')) {
       router.push('/')
     }
-  }, [onClose, router])
+  }
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow
