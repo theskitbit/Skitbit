@@ -2,9 +2,6 @@
 
 import type React from 'react'
 import Link from 'next/link'
-import Script from 'next/script'
-const FIREWORK_MODULE_SCRIPT = 'https://asset.fwcdn3.com/js/module/fwn.js'
-const FIREWORK_LEGACY_SCRIPT = 'https://asset.fwcdn3.com/js/fwn.js'
 
 declare global {
   namespace React.JSX {
@@ -23,8 +20,6 @@ export function FireworkWidget() {
 
   return (
     <section className="w-full pb-12 sm:pb-14 lg:pb-16">
-      <Script src={FIREWORK_MODULE_SCRIPT} strategy="afterInteractive" type="module" />
-      <Script src={FIREWORK_LEGACY_SCRIPT} strategy="afterInteractive" noModule />
       <style jsx global>{`
         fw-widget { display: block !important; width: 100% !important; min-height: 400px !important; height: 100% !important; }
         fw-widget > div, fw-widget iframe { width: 100% !important; height: 100% !important; }
