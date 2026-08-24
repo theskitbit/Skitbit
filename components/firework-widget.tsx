@@ -1,11 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Script from 'next/script'
 
 export function FireworkWidget() {
-  const [isReady, setIsReady] = useState(false)
 
   return (
     <section className="w-full pb-12 sm:pb-14 lg:pb-16">
@@ -14,7 +12,6 @@ export function FireworkWidget() {
       <Script 
         src="https://asset.fwcdn3.com/js/fwn.js" 
         strategy="afterInteractive"
-        onReady={() => setIsReady(true)}
       />
 
       {/* 2. Aggressive CSS to force the Shadow DOM element to respect height */}
@@ -49,14 +46,12 @@ export function FireworkWidget() {
         
         {/* 3. The container that holds the space */}
         <div className="w-full min-h-[400px] relative">
-          {isReady && (
-            <div 
-              className="w-full h-full"
-              dangerouslySetInnerHTML={{ 
-                __html: '<fw-widget widget_config_id="95D10o_efc" class="w-full h-full" autoplay="true" loop="true" muted="true"></fw-widget>' 
-              }} 
-            />
-          )}
+          <div
+            className="w-full h-full"
+            dangerouslySetInnerHTML={{
+              __html: '<fw-widget widget_config_id="95D10o_efc" class="w-full h-full" autoplay="true" loop="true" muted="true"></fw-widget>'
+            }}
+          />
         </div>
 
       </div>
