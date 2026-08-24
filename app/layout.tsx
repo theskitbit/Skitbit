@@ -125,8 +125,10 @@ export default function RootLayout({
       <head>
         {/* Next.js automatically injects metadata and font preload links here */}
       </head>
-      <body className={`${geist.className} font-sans antialiased`}>
-        {/* GOOGLE TAG MANAGER */}
+  <body className={`${geist.className} font-sans antialiased`}>
+  <Script src="https://asset.fwcdn3.com/js/module/fwn.js" strategy="beforeInteractive" type="module" />
+  <Script src="https://asset.fwcdn3.com/js/fwn.js" strategy="beforeInteractive" noModule />
+  {/* GOOGLE TAG MANAGER */}
         <Script id="gtm-script" strategy="afterInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
