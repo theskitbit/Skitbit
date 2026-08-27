@@ -26,7 +26,7 @@ export function Hero() {
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <button type="button" onClick={open} className="btn-primary inline-flex h-11 cursor-pointer items-center justify-center rounded-full px-7 text-[15px] font-medium lg:min-w-[176px]">
-                Partner with Us
+                Get in touch
               </button>
               <Link href="/works" className="btn-ghost inline-flex h-11 items-center justify-center rounded-full px-7 text-[15px] font-medium lg:min-w-[128px]">
                 Our Work
