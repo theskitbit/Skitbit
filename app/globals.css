@@ -80,62 +80,45 @@
   letter-spacing: -0.075em;
 }
 
-/* Contact CTA tooltip: bright accent speech bubble on hover/focus. */
-button[title="Get a reply in 60secs"] {
+/* Small contact CTA tooltip: accent-tinted, hover-only, and below the button. */
+button[data-tooltip="Get a reply in 60secs"] {
   position: relative;
 }
 
-button[title="Get a reply in 60secs"]::after {
-  content: attr(title);
+button[data-tooltip="Get a reply in 60secs"]::after {
+  content: attr(data-tooltip);
   position: absolute;
+  top: calc(100% + 0.45rem);
   left: 50%;
-  bottom: calc(100% + 0.75rem);
   z-index: 40;
   width: max-content;
-  max-width: min(16rem, calc(100vw - 2rem));
-  padding: 0.7rem 1rem;
-  border: 2px solid var(--accent);
-  border-radius: 0.75rem;
-  background: var(--primary);
-  color: var(--primary-foreground);
-  box-shadow: 0 0.35rem 0 var(--accent);
-  font-size: 0.875rem;
-  font-weight: 700;
+  max-width: 100%;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 70%, var(--primary));
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, var(--accent) 82%, var(--background));
+  color: var(--primary);
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--primary) 18%, transparent);
+  font-size: 0.7rem;
+  font-weight: 600;
   line-height: 1.2;
+  white-space: nowrap;
   pointer-events: none;
   opacity: 0;
-  transform: translate(-50%, 0.35rem);
+  transform: translate(-50%, -0.2rem);
   transition: opacity var(--transition-base), transform var(--transition-base);
 }
 
-button[title="Get a reply in 60secs"]::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 0.25rem);
-  z-index: 41;
-  width: 0.8rem;
-  height: 0.8rem;
-  border-right: 2px solid var(--accent);
-  border-bottom: 2px solid var(--accent);
-  background: var(--primary);
-  pointer-events: none;
-  opacity: 0;
-  transform: translate(-50%, 0.35rem) rotate(45deg);
-  transition: opacity var(--transition-base), transform var(--transition-base);
-}
-
-button[title="Get a reply in 60secs"]:hover::before,
-button[title="Get a reply in 60secs"]:hover::after,
-button[title="Get a reply in 60secs"]:focus-visible::before,
-button[title="Get a reply in 60secs"]:focus-visible::after {
+button[data-tooltip="Get a reply in 60secs"]:hover::after,
+button[data-tooltip="Get a reply in 60secs"]:focus-visible::after {
   opacity: 1;
-  transform: translate(-50%, 0) rotate(45deg);
+  transform: translate(-50%, 0);
 }
 
-button[title="Get a reply in 60secs"]:hover::after,
-button[title="Get a reply in 60secs"]:focus-visible::after {
-  transform: translate(-50%, 0);
+@media (max-width: 767px) {
+  button[data-tooltip="Get a reply in 60secs"]::after {
+    display: none;
+  }
 }
 
 @media (min-width: 640px) {

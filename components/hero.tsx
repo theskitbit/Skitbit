@@ -25,7 +25,7 @@ export function Hero() {
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <button type="button" onClick={open} title="Get a reply in 60secs" aria-label="Get in touch — Get a reply in 60secs" className="btn-primary inline-flex h-11 cursor-pointer items-center justify-center rounded-full px-7 text-[15px] font-medium lg:min-w-[176px]">
+              <button type="button" onClick={open} data-tooltip="Get a reply in 60secs" data-tooltip-position="below" aria-label="Get in touch — Get a reply in 60secs" className="btn-primary inline-flex h-11 cursor-pointer items-center justify-center rounded-full px-7 text-[15px] font-medium lg:min-w-[176px]">
                 Get in touch
               </button>
               <Link href="/works" className="btn-ghost inline-flex h-11 items-center justify-center rounded-full px-7 text-[15px] font-medium lg:min-w-[128px]">

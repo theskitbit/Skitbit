@@ -96,7 +96,7 @@ export function CountryPageTemplate({ content, canonical }: CountryPageTemplateP
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center z-20 relative">
           <button 
             onClick={open}
-            title="Get a reply in 60secs"
+            data-tooltip="Get a reply in 60secs" data-tooltip-position="below"
             aria-label="Get in touch — Get a reply in 60secs"
             className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-md bg-foreground px-8 text-sm font-medium text-background transition-colors hover:bg-foreground/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring shadow-lg cursor-pointer"
           >

@@ -25,7 +25,7 @@ export function CTA() {
           <button
             type="button"
             onClick={open}
-            title="Get a reply in 60secs"
+            data-tooltip="Get a reply in 60secs" data-tooltip-position="below"
             aria-label="Get in touch — Get a reply in 60secs"
             className="btn-primary inline-flex items-center justify-center gap-2 rounded-full px-8 py-3 transition-all duration-300 hover:scale-[1.03] hover:opacity-90 focus:outline-none focus-ring active:scale-[0.98]"
           >

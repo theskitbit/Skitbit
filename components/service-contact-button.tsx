@@ -27,7 +27,7 @@ export function ServiceContactButton({
     <button
       type="button"
       onClick={open}
-      title="Get a reply in 60secs"
+      data-tooltip="Get a reply in 60secs" data-tooltip-position="below"
       aria-label="Get in touch — Get a reply in 60secs"
       className={[
         "inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-lg font-semibold transition-all duration-200 hover:scale-105 hover:opacity-90 hover:shadow-lg active:scale-95",
