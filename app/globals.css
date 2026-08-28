@@ -80,6 +80,64 @@
   letter-spacing: -0.075em;
 }
 
+/* Contact CTA tooltip: bright accent speech bubble on hover/focus. */
+button[title="Get a reply in 60secs"] {
+  position: relative;
+}
+
+button[title="Get a reply in 60secs"]::after {
+  content: attr(title);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.75rem);
+  z-index: 40;
+  width: max-content;
+  max-width: min(16rem, calc(100vw - 2rem));
+  padding: 0.7rem 1rem;
+  border: 2px solid var(--accent);
+  border-radius: 0.75rem;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  box-shadow: 0 0.35rem 0 var(--accent);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 0.35rem);
+  transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+button[title="Get a reply in 60secs"]::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.25rem);
+  z-index: 41;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-right: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  background: var(--primary);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 0.35rem) rotate(45deg);
+  transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+button[title="Get a reply in 60secs"]:hover::before,
+button[title="Get a reply in 60secs"]:hover::after,
+button[title="Get a reply in 60secs"]:focus-visible::before,
+button[title="Get a reply in 60secs"]:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, 0) rotate(45deg);
+}
+
+button[title="Get a reply in 60secs"]:hover::after,
+button[title="Get a reply in 60secs"]:focus-visible::after {
+  transform: translate(-50%, 0);
+}
+
 @media (min-width: 640px) {
   .performance-hero-title {
     font-size: 68px;

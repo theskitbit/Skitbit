@@ -7,7 +7,7 @@ import { X } from "lucide-react"
 const messages = [
   "You have the campaign. We have the execution.",
   "Assets delivered on time, every time.",
-  "Visuals that actually drive ad performance."
+  "Contact US & Get a reply in just 60 secs."
 ]
 
 export default function AnnouncementBanner() {
