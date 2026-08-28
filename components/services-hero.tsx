@@ -23,6 +23,8 @@ export function ServicesHero() {
           <div className="pt-6">
             <button
               onClick={open}
+              data-tooltip="Get a reply in 60secs" data-tooltip-position="below"
+              aria-label="Get in touch — Get a reply in 60secs"
               className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground font-semibold text-lg rounded-full hover:opacity-90 hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200"
             >
               Explore All Services →

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode, Suspense } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { saveFormToAirtable } from '@/app/actions'
+import { getPhoneCountryCode, saveFormToAirtable } from '@/app/actions'
 
 const ContactOverlayContext = createContext<any>(null)
 
@@ -47,7 +47,8 @@ function ContactOverlay({ isOpen, onClose }: any) {
   const [step, setStep] = useState<Step>(1)
   const [direction, setDirection] = useState(1)
   const [error, setError] = useState('')
-  const [data, setData] = useState({ category: '', needs: [] as string[], timeline: '', product: '', name: '', contact: '' })
+  const [data, setData] = useState({ category: '', needs: [] as string[], timeline: '', product: '', name: '', contact: '', phone: '' })
+  const [phoneCode, setPhoneCode] = useState('+91')
 
   const messageText = `Hi Adnan,
 
@@ -77,10 +78,16 @@ const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(messag
     if (step === 1 && !data.category) return 'Please select a category'
     if (step === 2) {
       if (data.needs.length === 0) return 'Select at least one requirement'
-      if (!data.product.trim()) return 'Enter your brand name or website'
+      if (!data.product.trim()) return 'Enter your website or product link'
+      try {
+        const url = new URL(/^https?:\/\//i.test(data.product.trim()) ? data.product.trim() : `https://${data.product.trim()}`)
+        if (!url.hostname.includes('.')) throw new Error()
+      } catch { return 'Enter a valid website or full product URL' }
     }
     if (step === 3) {
-      if (!data.timeline || !data.name.trim() || !data.contact.trim()) return 'Please complete the details'
+      if (!data.timeline || !data.name.trim() || !data.contact.trim() || !data.phone.trim()) return 'Please complete the details'
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.contact) || ['gmail.com', 'googlemail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com', 'proton.me', 'protonmail.com'].includes(data.contact.split('@')[1]?.toLowerCase())) return 'Please use a work email'
+      if (!/^\+?[0-9 ()-]{7,20}$/.test(data.phone)) return 'Enter a valid phone number'
     }
     return ''
   }
@@ -110,6 +117,7 @@ const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(messag
         category: data.category,
         needs: data.needs,
         timeline: data.timeline,
+        phone: `${phoneCode} ${data.phone}`,
       }).catch((err) => {
         console.error('Airtable background save failed', err)
       })
@@ -148,6 +156,10 @@ const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(messag
   }, [isOpen, onClose, step, data])
 
   useEffect(() => { setMounted(true); if (isOpen) setStep(1) }, [isOpen])
+
+  useEffect(() => {
+    if (isOpen) getPhoneCountryCode().then(setPhoneCode).catch(() => undefined)
+  }, [isOpen])
 
   if (!mounted || !isOpen) return null
 
@@ -226,7 +238,11 @@ const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(messag
                         </div>
                         <div className="space-y-2 pt-6">
                           <input placeholder="Full Name" className="w-full border-b border-black/15 bg-transparent py-4 text-base placeholder:text-slate-400 focus:border-[#0B1A28] outline-none text-[#0B1A28] transition-colors" value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })} />
-                          <input placeholder="Work Email or Brand's Instagram" className="w-full border-b border-black/15 bg-transparent py-4 text-base placeholder:text-slate-400 focus:border-[#0B1A28] outline-none text-[#0B1A28] transition-colors" value={data.contact} onChange={(e) => setData({ ...data, contact: e.target.value })} />
+                          <input type="email" placeholder="Work Email" className="w-full border-b border-black/15 bg-transparent py-4 text-base placeholder:text-slate-400 focus:border-[#0B1A28] outline-none text-[#0B1A28] transition-colors" value={data.contact} onChange={(e) => setData({ ...data, contact: e.target.value })} />
+                          <div className="flex items-center border-b border-black/15">
+                            <span className="py-4 pr-3 text-base text-[#0B1A28]" aria-label="Detected country calling code">{phoneCode}</span>
+                            <input type="tel" inputMode="tel" placeholder="Phone Number" aria-label="Phone Number" className="w-full bg-transparent py-4 text-base placeholder:text-slate-400 focus:outline-none text-[#0B1A28]" value={data.phone} onChange={(e) => setData({ ...data, phone: e.target.value })} />
+                          </div>
                         </div>
                       </div>
                     )}
