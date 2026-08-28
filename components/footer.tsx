@@ -67,6 +67,8 @@ function FooterNav({ title, links }: { title: string; links: { href: string; lab
               <button
                 type="button"
                 onClick={open}
+                title="Get a reply in 60secs"
+                aria-label="Get in touch — Get a reply in 60secs"
                 className="text-sm transition-colors duration-200 hover:opacity-100 hover:text-foreground text-muted-foreground"
               >
                 {label}
