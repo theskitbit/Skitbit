@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { BadgeCheck } from 'lucide-react'
 import { useContactOverlay } from './contact-overlay'
 
 const PARTNER_LOGOS = [
@@ -150,8 +151,9 @@ export function Footer() {
               />
 
               <h3 className="text-[1.35rem] font-semibold tracking-[-0.025em] leading-none text-foreground">
-                Skitbit
-                <span className="ml-0.5 align-top text-[0.55rem] font-medium">®</span>
+  Skitbit
+  <span className="ml-0.5 align-top text-[0.55rem] font-medium">®</span>
+  <BadgeCheck aria-label="Verified Skitbit account" className="ml-1.5 inline-block h-4 w-4 fill-[var(--verified)] text-background align-middle" strokeWidth={2.5} />
               </h3>
             </div>
             <p className="text-xs mt-2 leading-relaxed text-muted-foreground">
