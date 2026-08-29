@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import { useContactOverlay } from './contact-overlay'
+import { BadgeCheck } from 'lucide-react'
 import { MobileNavigationDrawer, type MobileNavContent } from './mobile-navigation-drawer'
 
 export function Header({ hasAnnouncement = false, mobileNavigation }: { hasAnnouncement?: boolean; mobileNavigation?: MobileNavContent | null }) {
@@ -63,6 +64,7 @@ export function Header({ hasAnnouncement = false, mobileNavigation }: { hasAnnou
           <h1 className="text-[1.35rem] font-semibold tracking-[-0.025em] leading-none text-foreground">
             Skitbit
             <span className="ml-0.5 align-top text-[0.55rem] font-medium">®</span>
+            <BadgeCheck aria-label="Verified Skitbit account" className="ml-1.5 inline-block h-4 w-4 fill-[var(--verified)] text-background align-middle" strokeWidth={2.5} />
           </h1>
         </Link>
 
