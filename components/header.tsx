@@ -8,15 +8,12 @@ import { BadgeCheck } from 'lucide-react'
 import { MobileNavigationDrawer, type MobileNavContent } from './mobile-navigation-drawer'
 
 export function Header({ hasAnnouncement = false, mobileNavigation }: { hasAnnouncement?: boolean; mobileNavigation?: MobileNavContent | null }) {
-  const [mounted, setMounted] = useState(false)
   const [announcementVisible, setAnnouncementVisible] = useState(hasAnnouncement)
   const [hidden, setHidden] = useState(false)
   const lastScrollY = useRef(0)
   const { open } = useContactOverlay()
 
   useEffect(() => {
-    setMounted(true)
-
     const handleScroll = () => {
       const currentScrollY = window.scrollY
       const scrollingDown = currentScrollY > lastScrollY.current
@@ -38,8 +35,6 @@ export function Header({ hasAnnouncement = false, mobileNavigation }: { hasAnnou
       window.removeEventListener('skitbit-announcement', handleAnnouncement)
     }
   }, [])
-
-  if (!mounted) return null
 
   return (
     // 👇 Removed 'sticky top-0' and changed to 'relative z-40'
