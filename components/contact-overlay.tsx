@@ -240,7 +240,21 @@ const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(messag
                           <input placeholder="Full Name" className="w-full border-b border-black/15 bg-transparent py-4 text-base placeholder:text-slate-400 focus:border-[#0B1A28] outline-none text-[#0B1A28] transition-colors" value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })} />
                           <input type="email" placeholder="Work Email" className="w-full border-b border-black/15 bg-transparent py-4 text-base placeholder:text-slate-400 focus:border-[#0B1A28] outline-none text-[#0B1A28] transition-colors" value={data.contact} onChange={(e) => setData({ ...data, contact: e.target.value })} />
                           <div className="flex items-center border-b border-black/15">
-                            <span className="py-4 pr-3 text-base text-[#0B1A28]" aria-label="Detected country calling code">{phoneCode}</span>
+                            <label className="sr-only" htmlFor="phone-country-code">Country calling code</label>
+                            <select id="phone-country-code" aria-label="Country calling code" value={phoneCode} onChange={(e) => setPhoneCode(e.target.value)} className="appearance-none bg-transparent py-4 pr-2 text-base text-[#0B1A28] outline-none">
+                              {[
+                                ['+91', 'India'],
+                                ['+1', 'United States / Canada'],
+                                ['+44', 'United Kingdom'],
+                                ['+61', 'Australia'],
+                                ['+971', 'United Arab Emirates'],
+                                ['+65', 'Singapore'],
+                                ['+49', 'Germany'],
+                                ['+33', 'France'],
+                                ['+31', 'Netherlands'],
+                                ['+81', 'Japan'],
+                              ].map(([code, country]) => <option key={code} value={code}>{code} — {country}</option>)}
+                            </select>
                             <input type="tel" inputMode="tel" placeholder="Phone Number" aria-label="Phone Number" className="w-full bg-transparent py-4 text-base placeholder:text-slate-400 focus:outline-none text-[#0B1A28]" value={data.phone} onChange={(e) => setData({ ...data, phone: e.target.value })} />
                           </div>
                         </div>
