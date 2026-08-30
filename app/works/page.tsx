@@ -1,6 +1,7 @@
 // app/works/page.tsx
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { getWorkItems, getUniqueIndustries, type WorkItem } from '@/lib/sanity/client'
 import { WorkFilterBar } from '@/components/work/work-filter-bar'
@@ -90,7 +91,9 @@ export default function WorkPage() {
         <div className="mt-12 md:mt-16" aria-live="polite">
           <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
             {filtered.map((item) => (
-              <WorkCard key={item._id} item={item} />
+              <Link key={item._id} href={`/works/${item.slug.current}`} className="block break-inside-avoid">
+                <WorkCard item={item} />
+              </Link>
             ))}
           </div>
 
