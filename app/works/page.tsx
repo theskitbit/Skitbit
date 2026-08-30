@@ -1,6 +1,7 @@
 // app/works/page.tsx
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { getWorkItems, getUniqueIndustries, type WorkItem } from '@/lib/sanity/client'
 import { WorkFilterBar } from '@/components/work/work-filter-bar'
@@ -13,6 +14,7 @@ export default function WorkPage() {
   const [loading, setLoading] = useState(true)
   const [typeFilter, setTypeFilter] = useState<'all' | 'animation' | 'render'>('all')
   const [industryFilter, setIndustryFilter] = useState<string>('all')
+  const [pendingSlug, setPendingSlug] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchWork() {
@@ -90,7 +92,21 @@ export default function WorkPage() {
         <div className="mt-12 md:mt-16" aria-live="polite">
           <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
             {filtered.map((item) => (
-              <WorkCard key={item._id} item={item} />
+              <Link
+                key={item._id}
+                href={`/works/${item.slug.current}`}
+                onClick={() => setPendingSlug(item.slug.current)}
+                aria-label={`Open project: ${item.title}`}
+                className={`group relative block break-inside-avoid rounded-lg transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 active:scale-[0.985] ${pendingSlug === item.slug.current ? 'pointer-events-none' : ''}`}
+                aria-busy={pendingSlug === item.slug.current}
+              >
+                <WorkCard item={item} />
+                {pendingSlug === item.slug.current && (
+                  <span className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center rounded-lg bg-background/35 backdrop-blur-[2px]" role="status" aria-live="polite">
+                    <span className="rounded-full bg-foreground px-4 py-2 text-xs font-medium text-background shadow-lg">Opening project…</span>
+                  </span>
+                )}
+              </Link>
             ))}
           </div>
 
