@@ -61,25 +61,31 @@ export default async function WorkDetailPage({
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Header />
-      <article className="mx-auto max-w-7xl px-5 pb-20 pt-32 sm:px-8 md:pb-28 md:pt-40">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-start lg:gap-20">
-          <header className="lg:sticky lg:top-28">
-            <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-accent">Selected work</p>
-            <h1 className="max-w-2xl text-5xl font-semibold tracking-[-0.06em] sm:text-7xl">{project.title}</h1>
-            <p className="mt-7 max-w-xl text-lg leading-relaxed text-foreground/65">{project.description}</p>
-            <div className="mt-8 flex flex-wrap gap-2">
-              {[project.formatTag, project.fidelityTag, ...project.industries].map((tag) => (
-                <span key={tag} className="rounded-full border border-foreground/15 bg-foreground/[0.06] px-3 py-1.5 text-xs font-medium text-foreground/75 backdrop-blur-md">{tag}</span>
-              ))}
+      <article className="w-full border-b border-border bg-background pb-0 pt-[48px]">
+        <div className="mx-auto w-full max-w-7xl lg:px-8">
+          <div className="relative mx-4 grid min-h-[629px] w-[calc(100%-2rem)] grid-cols-1 border-x border-border lg:mx-0 lg:w-full lg:grid-cols-2">
+            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/2 z-10 hidden w-px -translate-x-1/2 bg-border lg:block" />
+            <header className="flex items-end border-b border-border px-8 pb-8 pt-16 sm:px-12 lg:border-b-0 lg:px-6 lg:pb-8 xl:px-6">
+              <div className="w-full max-w-[500px]">
+                <p className="mb-6 text-xs font-semibold uppercase tracking-[0.2em] text-accent">Selected work</p>
+                <h1 className="m-0 max-w-[490px] text-[54px] font-regular leading-[0.9] tracking-[-0.065em] text-foreground sm:text-[64px] lg:text-[66px] xl:text-[66px]">{project.title}</h1>
+                <p className="mt-6 max-w-[430px] text-[15px] leading-[1.45] text-muted-foreground sm:text-[16px]">{project.description}</p>
+                <div className="mt-8 flex flex-wrap gap-2">
+                  {[project.formatTag, project.fidelityTag, ...project.industries].map((tag) => (
+                    <span key={tag} className="rounded-full border border-border bg-background/70 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur-md">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </header>
+            <div className="relative flex min-h-[520px] items-center justify-center overflow-hidden border-b border-border bg-background p-6 lg:min-h-0 lg:border-b-0 lg:p-10">
+              <div className={`w-full max-w-[560px] overflow-hidden rounded-[1.5rem] border border-border bg-muted/30 p-2 shadow-xl shadow-foreground/10 backdrop-blur-xl ${isVideo ? 'aspect-[9/16]' : 'aspect-square'}`}>
+                {isVideo ? (
+                  <video src={project.mediaUrl} poster={project.posterUrl} controls playsInline className="h-full w-full rounded-[1.1rem] object-cover" />
+                ) : (
+                  <img src={project.mediaUrl} alt={project.title} className="h-full w-full rounded-[1.1rem] object-cover" />
+                )}
+              </div>
             </div>
-          </header>
-
-          <div className={`overflow-hidden rounded-[1.5rem] border border-foreground/15 bg-foreground/[0.06] p-2 shadow-xl shadow-foreground/10 backdrop-blur-xl ${isVideo ? 'aspect-[9/16]' : 'aspect-square'}`}>
-            {isVideo ? (
-              <video src={project.mediaUrl} poster={project.posterUrl} controls playsInline className="h-full w-full rounded-[1.1rem] object-cover" />
-            ) : (
-              <img src={project.mediaUrl} alt={project.title} className="h-full w-full rounded-[1.1rem] object-cover" />
-            )}
           </div>
         </div>
       </article>
