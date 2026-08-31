@@ -89,6 +89,21 @@ export default defineType({
       validation: (Rule) => Rule.required().max(30),
     }),
     defineField({
+      name: 'seoTitle',
+      title: 'SEO Title',
+      type: 'string',
+      description: 'Optional title used for search results and social sharing.',
+      validation: (Rule) => Rule.max(60),
+    }),
+    defineField({
+      name: 'seoDescription',
+      title: 'SEO Description',
+      type: 'text',
+      rows: 3,
+      description: 'Optional description used for search results and social sharing.',
+      validation: (Rule) => Rule.max(160),
+    }),
+    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',

@@ -9,6 +9,8 @@ const WORK_ITEM_QUERY = groq`*[_type == "workItem" && slug.current == $slug][0]{
   _id,
   title,
   description,
+  seoTitle,
+  seoDescription,
   type,
   mediaUrl,
   posterUrl,
@@ -32,17 +34,26 @@ export async function generateMetadata({
 
   if (!project) return { title: 'Project not found | SKITBIT' }
 
+  const title = project.seoTitle || `${project.title} | SKITBIT`
+  const description = project.seoDescription || project.description
+  const canonical = `https://theskitbit.com/works/${project.slug.current}`
+  const image = project.posterUrl || (project.type === 'render' ? project.mediaUrl : undefined)
+
   return {
-    title: `${project.title} | SKITBIT`,
-    description: project.description,
-    alternates: { canonical: `https://theskitbit.com/works/${project.slug.current}` },
+    title,
+    description,
+    metadataBase: new URL('https://theskitbit.com'),
+    alternates: { canonical },
+    robots: { index: true, follow: true, 'max-image-preview': 'large', 'max-video-preview': -1 },
     openGraph: {
-      title: project.title,
-      description: project.description,
+      title,
+      description,
       type: 'article',
-      url: `https://theskitbit.com/works/${project.slug.current}`,
-      images: project.posterUrl || project.mediaUrl ? [{ url: project.posterUrl || project.mediaUrl }] : undefined,
+      url: canonical,
+      siteName: 'Skitbit',
+      images: image ? [{ url: image, alt: project.title }] : undefined,
     },
+    twitter: { card: 'summary_large_image', title, description, images: image ? [image] : undefined },
   }
 }
 
@@ -77,12 +88,12 @@ export default async function WorkDetailPage({
                 </div>
               </div>
             </header>
-            <div className="relative flex min-h-[520px] items-center justify-center overflow-hidden border-b border-border bg-background p-6 lg:min-h-0 lg:border-b-0 lg:p-10">
-              <div className={`w-full max-w-[560px] overflow-hidden rounded-[1.5rem] border border-border bg-muted/30 p-2 shadow-xl shadow-foreground/10 backdrop-blur-xl ${isVideo ? 'aspect-[9/16]' : 'aspect-square'}`}>
+            <div className="relative flex min-h-[520px] items-center justify-center overflow-hidden border-b border-border bg-muted lg:min-h-0 lg:border-b-0">
+              <div className={`relative h-full min-h-[520px] w-full overflow-hidden ${isVideo ? 'aspect-[9/16] lg:aspect-auto' : 'aspect-square lg:aspect-auto'}`}>
                 {isVideo ? (
-                  <video src={project.mediaUrl} poster={project.posterUrl} controls playsInline className="h-full w-full rounded-[1.1rem] object-cover" />
+                  <video src={project.mediaUrl} poster={project.posterUrl} controls playsInline className="absolute inset-0 h-full w-full object-cover" />
                 ) : (
-                  <img src={project.mediaUrl} alt={project.title} className="h-full w-full rounded-[1.1rem] object-cover" />
+                  <img src={project.mediaUrl} alt={project.title} className="absolute inset-0 h-full w-full object-cover" />
                 )}
               </div>
             </div>
