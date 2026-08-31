@@ -33,6 +33,12 @@ type SanityLocation = {
   slug: string
 }
 
+type SanityWork = {
+  title?: string
+  slug: string
+  updatedAt?: string
+}
+
 const BLOG_POSTS_QUERY = groq`
   *[_type == "blogPost" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {
     title,
@@ -45,6 +51,14 @@ const SANITY_LOCATIONS_QUERY = groq`
   *[_type == "location" && defined(slug.current)] | order(coalesce(pageTitle, name, title, slug.current) asc) {
     "title": coalesce(pageTitle, name, title, slug.current),
     "slug": slug.current
+  }
+`
+
+const WORK_ITEMS_QUERY = groq`
+  *[_type == "workItem" && defined(slug.current)] | order(coalesce(title, slug.current) asc) {
+    title,
+    "slug": slug.current,
+    "updatedAt": _updatedAt
   }
 `
 
@@ -61,6 +75,16 @@ async function getBlogPosts(): Promise<BlogPost[]> {
     return Array.isArray(posts) ? posts : []
   } catch (error) {
     console.error("Failed to fetch blog posts for sitemap index:", error)
+    return []
+  }
+}
+
+async function getWorkItems(): Promise<SanityWork[]> {
+  try {
+    const works = await client.fetch<SanityWork[]>(WORK_ITEMS_QUERY, {}, { cache: "no-store" })
+    return Array.isArray(works) ? works : []
+  } catch (error) {
+    console.error("Failed to fetch work items for sitemap index:", error)
     return []
   }
 }
@@ -141,6 +165,7 @@ function RouteCard({
 export default async function SitemapIndex() {
   const routes = dedupeRoutes(await getAllPublicRoutes())
   const blogPosts = await getBlogPosts()
+  const workItems = await getWorkItems()
   const sanityLocations = await getSanityLocations()
 
   const groupedRoutes = {
@@ -172,7 +197,8 @@ export default async function SitemapIndex() {
     groupedRoutes.countries.length +
     groupedRoutes.services.length +
     allLocationSlugs.length +
-    blogPosts.length
+    blogPosts.length +
+    workItems.length
 
   return (
     <main className="min-h-screen bg-background py-20 text-foreground">
@@ -236,6 +262,24 @@ export default async function SitemapIndex() {
                   href={`/blog/${post.slug}`}
                   title={post.title}
                   subtitle={`Published: ${formatDate(post.publishedAt)}`}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {workItems.length > 0 && (
+          <section className="mb-14">
+            <h2 className="mb-6 text-2xl font-bold tracking-[-0.04em]">
+              Work Pages ({workItems.length})
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {workItems.map((work) => (
+                <RouteCard
+                  key={work.slug}
+                  href={`/works/${work.slug}`}
+                  title={work.title || work.slug}
+                  subtitle={`/works/${work.slug}`}
                 />
               ))}
             </div>
@@ -323,6 +367,13 @@ export default async function SitemapIndex() {
               Blog Posts:{" "}
               <span className="font-semibold text-foreground">
                 {blogPosts.length}
+              </span>
+            </li>
+
+            <li>
+              Work Pages: {" "}
+              <span className="font-semibold text-foreground">
+                {workItems.length}
               </span>
             </li>
 
