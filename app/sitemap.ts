@@ -2,7 +2,8 @@ import { MetadataRoute } from 'next'
 import { getAllPublicRoutes } from "@/lib/public-routes"
 import { getAllCountryCodes } from "@/data/country-pages"
 
-export const revalidate = 3600 // Revalidate every 1 hour (ISR)
+// Automatically refresh the sitemap hourly; Sanity-tagged fetches can also be invalidated on demand.
+export const revalidate = 3600
 
 const baseUrl = "https://theskitbit.com"
 
