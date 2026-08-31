@@ -22,6 +22,11 @@ export interface WorkItem {
   type: 'animation' | 'render'
   mediaUrl: string
   posterUrl?: string
+  gallery?: Array<{
+    _key: string
+    url: string
+    alt: string
+  }>
   formatTag: string
   industries: string[]
   fidelityTag: string
@@ -38,6 +43,7 @@ export const WORK_ITEMS_QUERY = `
     type,
     mediaUrl,
     posterUrl,
+    gallery[]{_key, "url": image.asset->url, "alt": coalesce(image.alt, title)},
     formatTag,
     industries,
     fidelityTag,

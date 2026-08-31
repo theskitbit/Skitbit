@@ -14,6 +14,7 @@ const WORK_ITEM_QUERY = groq`*[_type == "workItem" && slug.current == $slug][0]{
   type,
   mediaUrl,
   posterUrl,
+  gallery[]{_key, "url": image.asset->url, "alt": coalesce(image.alt, title)},
   formatTag,
   industries,
   fidelityTag,
@@ -68,6 +69,7 @@ export default async function WorkDetailPage({
   if (!project) notFound()
 
   const isVideo = project.type === 'animation'
+  const gallery = project.gallery?.filter((image) => image.url) ?? []
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -100,6 +102,26 @@ export default async function WorkDetailPage({
           </div>
         </div>
       </article>
+      {gallery.length > 0 && (
+        <section aria-labelledby="project-gallery-title" className="border-b border-border bg-background px-4 py-16 sm:px-8 lg:px-12">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-8 flex items-end justify-between gap-4">
+              <h2 id="project-gallery-title" className="text-2xl font-medium tracking-[-0.04em] text-foreground sm:text-3xl">Project gallery</h2>
+              <p className="text-sm text-muted-foreground">{gallery.length} {gallery.length === 1 ? 'image' : 'images'}</p>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {gallery.map((image, index) => (
+                <figure key={image._key || image.url} className="group overflow-hidden rounded-lg border border-border bg-muted">
+                  <div className="aspect-square overflow-hidden">
+                    <img src={image.url} alt={image.alt || `${project.title} project image ${index + 1}`} loading={index < 3 ? 'eager' : 'lazy'} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]" />
+                  </div>
+                  <figcaption className="border-t border-border px-4 py-3 text-xs text-muted-foreground">Image {index + 1}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
       <Footer />
     </main>
   )
