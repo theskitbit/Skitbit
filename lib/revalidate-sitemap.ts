@@ -14,13 +14,14 @@ export async function revalidateSitemap() {
   }
 }
 
-export async function revalidateSitemapFor(contentType: 'blog' | 'locations' | 'countries' | 'all') {
+export async function revalidateSitemapFor(contentType: 'blog' | 'work' | 'locations' | 'countries' | 'all') {
   try {
     switch (contentType) {
       case 'blog':
         revalidateTag('sitemap', 'max')
         revalidateTag('sanity-content', 'max')
         break
+      case 'work':
       case 'locations':
         revalidateTag('sitemap', 'max')
         revalidateTag('sanity-content', 'max')

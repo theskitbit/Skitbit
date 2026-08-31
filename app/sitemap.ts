@@ -2,7 +2,8 @@ import { MetadataRoute } from 'next'
 import { getAllPublicRoutes } from "@/lib/public-routes"
 import { getAllCountryCodes } from "@/data/country-pages"
 
-export const revalidate = 3600 // Revalidate every 1 hour (ISR)
+// Automatically refresh the sitemap hourly; Sanity-tagged fetches can also be invalidated on demand.
+export const revalidate = 3600
 
 const baseUrl = "https://theskitbit.com"
 
@@ -101,7 +102,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("[Sitemap] Blog posts error:", e) 
   }
 
-  // 4. Locations (from Sanity)
+  // 4. Work detail pages (from Sanity)
+  try {
+    const workQuery = `*[_type == "workItem" && defined(slug.current)] { "slug": slug.current, "updatedAt": _updatedAt }`
+    const workItems = await fetchSanity(workQuery)
+    if (Array.isArray(workItems)) {
+      workItems.forEach((work: any) => {
+        if (work.slug) {
+          sitemapEntries.push({
+            url: `${baseUrl}/works/${work.slug}`,
+            lastModified: work.updatedAt ? new Date(work.updatedAt) : now,
+            changeFrequency: "monthly",
+            priority: 0.8,
+          })
+        }
+      })
+    }
+  } catch (e) {
+    console.error("[Sitemap] Work pages error:", e)
+  }
+
+  // 5. Locations (from Sanity)
   try {
     const locQuery = `*[_type == "location" && defined(slug.current)] { "slug": slug.current, "updatedAt": _updatedAt }`
     const locations = await fetchSanity(locQuery)

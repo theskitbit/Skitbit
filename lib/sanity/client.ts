@@ -17,6 +17,8 @@ export interface WorkItem {
   _id: string
   title: string
   description: string
+  seoTitle?: string
+  seoDescription?: string
   type: 'animation' | 'render'
   mediaUrl: string
   posterUrl?: string
