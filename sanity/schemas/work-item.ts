@@ -51,6 +51,29 @@ export default defineType({
       },
     }),
     defineField({
+      name: 'gallery',
+      title: 'Project Gallery',
+      type: 'array',
+      description: 'Add multiple project images. Drag items to reorder them; the first image is the hero image.',
+      of: [
+        defineField({
+          name: 'image',
+          title: 'Image',
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            defineField({
+              name: 'alt',
+              title: 'Alt Text',
+              type: 'string',
+              validation: (Rule) => Rule.required().max(120),
+            }),
+          ],
+        }),
+      ],
+      options: { sortable: true },
+    }),
+    defineField({
       name: 'formatTag',
       title: 'Format Tag',
       type: 'string',
