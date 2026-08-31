@@ -79,7 +79,7 @@ export default async function WorkDetailPage({
             <header className="flex items-end border-b border-border px-8 pb-8 pt-16 sm:px-12 lg:border-b-0 lg:px-6 lg:pb-8 xl:px-6">
               <div className="w-full max-w-[500px]">
                 <p className="mb-6 text-xs font-semibold uppercase tracking-[0.2em] text-accent">Selected work</p>
-                <h1 className="m-0 max-w-[490px] text-[54px] font-regular leading-[0.9] tracking-[-0.065em] text-foreground sm:text-[64px] lg:text-[66px] xl:text-[66px]">{project.title}</h1>
+                <h1 className="m-0 max-w-[490px] text-[40px] font-regular leading-[0.92] tracking-[-0.06em] text-foreground sm:text-[64px] lg:text-[66px] xl:text-[66px]">{project.title}</h1>
                 <p className="mt-6 max-w-[430px] text-[15px] leading-[1.45] text-muted-foreground sm:text-[16px]">{project.description}</p>
                 <div className="mt-8 flex flex-wrap gap-2">
                   {[project.formatTag, project.fidelityTag, ...project.industries].map((tag) => (
