@@ -4,6 +4,197 @@ import Image from 'next/image'
 import { useRef, useState, useEffect } from 'react'
 import { useContactOverlay } from './contact-overlay'
 
+const OPENTYPE_CDN = "https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js"
+const DEFAULT_FONT_URL = "https://raw.githubusercontent.com/google/fonts/main/ofl/shadowsintolight/ShadowsIntoLight.ttf"
+
+type Geometry = {
+  full: string
+  contours: string[]
+  x: number
+  y: number
+  w: number
+  h: number
+}
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+let libPromise: Promise<any> | null = null
+
+function loadOpentype(): Promise<any> {
+  if (typeof window === "undefined") return Promise.reject(new Error("no window"))
+  const existing = (window as any).opentype
+  if (existing) return Promise.resolve(existing)
+  if (!libPromise) {
+    libPromise = new Promise((resolve, reject) => {
+      const script = document.createElement("script")
+      script.src = OPENTYPE_CDN
+      script.async = true
+      script.onload = () => {
+        const lib = (window as any).opentype
+        if (lib) resolve(lib)
+        else reject(new Error("opentype.js loaded but exposed nothing"))
+      }
+      script.onerror = () => reject(new Error("opentype.js failed to load"))
+      document.head.appendChild(script)
+    })
+  }
+  return libPromise
+}
+
+const fontCache = new Map<string, Promise<any>>()
+
+function loadFont(url: string): Promise<any> {
+  let pending = fontCache.get(url)
+  if (!pending) {
+    pending = Promise.all([
+      loadOpentype(),
+      fetch(url).then((res) => {
+        if (!res.ok) throw new Error(`Font request failed: ${res.status}`)
+        return res.arrayBuffer()
+      }),
+    ]).then(([lib, buffer]) => lib.parse(buffer))
+    fontCache.set(url, pending)
+  }
+  return pending
+}
+
+const EM = 100
+
+interface HandwritingTextProps {
+  words: string[]
+  interval?: number
+  fontUrl?: string
+  duration?: number
+  delay?: number
+  strokeWidth?: number
+  fill?: boolean
+  height?: string
+  className?: string
+}
+
+function HandwritingText({
+  words,
+  interval = 3200,
+  fontUrl = DEFAULT_FONT_URL,
+  duration = 1.5,
+  delay = 0.05,
+  strokeWidth = 1.6,
+  fill = true,
+  height = "1.15em",
+  className,
+}: HandwritingTextProps) {
+  const [index, setIndex] = useState(0)
+  const current = words[index % words.length]
+
+  const [font, setFont] = useState<any>(null)
+  const [geom, setGeom] = useState<Geometry | null>(null)
+  const [drawn, setDrawn] = useState(false)
+  const [lengths, setLengths] = useState<number[]>([])
+  const pathRefs = useRef<(SVGPathElement | null)[]>([])
+
+  useEffect(() => {
+    const id = setInterval(() => setIndex((i) => i + 1), interval)
+    return () => clearInterval(id)
+  }, [interval])
+
+  useEffect(() => {
+    let cancelled = false
+    loadFont(fontUrl)
+      .then((f) => { if (!cancelled) setFont(f) })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [fontUrl])
+
+  useEffect(() => {
+    if (!font || !current) return
+    const path = font.getPath(current, 0, EM, EM)
+    const box = path.getBoundingBox()
+    const pad = EM * 0.12
+    const full = path.toPathData(2)
+    setGeom({
+      full,
+      contours: full.split(/(?=M)/).filter((d: string) => d.trim().length > 1),
+      x: box.x1 - pad,
+      y: box.y1 - pad,
+      w: box.x2 - box.x1 + pad * 2,
+      h: box.y2 - box.y1 + pad * 2,
+    })
+    setDrawn(false)
+    setLengths([])
+  }, [font, current])
+
+  useEffect(() => {
+    if (!geom) return undefined
+    setLengths(
+      pathRefs.current
+        .slice(0, geom.contours.length)
+        .map((el) => (el ? el.getTotalLength() : 0)),
+    )
+    const id = requestAnimationFrame(() =>
+      requestAnimationFrame(() => setDrawn(true)),
+    )
+    return () => cancelAnimationFrame(id)
+  }, [geom])
+
+  if (!geom) {
+    return <span className={className}>{current}</span>
+  }
+
+  const count = Math.max(1, geom.contours.length)
+
+  return (
+    <svg
+      key={current}
+      viewBox={`${geom.x} ${geom.y} ${geom.w} ${geom.h}`}
+      role="img"
+      aria-label={current}
+      className={["inline-block", className].filter(Boolean).join(" ")}
+      style={{
+        height,
+        width: `calc(${height} * ${(geom.w / geom.h).toFixed(4)})`,
+        overflow: "visible",
+      }}
+    >
+      {fill && (
+        <path
+          d={geom.full}
+          fill="currentColor"
+          stroke="none"
+          style={{
+            opacity: drawn ? 1 : 0,
+            transition: drawn
+              ? `opacity 0.45s ease-out ${(delay + duration * 0.72).toFixed(3)}s`
+              : "none",
+          }}
+        />
+      )}
+      {geom.contours.map((d, i) => {
+        const length = lengths[i] || 0
+        const each = (duration / count) * 2.4
+        const start = delay + (i / count) * duration
+        return (
+          <path
+            key={i}
+            ref={(el) => { pathRefs.current[i] = el }}
+            d={d}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{
+              strokeDasharray: length || 1,
+              strokeDashoffset: drawn ? 0 : length || 1,
+              transition: drawn
+                ? `stroke-dashoffset ${each.toFixed(3)}s ease-out ${start.toFixed(3)}s`
+                : "none",
+            }}
+          />
+        )
+      })}
+    </svg>
+  )
+}
+
 export function AboutEvent() {
   const ref = useRef<HTMLDivElement | null>(null)
   const [isInView, setIsInView] = useState(false)
@@ -65,7 +256,6 @@ export function AboutEvent() {
                 }`}
             >
               <Image
-                // FIX 1: Changed to lowercase 'b'. Make sure your actual file is named 'before.webp'
                 src="/images/before.webp" 
                 alt="3D PRODUCT RENDER"
                 fill
@@ -86,7 +276,7 @@ export function AboutEvent() {
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
-                unoptimized // FIX 2: Bypasses the optimizer error for Blob storage
+                unoptimized
               />
             </div>
           </div>
@@ -108,7 +298,7 @@ export function AboutEvent() {
                 fill
                 sizes="100vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
-                unoptimized // FIX 2: Bypasses the optimizer error for the file with a space in the name
+                unoptimized
               />
 
               <span className="absolute bottom-16 left-4 bg-foreground text-white text-sm font-semibold px-4 py-2 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-default">
@@ -127,7 +317,12 @@ export function AboutEvent() {
           <div className="bg-primary rounded-3xl p-8 lg:p-10 flex flex-col justify-between min-h-[360px]">
             <div>
               <h3 className="text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-primary-foreground mb-4 m-0">
-                Start Fast –<br />Sell faster.
+                Start Fast –<br />
+                <HandwritingText
+                  words={["Sell faster.", "Scale higher.", "Convert better."]}
+                  className="text-primary-foreground"
+                  height="0.95em"
+                />
               </h3>
               <p className="text-primary-foreground/80 text-sm leading-relaxed max-w-xs m-0 mt-4">
                 Go from product to conversion-ready creatives in days, not weeks.
