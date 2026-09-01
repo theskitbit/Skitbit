@@ -8,20 +8,19 @@ export function CTA() {
   return (
     <section
       id="contact"
-      className="py-24 bg-background border-t border-border"
+      className="border-t border-border bg-background py-24 sm:py-28 lg:py-32"
       aria-label="Call to action - get your first 3D product concept"
     >
-      <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-
-        <h2 className="text-5xl sm:text-6xl font-semibold tracking-tight text-foreground m-0">
+      <div className="mx-auto max-w-5xl px-6 text-center lg:px-8">
+        <h2 className="mx-auto m-0 max-w-4xl text-5xl font-semibold leading-[0.98] tracking-[-0.055em] text-foreground sm:text-6xl lg:text-7xl">
           Scale Your E-commerce Sales Today.
         </h2>
 
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium m-0 mt-6">
+        <p className="mx-auto mt-7 max-w-2xl text-base font-medium leading-relaxed text-muted-foreground sm:text-lg">
           High-performing product creatives built to increase clicks, conversions, and sales. Delivered in days, not weeks — no photoshoots, no delays.
         </p>
 
-        <div className="flex justify-center mt-10">
+        <div className="mt-10 flex justify-center sm:mt-11">
           <button
             type="button"
             onClick={open}
