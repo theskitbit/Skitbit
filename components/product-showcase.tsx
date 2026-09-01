@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { animate, motion, useMotionValue } from 'framer-motion'
 
-const HERO_STILLS = [
+const FALLBACK_HERO_STILLS = [
   {
     src: "https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/3d-watch-rendering-patria-tourbillon-scaled.jpg",
     alt: "Patria Tourbillon 3D Watch Rendering"
@@ -35,11 +35,26 @@ const HERO_STILLS = [
   }
 ]
 
-export function ProductShowcase() {
+type ShowcaseCampaign = {
+  _id: string
+  title: string
+  type: 'animation' | 'render'
+  mediaUrl: string
+  posterUrl?: string
+  gallery?: Array<{ url: string; alt: string }>
+}
+
+export function ProductShowcase({ campaigns }: { campaigns?: ShowcaseCampaign[] }) {
+  const heroStills = campaigns?.length
+    ? campaigns.map((campaign) => ({
+        src: campaign.type === 'animation' ? campaign.posterUrl : campaign.gallery?.[0]?.url || campaign.mediaUrl,
+        alt: campaign.title,
+      })).filter((image): image is { src: string; alt: string } => Boolean(image.src))
+    : FALLBACK_HERO_STILLS
   const trackRef = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const animationRef = useRef<ReturnType<typeof animate> | null>(null)
-  const loopWidth = HERO_STILLS.length * (typeof window !== 'undefined' && window.innerWidth < 768 ? 284 : 364)
+  const loopWidth = heroStills.length * (typeof window !== 'undefined' && window.innerWidth < 768 ? 284 : 364)
   const speed = 40
 
   const startInfiniteLoop = () => {
@@ -100,7 +115,7 @@ export function ProductShowcase() {
           className="flex gap-6 w-max"
           style={{ x }}
         >
-          {[...HERO_STILLS, ...HERO_STILLS].map((image, index) => (
+          {[...heroStills, ...heroStills].map((image, index) => (
             <motion.div
               key={index}
               className="relative aspect-[4/5] w-[260px] shrink-0 overflow-hidden rounded-2xl bg-white sm:w-[340px] border border-zinc-100 shadow-xs transition-all duration-300 hover:scale-[1.02]"

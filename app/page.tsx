@@ -11,10 +11,13 @@ import { WhatWeOffer } from '@/components/what-we-offer'
 import { Testimonials } from '@/components/testimonials'
 import { CTA } from '@/components/cta'
 import { Footer } from '@/components/footer'
-import { getMobileNavigation } from '@/lib/sanity/client'
+import { getHomepageSettings, getMobileNavigation } from '@/lib/sanity/client'
 
 export default async function Home() {
-  const mobileNavigation = await getMobileNavigation()
+  const [mobileNavigation, homepageSettings] = await Promise.all([
+    getMobileNavigation(),
+    getHomepageSettings(),
+  ])
   return (
     <main className="bg-background text-foreground">
 
@@ -137,7 +140,7 @@ export default async function Home() {
       <LogoStrip />
       <FireworkWidget />
       <AboutEvent />
-      <ProductShowcase />
+      <ProductShowcase campaigns={homepageSettings?.heroStills} />
       <WhatWeOffer />
       <Testimonials />
       <CTA />

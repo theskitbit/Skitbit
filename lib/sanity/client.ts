@@ -55,6 +55,23 @@ export async function getWorkItems(): Promise<WorkItem[]> {
   return client.fetch(WORK_ITEMS_QUERY)
 }
 
+export const HOMEPAGE_SETTINGS_QUERY = `
+  *[_type == "homepageSettings"][0]{
+    heroStills[]->{
+      _id,
+      title,
+      type,
+      mediaUrl,
+      posterUrl,
+      gallery[]{_key, "url": image.asset->url, "alt": coalesce(image.alt, title)}
+    }
+  }
+`
+
+export async function getHomepageSettings() {
+  return client.fetch<{ heroStills?: WorkItem[] } | null>(HOMEPAGE_SETTINGS_QUERY)
+}
+
 export async function getUniqueIndustries(): Promise<string[]> {
   const items = await getWorkItems()
   const industries = new Set<string>()
