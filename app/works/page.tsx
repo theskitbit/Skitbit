@@ -9,14 +9,21 @@ import { WorkCard } from '@/components/work/work-card'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 
-export default function WorkPage() {
-  const [items, setItems] = useState<WorkItem[]>([])
-  const [loading, setLoading] = useState(true)
+export default function WorkPage({ campaigns }: { campaigns?: WorkItem[] }) {
+  const [items, setItems] = useState<WorkItem[]>(campaigns ?? [])
+  const [loading, setLoading] = useState(!campaigns)
   const [typeFilter, setTypeFilter] = useState<'all' | 'animation' | 'render'>('all')
   const [industryFilter, setIndustryFilter] = useState<string>('all')
   const [pendingSlug, setPendingSlug] = useState<string | null>(null)
+  const [visibleCount, setVisibleCount] = useState(6)
 
   useEffect(() => {
+    if (campaigns) {
+      setItems(campaigns)
+      setLoading(false)
+      return
+    }
+
     async function fetchWork() {
       try {
         const data = await getWorkItems()
@@ -28,7 +35,7 @@ export default function WorkPage() {
       }
     }
     fetchWork()
-  }, [])
+  }, [campaigns])
 
   const industries = useMemo(() => {
     const all = new Set<string>()
@@ -45,6 +52,12 @@ export default function WorkPage() {
       return typeMatch && industryMatch
     })
   }, [items, typeFilter, industryFilter])
+
+  useEffect(() => {
+    setVisibleCount(6)
+  }, [typeFilter, industryFilter])
+
+  const visibleItems = filtered.slice(0, visibleCount)
 
   if (loading) {
     return (
@@ -91,7 +104,7 @@ export default function WorkPage() {
 
         <div className="mt-12 md:mt-16" aria-live="polite">
           <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
-            {filtered.map((item) => (
+            {visibleItems.map((item) => (
               <Link
                 key={item._id}
                 href={`/works/${item.slug.current}`}
@@ -109,6 +122,14 @@ export default function WorkPage() {
               </Link>
             ))}
           </div>
+
+          {visibleCount < filtered.length && (
+            <div className="mt-10 flex justify-center break-inside-avoid">
+              <button type="button" onClick={() => setVisibleCount((count) => count + 6)} className="rounded-full border border-foreground/20 bg-background px-6 py-3 text-sm font-medium text-foreground transition hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">
+                Load More
+              </button>
+            </div>
+          )}
 
           {filtered.length === 0 && (
             <p className="text-center text-foreground/50 py-20">
