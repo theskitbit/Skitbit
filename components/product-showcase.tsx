@@ -46,10 +46,14 @@ type ShowcaseCampaign = {
 
 export function ProductShowcase({ campaigns }: { campaigns?: ShowcaseCampaign[] }) {
   const heroStills = campaigns?.length
-    ? campaigns.map((campaign) => ({
-        src: campaign.type === 'animation' ? campaign.posterUrl : campaign.gallery?.[0]?.url || campaign.mediaUrl,
-        alt: campaign.title,
-      })).filter((image): image is { src: string; alt: string } => Boolean(image.src))
+    ? campaigns
+        .map((campaign) => ({
+          src: campaign.type === 'animation'
+            ? campaign.posterUrl || campaign.gallery?.[0]?.url || campaign.mediaUrl
+            : campaign.mediaUrl || campaign.gallery?.[0]?.url,
+          alt: campaign.title,
+        }))
+        .filter((image): image is { src: string; alt: string } => Boolean(image.src))
     : FALLBACK_HERO_STILLS
   const trackRef = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)

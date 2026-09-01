@@ -69,7 +69,16 @@ export const HOMEPAGE_SETTINGS_QUERY = `
 `
 
 export async function getHomepageSettings() {
-  return client.fetch<{ heroStills?: WorkItem[] } | null>(HOMEPAGE_SETTINGS_QUERY)
+  return client.fetch<{ heroStills?: WorkItem[] } | null>(
+    HOMEPAGE_SETTINGS_QUERY,
+    {},
+    {
+      next: {
+        revalidate: 60,
+        tags: ['homepage-settings', 'work-items'],
+      },
+    },
+  )
 }
 
 export async function getUniqueIndustries(): Promise<string[]> {
