@@ -4,6 +4,7 @@ import { groq } from 'next-sanity'
 import { client, type WorkItem } from '@/lib/sanity/client'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { CTA } from '@/components/cta'
 
 const WORK_ITEM_QUERY = groq`*[_type == "workItem" && slug.current == $slug][0]{
   _id,
@@ -122,6 +123,7 @@ export default async function WorkDetailPage({
           </div>
         </section>
       )}
+      <CTA />      
       <Footer />
     </main>
   )
