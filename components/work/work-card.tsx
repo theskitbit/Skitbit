@@ -7,7 +7,7 @@ import type { WorkItem } from '@/lib/sanity/client'
 
 const IMAGE_SIZES = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
 
-export function WorkCard({ item }: { item: WorkItem }) {
+export function WorkCard({ item, isOpening = false }: { item: WorkItem; isOpening?: boolean }) {
   const [isHovering, setIsHovering] = useState(false)
   const isVideo = item.type === 'animation'
 
@@ -45,6 +45,7 @@ export function WorkCard({ item }: { item: WorkItem }) {
       >
         {media}
         {isVideo && !isHovering && <div className="absolute top-3 right-3 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm"><Play className="h-4 w-4 fill-foreground text-foreground" /></div>}
+        {isOpening && <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/35 backdrop-blur-[2px]" role="status" aria-live="polite"><span className="rounded-full bg-foreground px-4 py-2 text-xs font-medium text-background shadow-lg">Opening project…</span></div>}
         <div className="absolute bottom-3 left-3 z-10 inline-flex items-center rounded-full bg-foreground/90 px-3 py-1.5 text-[10px] font-semibold uppercase text-background">{item.formatTag}</div>
       </div>
       <Metadata />

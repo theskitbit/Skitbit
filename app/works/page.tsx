@@ -113,12 +113,7 @@ export default function WorkPage({ campaigns }: { campaigns?: WorkItem[] }) {
                 className={`group relative block break-inside-avoid rounded-lg transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 active:scale-[0.985] ${pendingSlug === item.slug.current ? 'pointer-events-none' : ''}`}
                 aria-busy={pendingSlug === item.slug.current}
               >
-                <WorkCard item={item} />
-                {pendingSlug === item.slug.current && (
-                  <span className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center rounded-lg bg-background/35 backdrop-blur-[2px]" role="status" aria-live="polite">
-                    <span className="rounded-full bg-foreground px-4 py-2 text-xs font-medium text-background shadow-lg">Opening project…</span>
-                  </span>
-                )}
+                <WorkCard item={item} isOpening={pendingSlug === item.slug.current} />
               </Link>
             ))}
           </div>
