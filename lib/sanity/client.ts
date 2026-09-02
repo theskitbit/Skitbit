@@ -9,7 +9,8 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: process.env.NODE_ENV === 'production',
+  // Homepage selections must reflect Studio changes without Sanity CDN lag.
+  useCdn: false,
   token: readToken,
 })
 
@@ -73,10 +74,7 @@ export async function getHomepageSettings() {
     HOMEPAGE_SETTINGS_QUERY,
     {},
     {
-      next: {
-        revalidate: 60,
-        tags: ['homepage-settings', 'work-items'],
-      },
+      cache: 'no-store',
     },
   )
 }

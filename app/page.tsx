@@ -11,13 +11,17 @@ import { WhatWeOffer } from '@/components/what-we-offer'
 import { Testimonials } from '@/components/testimonials'
 import { CTA } from '@/components/cta'
 import { Footer } from '@/components/footer'
-import { getHomepageSettings, getMobileNavigation } from '@/lib/sanity/client'
+import { getHomepageSettings, getMobileNavigation, getWorkItems } from '@/lib/sanity/client'
 
 export default async function Home() {
-  const [mobileNavigation, homepageSettings] = await Promise.all([
+  const [mobileNavigation, homepageSettings, workItems] = await Promise.all([
     getMobileNavigation(),
     getHomepageSettings(),
+    getWorkItems(),
   ])
+  const selectedHeroStills = homepageSettings?.heroStills?.length
+    ? homepageSettings.heroStills
+    : workItems.slice(0, 6)
   return (
     <main className="bg-background text-foreground">
 
@@ -140,7 +144,7 @@ export default async function Home() {
       <LogoStrip />
       <FireworkWidget />
       <AboutEvent />
-      <ProductShowcase campaigns={homepageSettings?.heroStills} />
+      <ProductShowcase campaigns={selectedHeroStills} />
       <WhatWeOffer />
       <Testimonials />
       <CTA />
