@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { parse as parseOpenType } from "opentype.js"
 import { useContactOverlay } from "./contact-overlay"
 
-const DEFAULT_FONT_URL = "https://fonts.gstatic.com/s/shadowsintolight/v21/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2"
+const DEFAULT_FONT_URL = "https://raw.githubusercontent.com/google/fonts/main/ofl/shadowsintolight/ShadowsIntoLight.ttf"
 
 type Geometry = {
   full: string
