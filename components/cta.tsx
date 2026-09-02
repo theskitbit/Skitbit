@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useRef, useState } from "react"
+import { parse as parseOpenType } from "opentype.js"
 import { useContactOverlay } from "./contact-overlay"
 
-const OPENTYPE_CDN = "https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js"
-const DEFAULT_FONT_URL = "https://raw.githubusercontent.com/google/fonts/main/ofl/shadowsintolight/ShadowsIntoLight.ttf"
+const DEFAULT_FONT_URL = "https://fonts.gstatic.com/s/shadowsintolight/v21/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2"
 
 type Geometry = {
   full: string
@@ -16,27 +16,8 @@ type Geometry = {
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-let libPromise: Promise<any> | null = null
-
 function loadOpentype(): Promise<any> {
-  if (typeof window === "undefined") return Promise.reject(new Error("no window"))
-  const existing = (window as any).opentype
-  if (existing) return Promise.resolve(existing)
-  if (!libPromise) {
-    libPromise = new Promise((resolve, reject) => {
-      const script = document.createElement("script")
-      script.src = OPENTYPE_CDN
-      script.async = true
-      script.onload = () => {
-        const lib = (window as any).opentype
-        if (lib) resolve(lib)
-        else reject(new Error("opentype.js loaded but exposed nothing"))
-      }
-      script.onerror = () => reject(new Error("opentype.js failed to load"))
-      document.head.appendChild(script)
-    })
-  }
-  return libPromise
+  return Promise.resolve({ parse: parseOpenType })
 }
 
 const fontCache = new Map<string, Promise<any>>()
