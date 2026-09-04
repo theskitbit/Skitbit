@@ -12,7 +12,43 @@ export function SEOSchema() {
         "alternateName": "Skitbit International",
         "publisher": { "@id": "https://theskitbit.com/#organization" }
       },
-      // 2. ORGANIZATION (Brand & Social)
+      // 2. SITE NAVIGATION (Helps search engines understand primary sitelinks)
+      {
+        "@type": "ItemList",
+        "@id": "https://theskitbit.com/#site-navigation",
+        "name": "Skitbit primary navigation",
+        "itemListElement": [
+          {
+            "@type": "SiteNavigationElement",
+            "position": 1,
+            "name": "Services",
+            "description": "Explore Skitbit's 3D product animation, CGI rendering, and creative services.",
+            "url": "https://theskitbit.com/services"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "position": 2,
+            "name": "Work",
+            "description": "View Skitbit's portfolio of 3D product visuals and CGI campaigns.",
+            "url": "https://theskitbit.com/works"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "position": 3,
+            "name": "Pricing",
+            "description": "Explore Skitbit's product visualization pricing and project options.",
+            "url": "https://theskitbit.com/pricing"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "position": 4,
+            "name": "Contact",
+            "description": "Contact Skitbit to discuss your next 3D product visualization project.",
+            "url": "https://theskitbit.com/contact-form"
+          }
+        ]
+      },
+      // 3. ORGANIZATION (Brand & Social)
       {
         "@type": "Organization",
         "@id": "https://theskitbit.com/#organization",
