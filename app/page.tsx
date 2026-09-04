@@ -35,11 +35,6 @@ export default async function Home() {
           url: "https://theskitbit.com/",
           logo: "https://theskitbit.com/images/Black-icon.svg",
           description: "Skitbit International is the premier agency for high-converting 3D product visuals, CGI rendering, and D2C brand scaling systems.",
-          founder: {
-            "@type": "Person",
-            name: "Adnan Akhtar",
-            jobTitle: "Head of Brand & Creative"
-          },
           sameAs: [
             "https://www.instagram.com/theskitbit/",
             "https://uk.linkedin.com/company/theskitbit",
@@ -123,7 +118,7 @@ export default async function Home() {
               name: "How are you different from other 3D studios?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "We do not just execute technical renders. Our work is directed by a Head of Brand & Creative, ensuring all assets are structurally engineered for higher click-through rates and Shopify conversions."
+                text: "We do not just execute technical renders. Every asset is strategically engineered for higher click-through rates and Shopify conversions."
               }
             },
             {

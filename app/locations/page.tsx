@@ -66,7 +66,7 @@ export const metadata: Metadata = {
   description:
     "Explore Skitbit location pages for 3D product rendering, CGI visuals, product animation, ecommerce visuals, and premium D2C creative services.",
   alternates: {
-    canonical: "/locations",
+    canonical: "https://theskitbit.com/locations",
   },
   robots: {
     index: true,

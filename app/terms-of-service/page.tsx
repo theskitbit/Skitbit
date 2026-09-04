@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Terms of Service | Skitbit",
   description: "Terms and conditions for Skitbit International Group 3D rendering and performance marketing services.",
   alternates: {
-    canonical: "/terms-of-service",
+    canonical: "https://theskitbit.com/terms-of-service",
   },
   robots: {
     index: true,

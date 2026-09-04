@@ -66,9 +66,9 @@ export default function WorkPage({ campaigns }: { campaigns?: WorkItem[] }) {
         {/* MATCHED PADDING HERE: pt-32 mobile, pt-40 desktop */}
         <section className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pt-32 pb-16 md:pt-40 md:pb-24" aria-busy="true">
           <header className="mb-12 md:mb-16">
-            <h1 className="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] mb-2">
-              Our Work
-            </h1>
+          <div className="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] mb-2" aria-hidden="true">
+            Our Work
+          </div>
           </header>
           <p className="text-foreground/50">Loading projects...</p>
         </section>

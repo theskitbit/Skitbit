@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   description:
     "Practical insights on 3D product rendering, CGI product animation, performance creative, Shopify visuals, and premium D2C launch content.",
   alternates: {
-    canonical: "/blog",
+    canonical: "https://theskitbit.com/blog",
   },
   robots: {
     index: true,

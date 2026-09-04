@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     "Transparent pricing for 3D product rendering, animation, and CGI creative systems. Starter, Content System, and Growth packages for D2C brands.",
   alternates: {
-    canonical: "/pricing",
+    canonical: "https://theskitbit.com/pricing",
   },
   robots: {
     index: true,

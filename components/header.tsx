@@ -56,11 +56,11 @@ export function Header({ hasAnnouncement = false, mobileNavigation }: { hasAnnou
             className="mr-2 h-5 w-auto shrink-0 transition-transform duration-300 group-hover:scale-105"
           />
 
-          <h1 className="text-[1.35rem] font-semibold tracking-[-0.025em] leading-none text-foreground">
+          <div className="text-[1.35rem] font-semibold tracking-[-0.025em] leading-none text-foreground">
             Skitbit
             <span className="ml-0.5 align-top text-[0.55rem] font-medium">®</span>
             <BadgeCheck aria-label="Verified Skitbit account" className="ml-1.5 inline-block h-4 w-4 fill-[var(--verified)] text-background align-middle" strokeWidth={2.5} />
-          </h1>
+          </div>
         </Link>
 
         {/* Navigation */}

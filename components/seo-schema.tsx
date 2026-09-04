@@ -112,16 +112,6 @@ export function SEOSchema() {
           { "@type": "ListItem", "position": 2, "name": "Pricing", "item": "https://theskitbit.com/pricing" }
         ]
       },
-      // 6. LOCAL BUSINESS (Trust Signals)
-      {
-        "@type": "LocalBusiness",
-        "name": "SKITBIT",
-        "image": "https://theskitbit.com/images/Black-icon.svg",
-        "url": "https://theskitbit.com",
-        "priceRange": "$$",
-        "telephone": "+1-contact-us",
-        "areaServed": ["US", "CA", "UK", "AU"]
-      }
     ]
   };
 
