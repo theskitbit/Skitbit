@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Cookie Policy | Skitbit",
   description: "Cookie policy explaining how Skitbit uses cookies, pixels, and tracking technologies.",
   alternates: {
-    canonical: "/cookie-policy",
+    canonical: "https://theskitbit.com/cookie-policy",
   },
   robots: {
     index: true,

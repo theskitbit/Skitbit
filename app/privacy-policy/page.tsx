@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Privacy Policy | Skitbit",
   description: "Skitbit's privacy policy covering data collection, processing, retention, and your rights under GDPR and CCPA.",
   alternates: {
-    canonical: "/privacy-policy",
+    canonical: "https://theskitbit.com/privacy-policy",
   },
   robots: {
     index: true,

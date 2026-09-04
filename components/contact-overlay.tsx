@@ -50,7 +50,7 @@ function ContactOverlay({ isOpen, onClose }: any) {
   const [data, setData] = useState({ category: '', needs: [] as string[], timeline: '', product: '', name: '', contact: '', phone: '' })
   const [phoneCode, setPhoneCode] = useState('+91')
 
-  const messageText = `Hi Adnan,
+  const messageText = `Hi Skitbit team,
 
 I'm interested in a Shopify landing page.
 
