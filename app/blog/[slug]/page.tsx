@@ -54,7 +54,7 @@ export async function generateMetadata(
       title: post.seoTitle || post.title,
       description: post.seoDescription || post.excerpt || "Read this article on Skitbit.",
       alternates: {
-        canonical: `/blog/${post.slug.current}`,
+        canonical: `https://theskitbit.com/blog/${post.slug.current}`,
       },
       robots: {
         index: true,

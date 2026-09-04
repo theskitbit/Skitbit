@@ -182,7 +182,7 @@ export async function generateMetadata({
       title,
       description,
       alternates: {
-        canonical: `/services/${slug}`,
+        canonical: `https://theskitbit.com/services/${slug}`,
       },
       openGraph: {
         title,
@@ -207,7 +207,7 @@ export async function generateMetadata({
     title: `${legacyService.title} | Skitbit`,
     description: legacyService.description,
     alternates: {
-      canonical: `/services/${slug}`,
+      canonical: `https://theskitbit.com/services/${slug}`,
     },
     openGraph: {
       title: `${legacyService.title} | Skitbit`,
