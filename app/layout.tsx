@@ -23,7 +23,7 @@ const geistMono = Geist_Mono({
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-NFLHXXGK'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://theskitbit.com'),
+  metadataBase: new URL('https://theskitbit.com/'),
   title: '3D Product Animation & CGI Rendering Agency | Skitbit',
   description:
     'High-converting 3D CGI product videos & renders for cosmetics, skincare, wellness & luxury brands. Trusted by 200+ global brands. Get a quote!',
