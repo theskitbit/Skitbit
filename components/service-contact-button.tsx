@@ -28,7 +28,7 @@ export function ServiceContactButton({
       type="button"
       onClick={open}
       data-tooltip="Get a reply in 60secs" data-tooltip-position="below"
-      aria-label="Claim your first 3D concept — Get a reply in 60secs"
+      aria-label="Get in touch — Get a reply in 60secs"
       className={[
         "inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-lg font-semibold transition-all duration-200 hover:scale-105 hover:opacity-90 hover:shadow-lg active:scale-95",
         variantClass,

@@ -69,7 +69,7 @@ function FooterNav({ title, links }: { title: string; links: { href: string; lab
                 type="button"
                 onClick={open}
                 data-tooltip="Get a reply in 60secs" data-tooltip-position="below"
-                aria-label="Start your creative pipeline — Get a reply in 60secs"
+                aria-label="Get in touch — Get a reply in 60secs"
                 className="text-sm transition-colors duration-200 hover:opacity-100 hover:text-foreground text-muted-foreground"
               >
                 {label}
