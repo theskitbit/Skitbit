@@ -224,8 +224,8 @@ export function AboutEvent() {
               </p>
             </div>
             <div className="mt-8">
-              <button onClick={open} data-tooltip="Get a reply in 60secs" data-tooltip-position="below" aria-label="Get in touch — Get a reply in 60secs" className="bg-primary-foreground text-primary font-semibold text-sm px-6 py-3 rounded-full hover:opacity-90 hover:-translate-y-0.5 hover:shadow-md active:scale-95 transition-all duration-200">
-                Get Your First Concept
+              <button onClick={open} data-tooltip="Get a reply in 60secs" data-tooltip-position="below" aria-label="Claim your first 3D concept — Get a reply in 60secs" className="bg-primary-foreground text-primary font-semibold text-sm px-6 py-3 rounded-full hover:opacity-90 hover:-translate-y-0.5 hover:shadow-md active:scale-95 transition-all duration-200">
+                Claim Your First 3D Concept
               </button>
             </div>
           </div>
@@ -311,8 +311,8 @@ export function AboutEvent() {
             </div>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-8 gap-6 sm:gap-0">
-              <button onClick={open} data-tooltip="Get a reply in 60secs" data-tooltip-position="below" aria-label="Get in touch — Get a reply in 60secs" className="bg-foreground text-white font-semibold text-sm px-6 py-3 rounded-full hover:opacity-90 hover:shadow-lg hover:scale-105 transition-all duration-200 active:scale-95">
-                Start now!
+              <button onClick={open} data-tooltip="Get a reply in 60secs" data-tooltip-position="below" aria-label="Claim your first 3D concept — Get a reply in 60secs" className="bg-foreground text-white font-semibold text-sm px-6 py-3 rounded-full hover:opacity-90 hover:shadow-lg hover:scale-105 transition-all duration-200 active:scale-95">
+                See Retainer Pricing
               </button>
 
               <div className="flex items-center -space-x-3 pl-2 sm:pl-0">

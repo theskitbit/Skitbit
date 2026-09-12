@@ -15,18 +15,16 @@ export function Hero() {
         <div className="flex items-end border-b border-border px-8 pb-8 pt-16 sm:px-12 lg:border-b-0 lg:px-6 lg:pb-8 xl:px-6">
           <div className="w-full max-w-[500px]">
             <h1 className="m-0 max-w-[490px] text-[54px] font-regular leading-[0.9] tracking-[-0.065em] text-foreground sm:text-[64px] lg:text-[66px] xl:text-[66px]">
-              <span className="block">Stop</span>
-              <span className="block">explaining.</span>
-              <span className="block">Show it in 3D.</span>
+              Turn underperforming product visuals into high-converting ad creatives.
             </h1>
 
             <p className="mt-6 max-w-[430px] text-[15px] leading-[1.45] text-muted-foreground sm:text-[16px]">
-              Your on-demand 3D production partner for product launches, paid media, ecommerce &amp; brand campaigns.
+              A continuous pipeline of conversion-ready 3D creatives for DTC brands on a streamlined monthly retainer — built for paid media, launches, and ecommerce growth.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <button type="button" onClick={open} data-tooltip="Get a reply in 60secs" data-tooltip-position="below" aria-label="Get in touch — Get a reply in 60secs" className="btn-primary inline-flex h-11 cursor-pointer items-center justify-center rounded-full px-7 text-[15px] font-medium lg:min-w-[176px]">
-                Get in touch
+              <button type="button" onClick={open} data-tooltip="Get a reply in 60secs" data-tooltip-position="below" aria-label="Audit your ad creatives — Get a reply in 60secs" className="btn-primary inline-flex h-11 cursor-pointer items-center justify-center rounded-full px-7 text-[15px] font-medium lg:min-w-[176px]">
+                Audit Your Ad Creatives
               </button>
               <Link href="/works" className="btn-ghost inline-flex h-11 items-center justify-center rounded-full px-7 text-[15px] font-medium lg:min-w-[128px]">
                 Our Work
