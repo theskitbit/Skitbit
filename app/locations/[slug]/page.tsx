@@ -115,13 +115,16 @@ export async function generateMetadata({
     location.heroSubtitle ||
     "3D rendering, CGI visuals, and product animation services by Skitbit."
 
+  const canonical = `https://theskitbit.com/locations/${location.slug}/`
+
   return {
     title,
     description,
+    alternates: { canonical },
     openGraph: {
       title,
       description,
-      url: `https://www.theskitbit.com/locations/${location.slug}`,
+      url: canonical,
       siteName: "Skitbit",
     },
   }
