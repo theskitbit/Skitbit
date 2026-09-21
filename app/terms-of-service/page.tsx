@@ -70,7 +70,7 @@ export default function TermsOfService() {
               <li><strong>Large Projects</strong> (₹1,00,000 / $2,500+ USD): 100% upfront OR 70% upfront + 30% due upon final delivery (at our discretion)</li>
             </ul>
             <p className="mb-4">
-              <strong>Non-Refundable Services:</strong> All payments are non-refundable once production has commenced. This applies regardless of project outcome, timeline delays, or client satisfaction.
+              <strong>Refund Policy:</strong> Except where Skitbit initiates cancellation under the Cancellation by Skitbit provision below, all payments are non-refundable once production has commenced. This applies regardless of project outcome, timeline delays, or client satisfaction.
             </p>
             <p>
               <strong>Partial Delivery & Payment:</strong> Projects must be completed in full per agreed scope. No partial delivery credits are accepted. If you paid 70% for a 2-video project and received 1 video, the remaining 30% is still due in full.
@@ -145,6 +145,9 @@ export default function TermsOfService() {
             <h2 className="text-2xl font-semibold tracking-[-0.04em] text-foreground mb-4">8. Termination</h2>
             <p className="mb-4">
               <strong>Project Cancellation:</strong> If you request to cancel after work has commenced, you forfeit all payments made. If you request cancellation before work begins, a 50% cancellation fee applies.
+            </p>
+            <p className="mb-4">
+              <strong>Cancellation by Skitbit:</strong> If Skitbit initiates cancellation because the parties are unable to reach agreement on the project scope, creative direction, revisions, timeline, or other material terms, Skitbit will refund the portion of the payment that remains after deducting the fair value of work completed and approved project expenses incurred up to the cancellation date. Work completed may include strategy, project setup, research, modeling, design, animation, revisions, production, and other services performed for the project. Any refund will be issued using the original payment method where reasonably possible.
             </p>
             <p>
               <strong>Service Suspension:</strong> We reserve the right to suspend services if communication becomes unresponsive or abusive, or to refuse future projects from clients with histories of non-payment.
