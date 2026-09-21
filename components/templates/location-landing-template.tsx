@@ -2,7 +2,6 @@
 
 import Script from "next/script"
 
-import AnnouncementBanner from "@/components/Announcement-banner"
 import { Header } from "@/components/header"
 import { Hero } from "@/components/hero"
 import { LogoStrip } from "@/components/logo-strip"
@@ -72,8 +71,7 @@ export function LocationLandingTemplate({ location }: LocationLandingTemplatePro
       <Script id={`location-schema-${location.slug}`} type="application/ld+json" strategy="afterInteractive">
         {JSON.stringify(schemaData)}
       </Script>
-      <AnnouncementBanner />
-      <Header hasAnnouncement />
+      <Header />
       <Hero
         locationName={location.locationName}
         locationTitle={location.heroTitle}
