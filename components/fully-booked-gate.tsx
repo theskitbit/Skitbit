@@ -91,7 +91,7 @@ export function FullyBookedGate() {
                   <div className="flex items-start gap-3">
                     <div className="mt-1 inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0" />
                     <span className="text-sm text-white/80">
-                      We prioritise focused, founder-led brands
+                      We prioritise corporate enquiries from D2C product brands
                     </span>
                   </div>
                   <div className="flex items-start gap-3">
