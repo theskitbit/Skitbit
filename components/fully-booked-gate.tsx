@@ -38,7 +38,7 @@ export function FullyBookedGate() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={() => setIsVisible(false)}
-            className="fully-booked-backdrop fixed inset-0 z-[999]"
+            className="fully-booked-backdrop fixed inset-0 z-[100000]"
           />
 
           {/* Modal */}
@@ -127,10 +127,6 @@ export function FullyBookedGate() {
                   </button>
                 </div>
 
-                {/* Footer note */}
-                <p className="mt-6 text-center text-xs text-white/50">
-                  Average response time: 60 seconds
-                </p>
               </div>
             </div>
           </motion.div>

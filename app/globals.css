@@ -147,6 +147,8 @@ button[data-tooltip="Get a reply in 60secs"]:focus-visible::after {
 
 .fully-booked-backdrop {
   background: color-mix(in srgb, var(--foreground) 48%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .fully-booked-modal {
