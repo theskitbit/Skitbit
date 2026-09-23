@@ -76,8 +76,8 @@ export function FullyBookedGate() {
 
                 {/* Main headline */}
                 <div className="mb-4 text-center">
-                  <h2 id="fully-booked-title" className="text-4xl font-bold tracking-tight text-white">
-                    We're at capacity.
+                  <h2 id="fully-booked-title" className="m-0 text-[42px] font-regular leading-[0.92] tracking-[-0.065em] text-foreground sm:text-[48px]">
+                    We&apos;re at capacity.
                   </h2>
                 </div>
 
@@ -115,13 +115,13 @@ export function FullyBookedGate() {
                       openContact()
                       setIsVisible(false)
                     }}
-                    className="w-full rounded-lg bg-white px-6 py-3 font-semibold text-black transition-all hover:bg-white/90 active:scale-95"
+                    className="btn-primary inline-flex h-11 w-full items-center justify-center rounded-full px-7 text-[15px] font-medium transition-transform active:scale-95"
                   >
-                    Express Interest
+                    Get in touch
                   </button>
                   <button
                     onClick={() => setIsVisible(false)}
-                    className="w-full rounded-lg border border-white/20 px-6 py-3 font-semibold text-white transition-colors hover:bg-white/5"
+                    className="btn-ghost inline-flex h-11 w-full items-center justify-center rounded-full border border-border px-7 text-[15px] font-medium transition-colors"
                   >
                     Continue Browsing
                   </button>

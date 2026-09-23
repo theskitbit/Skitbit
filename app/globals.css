@@ -158,10 +158,6 @@ button[data-tooltip="Get a reply in 60secs"]:focus-visible::after {
   box-shadow: 0 18px 50px color-mix(in srgb, var(--foreground) 18%, transparent);
 }
 
-.fully-booked-modal button {
-  border-radius: var(--radius);
-}
-
 .fully-booked-modal .text-white {
   color: var(--card-foreground);
 }
