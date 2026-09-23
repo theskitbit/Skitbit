@@ -38,7 +38,7 @@ export function FullyBookedGate() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={() => setIsVisible(false)}
-            className="fixed inset-0 z-[999] bg-black/50 backdrop-blur-sm"
+            className="fully-booked-backdrop fixed inset-0 z-[999]"
           />
 
           {/* Modal */}
@@ -55,7 +55,7 @@ export function FullyBookedGate() {
             aria-modal="true"
             aria-labelledby="fully-booked-title"
           >
-            <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-md">
+            <div className="fully-booked-modal relative w-full max-w-md">
               {/* Close button */}
               <button
                 onClick={() => setIsVisible(false)}
