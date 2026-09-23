@@ -38,7 +38,7 @@ export function FullyBookedGate() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={() => setIsVisible(false)}
-            className="fully-booked-backdrop fixed inset-0 z-[999]"
+            className="fully-booked-backdrop fixed inset-0 z-[100000]"
           />
 
           {/* Modal */}
@@ -50,7 +50,7 @@ export function FullyBookedGate() {
               duration: 0.4,
               ease: [0.16, 1, 0.3, 1],
             }}
-            className="fixed inset-0 z-[1000] flex items-center justify-center p-4"
+            className="fixed inset-0 z-[100001] flex items-center justify-center p-4"
             role="dialog"
             aria-modal="true"
             aria-labelledby="fully-booked-title"
@@ -91,7 +91,7 @@ export function FullyBookedGate() {
                   <div className="flex items-start gap-3">
                     <div className="mt-1 inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0" />
                     <span className="text-sm text-white/80">
-                      We prioritise focused, founder-led brands
+                      We prioritise corporate enquiries from D2C product brands
                     </span>
                   </div>
                   <div className="flex items-start gap-3">
@@ -127,10 +127,6 @@ export function FullyBookedGate() {
                   </button>
                 </div>
 
-                {/* Footer note */}
-                <p className="mt-6 text-center text-xs text-white/50">
-                  Average response time: 60 seconds
-                </p>
               </div>
             </div>
           </motion.div>
