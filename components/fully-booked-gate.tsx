@@ -50,7 +50,7 @@ export function FullyBookedGate() {
               duration: 0.4,
               ease: [0.16, 1, 0.3, 1],
             }}
-            className="fixed inset-0 z-[1000] flex items-center justify-center p-4"
+            className="fixed inset-0 z-[100001] flex items-center justify-center p-4"
             role="dialog"
             aria-modal="true"
             aria-labelledby="fully-booked-title"
