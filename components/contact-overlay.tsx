@@ -50,30 +50,6 @@ function ContactOverlay({ isOpen, onClose }: any) {
   const [data, setData] = useState({ category: '', needs: [] as string[], timeline: '', product: '', name: '', contact: '', phone: '' })
   const [phoneCode, setPhoneCode] = useState('+91')
 
-  const messageText = `Hi Skitbit team,
-
-I'm interested in a Shopify landing page.
-
-Brand:
-${data.product}
-
-Industry:
-${data.category}
-
-Requirements:
-${data.needs.join(', ')}
-
-Timeline:
-${data.timeline}
-
-Name:
-${data.name}
-
-Contact:
-${data.contact}`
-
-const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(messageText)}`
-
   const validateStep = () => {
     if (step === 1 && !data.category) return 'Please select a category'
     if (step === 2) {
@@ -122,7 +98,6 @@ const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(messag
         console.error('Airtable background save failed', err)
       })
 
-      window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
       onClose()
     }
   }
