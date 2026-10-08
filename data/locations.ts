@@ -71,7 +71,7 @@ export const locations: Record<string, LocationData> = {
       'Trusted by London-based and global luxury brands',
     ],
     clientsLocal: [], // <-- FIXED
-    clientsGlobal: ['Messika Paris', 'Rimowa', 'Bellroy', 'Skyborne', 'Shakeup Cosmetics', 'Notino', 'Cult Beauty'],
+    clientsGlobal: ['Messika Paris', 'Rimowa', 'Bellroy', 'Notino', 'Cult Beauty'],
     locationText: 'We partner with brands in London and across Europe through a remote-first production model, delivering faster turnaround, lower production overhead, and scalable creative output without the constraints of traditional London production studios.',
     ctaPrimary: 'Your production value doesn\'t matter if your videos don\'t convert.',
     ctaSecondary: 'Start with your first high-converting concept.',
@@ -112,7 +112,7 @@ export const locations: Record<string, LocationData> = {
       'Trusted by luxury and DTC brands across North America',
     ],
     clientsLocal: [], // <-- FIXED
-    clientsGlobal: ['Bellroy', 'Rimowa', 'Messika Paris', 'Skyborne', 'Brightland', 'Kinto'],
+    clientsGlobal: ['Bellroy', 'Rimowa', 'Messika Paris', 'Brightland', 'Kinto'],
     locationText: 'We partner with Toronto-based brands and North American companies through a remote-first model, enabling fast delivery, cost-effective production, and scalable animation asset creation for global campaigns.',
     ctaPrimary: 'Your animation looks great but doesn\'t drive conversions.',
     ctaSecondary: 'Switch to conversion-focused motion design that actually sells.',

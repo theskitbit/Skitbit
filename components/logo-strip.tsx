@@ -18,10 +18,6 @@ const logos = [
     src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/Neemans.png',
   },
   {
-    label: 'HerFantasyBox',
-    src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/617125239_878849164517476_9136886998112773274_naa.png',
-  },
-  {
     label: 'Supliful',
     src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/supliful-logo',
   },
@@ -40,10 +36,6 @@ const logos = [
   {
     label: 'PALLADIO Beauty',
     src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/blob-2026-08-04%20at%204.52.24%20PM.png',
-  },
-  {
-    label: 'Shake Up Cosmetics',
-    src: 'https://k7fdlkciit9qv6j1.public.blob.vercel-storage.com/Shakeup.png',
   },
 ];
 
