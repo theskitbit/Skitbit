@@ -123,7 +123,7 @@ const whatsappUrl = `https://wa.me/918384092211?text=${encodeURIComponent(messag
       })
 
       window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
-      window.location.href = `/contact-success`
+      onClose()
     }
   }
 
