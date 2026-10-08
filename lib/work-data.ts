@@ -57,16 +57,6 @@ export const workItems: WorkItem[] = [
     tags: ['BEAUTY', 'PRODUCT RENDER']
   },
   {
-    id: 'herfantasybox-gift-set',
-    type: 'render',
-    industry: 'Beauty',
-    src: 'https://your-cdn.com/herfantasybox-gift.jpg',
-    alt: 'HerFantasyBox gift set render',
-    title: 'HerFantasyBox Gift Set',
-    description: 'A vibrant lifestyle setup showcasing the complete gift set collection with dynamic lighting.',
-    tags: ['BEAUTY', 'SET DESIGN']
-  },
-  {
     id: 'messika-ring-rotation',
     type: 'animation',
     industry: 'Jewelry',

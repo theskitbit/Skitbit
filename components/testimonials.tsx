@@ -14,10 +14,8 @@ type Testimonial = {
 }
 
 const TESTIMONIALS: Testimonial[] = [
-  { name: 'Farooq Abraham', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Skyborne-p4ezaqFZ5OfdsvHpwahK8hQpOCamyf.png', category: 'SKYBORNE', role: 'Founder', headline: 'Endless assets. Zero reshoots.', text: 'We went from struggling with creatives to a full pipeline of high-performing assets for ads, PDPs, and social.' },
   { name: 'MESSIKA Paris', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Messika-qejIUYic4Yr2Ll5RU7os9DNNdgGIqJ.png', category: 'Luxury jewellery', role: 'Luxury brand', headline: 'Perfect brand consistency.', text: 'The biggest win was consistency. Every product and every campaign finally looks like one cohesive brand.' },
   { name: 'Joe Niehaus', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Skinny.rx-8WN3MckWWMQPMDKhdXo8iASOv4vQKK.png', category: 'Skinny.Rx', role: 'Growth Manager', headline: 'No more photoshoot delays.', text: 'Faster launches, better creatives, and no dependency on shoots. This changed how we produce content.' },
-  { name: 'Wilder Polycarpe', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/HerFantasyBox-B6XxTEH5jYtYcPFtMaxBWX2xIarg4t.png', category: 'HerFantasyBox', role: 'Co-founder', headline: 'One streamlined workflow.', text: 'Our team saves so much time now. What used to take multiple vendors is handled in one streamlined process.' },
   { name: 'Nadine Schürmann', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Plan%20B-pZTphn7CFyGcxlfnSqeXbfzbouJQZI.png', category: 'Plan B Cosmetics', role: 'Founder', headline: 'Flawless execution.', text: 'They did everything according to my ideas, responded to every request, and I would book the service again.' },
   { name: 'Angelica Angulo', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Palladio-4gVgAm7yrCStetxUP88iEXM1CTtJkY.png', category: 'PALLADIO Beauty', role: 'Social Media Manager', headline: 'Precision and creativity.', text: 'They took our idea and turned it into a wonderful project with great precision and creativity.' },
 ]
